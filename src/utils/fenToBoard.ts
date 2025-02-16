@@ -9,7 +9,7 @@ export default function fenToBoard(fen: string): BoardType {
   const board: BoardType = [];
   const rows = fen.split("/");
 
-  for (let i = 0; i < rows.length; i++) {
+  for (let i = rows.length - 1; i >= 0; i--) {
     const row = rows[i];
     const boardRow: SquareType[] = [];
 
@@ -26,7 +26,7 @@ export default function fenToBoard(fen: string): BoardType {
       } else {
         // The character is a piece, add it to the board
         const piece: PieceType = {
-          type: char as PieceType["type"],
+          type: char.toUpperCase() as PieceType["type"],
           colour: char === char.toUpperCase() ? "white" : "black",
         };
 
