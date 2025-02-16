@@ -1,6 +1,30 @@
 import type { BoardType, Move } from "../types/Core";
 
-export class MoveGenerator {
+export default class MoveGenerator {
+  static getAllMoves(board: BoardType, colour: "white" | "black"): Move[] {
+    const moves: Move[] = [];
+
+    for (let i = 0; i < 8; i++) {
+      for (let j = 0; j < 8; j++) {
+        if (board[i][j] !== null && board[i][j]?.colour === colour) {
+          moves.push(...MoveGenerator.getMoves(board, [i, j]));
+        }
+      }
+    }
+
+    return moves;
+  }
+
+  static makeMove(board: BoardType, move: Move): BoardType {
+    const newBoard = board.map((row) => [...row]);
+    const { from, to } = move;
+
+    newBoard[to[0]][to[1]] = newBoard[from[0]][from[1]];
+    newBoard[from[0]][from[1]] = null;
+
+    return newBoard;
+  }
+
   static getMoves(board: BoardType, position: [number, number]): Move[] {
     const piece = board[position[0]][position[1]];
     if (piece === null) {

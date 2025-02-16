@@ -1,5 +1,5 @@
 import { Board } from "../../../src/core/Board";
-import { MoveGenerator } from "../../../src/core/MoveGenerator";
+import MoveGenerator from "../../../src/core/MoveGenerator";
 
 describe("Move Generator | Pawn", () => {
   test("White pawn at [1, 1] with blocking piece", () => {

@@ -1,5 +1,5 @@
 import { Board } from "../../../src/core/Board";
-import { MoveGenerator } from "../../../src/core/MoveGenerator";
+import MoveGenerator from "../../../src/core/MoveGenerator";
 
 describe("Move Generator | Queen", () => {
   test("White queen at [1, 1]", () => {
