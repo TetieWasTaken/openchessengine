@@ -33,6 +33,8 @@ export class MoveGenerator {
     position: [number, number],
     colour: "white" | "black",
   ): Move[] {
+    // todo: add en passant
+
     const moves: Move[] = [];
     const direction = colour === "white" ? -1 : 1;
 
@@ -95,6 +97,7 @@ export class MoveGenerator {
       const [dx, dy] = direction;
       const [x, y] = position;
 
+      // todo: use generic function to mitigate code duplication
       // Check if the move is on the board
       if (x + dx >= 0 && x + dx < 8 && y + dy >= 0 && y + dy < 8) {
         const piece = board[x + dx][y + dy];
