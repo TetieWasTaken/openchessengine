@@ -1,0 +1,68 @@
+// src/cli.ts
+import Board from "../core/Board";
+import Search from "../bot/Search";
+import MoveGenerator from "../core/MoveGenerator";
+import { parseFEN, toFEN } from "../utils/FEN";
+import { Move } from "../types/Core";
+
+class FENCLI {
+  private readonly depth: number = 3;
+
+  public run() {
+    const fen = this.parseArgs();
+    const fenParts = parseFEN(fen);
+
+    let board: Board;
+    try {
+      board = new Board(fenParts.board);
+    } catch (error) {
+      if (error instanceof Error) {
+        console.error(`Invalid FEN: ${error.message}`);
+      } else {
+        console.error("Invalid FEN: Unknown error");
+      }
+      process.exit(1);
+    }
+
+    const bestMove = Search(
+      board.getBoard(),
+      this.depth,
+      fenParts.activeColour === "w" ? "white" : "black",
+    );
+
+    if (!bestMove) {
+      console.log("No legal moves available");
+      process.exit(0);
+    }
+
+    console.log(`Best move: ${this.moveToAlgebraic(bestMove)}`);
+    console.log(
+      `New FEN: ${toFEN(MoveGenerator.makeMove(board.getBoard(), bestMove))}`,
+    );
+  }
+
+  private parseArgs(): string {
+    const args = process.argv.slice(2);
+
+    for (let i = 0; i < args.length; i++) {
+      if (["-f", "--fen"].includes(args[i]) && args[i + 1]) {
+        return args[i + 1];
+      }
+    }
+
+    console.error("Usage: ts-node cli.ts -f <FEN>");
+    process.exit(1);
+  }
+
+  private moveToAlgebraic(move: Move): string {
+    const fileFrom = String.fromCharCode(97 + move.from[1]);
+    const rankFrom = 8 - move.from[0];
+    const fileTo = String.fromCharCode(97 + move.to[1]);
+    const rankTo = 8 - move.to[0];
+
+    return `${fileFrom}${rankFrom}${fileTo}${rankTo}`;
+  }
+}
+
+// Run the CLI
+new FENCLI().run();
