@@ -1,4 +1,4 @@
-import { BoardType, PieceType, SquareType } from "../types/BoardType";
+import type { BoardType, PieceType, SquareType } from "../types/Core";
 
 /**
  * Converts a FEN string to a Board

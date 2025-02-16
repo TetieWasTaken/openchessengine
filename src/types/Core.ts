@@ -4,3 +4,8 @@ export type PieceType = {
 };
 export type SquareType = PieceType | null;
 export type BoardType = SquareType[][];
+
+export type Move = {
+  from: [number, number];
+  to: [number, number];
+};

@@ -1,9 +1,4 @@
-import type { BoardType } from "../types/BoardType";
-
-type Move = {
-  from: [number, number];
-  to: [number, number];
-};
+import type { BoardType, Move } from "../types/Core";
 
 export class MoveGenerator {
   static getMoves(board: BoardType, position: [number, number]): Move[] {

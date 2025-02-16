@@ -1,4 +1,4 @@
-import { BoardType } from "../types/BoardType";
+import type { BoardType } from "../types/Core";
 import fenToBoard from "../utils/fenToBoard";
 
 export class Board {
