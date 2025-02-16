@@ -1,5 +1,5 @@
 import { BoardType } from "../types/BoardType";
-import fenToBoard from "../utils/FenToBoard";
+import fenToBoard from "../utils/fenToBoard";
 
 export class Board {
   private board: BoardType;
