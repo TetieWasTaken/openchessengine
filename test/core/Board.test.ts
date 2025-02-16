@@ -1,6 +1,6 @@
 import { Board } from "../../src/core/Board";
 
-describe("Chess Board", () => {
+describe("Board generator", () => {
   test("Rook at [0, 0]", () => {
     const board = new Board();
     expect(board.getPiece([0, 0])?.type).toBe("R");

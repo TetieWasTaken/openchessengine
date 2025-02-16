@@ -1,7 +1,7 @@
-import { Board } from "../../src/core/Board";
-import { MoveGenerator } from "../../src/core/MoveGenerator";
+import { Board } from "../../../src/core/Board";
+import { MoveGenerator } from "../../../src/core/MoveGenerator";
 
-describe("Move Generator", () => {
+describe("Move Generator | Pawn", () => {
   test("White pawn at [1, 1] with blocking piece", () => {
     const board = new Board("8/8/8/8/8/1p6/1P6/8").getBoard();
     const moves = MoveGenerator.getMoves(board, [1, 1]);
