@@ -1,7 +1,7 @@
 import type { BoardType } from "../types/Core";
 import fenToBoard from "../utils/fenToBoard";
 
-export class Board {
+export default class Board {
   private board: BoardType;
 
   constructor(fen?: string) {

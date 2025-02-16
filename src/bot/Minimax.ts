@@ -1,6 +1,6 @@
+import type { BoardType } from "../types/Core";
 import MoveGenerator from "../core/MoveGenerator";
-import { BoardType } from "../types/Core";
-import { Eval } from "./Eval";
+import Eval from "./Eval";
 
 /**
  * Minimax algorithm, see https://www.chessprogramming.org/Minimax

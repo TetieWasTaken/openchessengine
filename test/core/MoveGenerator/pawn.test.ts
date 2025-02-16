@@ -1,4 +1,4 @@
-import { Board } from "../../../src/core/Board";
+import Board from "../../../src/core/Board";
 import MoveGenerator from "../../../src/core/MoveGenerator";
 
 describe("Move Generator | Pawn", () => {

@@ -1,6 +1,6 @@
 import { BoardType, PieceType } from "../types/Core";
 
-export class Eval {
+export default class Eval {
   static evaluate(board: BoardType): number {
     let score = 0;
 
@@ -32,7 +32,7 @@ export class Eval {
       case "Q":
         return 9;
       case "K":
-        return 100;
+        return Infinity;
     }
   }
 }

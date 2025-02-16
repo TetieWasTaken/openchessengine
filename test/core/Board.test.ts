@@ -1,4 +1,4 @@
-import { Board } from "../../src/core/Board";
+import Board from "../../src/core/Board";
 
 describe("Board generator", () => {
   test("Rook at [0, 0]", () => {
