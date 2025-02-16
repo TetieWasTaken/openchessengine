@@ -29,6 +29,10 @@ export default function Minimax(
       const newBoard = MoveGenerator.makeMove(board, move);
       const score = Minimax(newBoard, depth - 1, false);
       bestMove = Math.max(bestMove, score);
+
+      if (Number.isNaN(bestMove)) {
+        throw new Error("bestMove is NaN");
+      }
     }
 
     return bestMove;
@@ -38,6 +42,10 @@ export default function Minimax(
       const newBoard = MoveGenerator.makeMove(board, move);
       const score = Minimax(newBoard, depth - 1, true);
       bestMove = Math.min(bestMove, score);
+
+      if (Number.isNaN(bestMove)) {
+        throw new Error("bestMove is NaN");
+      }
     }
 
     return bestMove;

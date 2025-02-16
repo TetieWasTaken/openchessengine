@@ -32,7 +32,7 @@ export default class Eval {
       case "Q":
         return 9;
       case "K":
-        return Infinity;
+        return 10000;
     }
   }
 }

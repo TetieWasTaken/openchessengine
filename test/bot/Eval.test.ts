@@ -24,6 +24,6 @@ describe("Eval", () => {
 
   test("White king", () => {
     const board = new Board("8/8/8/8/8/8/8/K7");
-    expect(Eval.evaluate(board.getBoard())).toBe(Infinity);
+    expect(Eval.evaluate(board.getBoard())).toBe(10000);
   });
 });
