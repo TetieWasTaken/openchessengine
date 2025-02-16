@@ -36,7 +36,7 @@ export class MoveGenerator {
     // todo: add en passant
 
     const moves: Move[] = [];
-    const direction = colour === "white" ? -1 : 1;
+    const direction = colour === "white" ? 1 : -1;
 
     // Move forward one square
     if (board[position[0] + direction][position[1]] === null) {
@@ -48,7 +48,8 @@ export class MoveGenerator {
 
     // Move forward two squares
     if (
-      position[0] === (colour === "white" ? 6 : 1) &&
+      position[0] === (colour === "white" ? 1 : 6) &&
+      board[position[0] + direction][position[1]] === null &&
       board[position[0] + 2 * direction][position[1]] === null
     ) {
       moves.push({
@@ -58,7 +59,11 @@ export class MoveGenerator {
     }
 
     // Capture diagonally to the left
-    if (board[position[0] + direction][position[1] - 1]?.colour !== colour) {
+    if (
+      position[1] - 1 >= 0 &&
+      board[position[0] + direction][position[1] - 1] !== null &&
+      board[position[0] + direction][position[1] - 1]?.colour !== colour
+    ) {
       moves.push({
         from: position,
         to: [position[0] + direction, position[1] - 1],
@@ -66,7 +71,11 @@ export class MoveGenerator {
     }
 
     // Capture diagonally to the right
-    if (board[position[0] + direction][position[1] + 1]?.colour !== colour) {
+    if (
+      position[1] + 1 < 8 &&
+      board[position[0] + direction][position[1] + 1] !== null &&
+      board[position[0] + direction][position[1] + 1]?.colour !== colour
+    ) {
       moves.push({
         from: position,
         to: [position[0] + direction, position[1] + 1],
