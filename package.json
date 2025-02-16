@@ -1,9 +1,11 @@
 {
   "name": "openchessbot",
   "version": "1.0.0",
-  "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsc",
+    "start": "ts-node src/interfaces/CLI.ts",
+    "test": "jest",
+    "lint": "eslint . --ext .ts"
   },
   "keywords": [],
   "author": "",
