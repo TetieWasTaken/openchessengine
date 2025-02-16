@@ -27,7 +27,7 @@ export default function fenToBoard(fen: string): BoardType {
         // The character is a piece, add it to the board
         const piece: PieceType = {
           type: char as PieceType["type"],
-          color: char === char.toUpperCase() ? "white" : "black",
+          colour: char === char.toUpperCase() ? "white" : "black",
         };
 
         boardRow.push(piece);
