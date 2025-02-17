@@ -22,6 +22,28 @@ export default class MoveGenerator {
   }
 
   /**
+   * Returns the number of nodes at a given depth, see https://www.chessprogramming.org/Perft
+   * @param board
+   * @param depth
+   * @internal
+   */
+  static _perft(board: BoardType, depth: number): number {
+    if (depth === 0) {
+      return 1;
+    }
+
+    const moves = MoveGenerator.getAllMoves(board, "white");
+    let nodes = 0;
+
+    for (const move of moves) {
+      const newBoard = MoveGenerator.makeMove(board, move);
+      nodes += MoveGenerator._perft(newBoard, depth - 1);
+    }
+
+    return nodes;
+  }
+
+  /**
    * Makes a move on the board and returns the new board
    */
   static makeMove(board: BoardType, move: Move): BoardType {
