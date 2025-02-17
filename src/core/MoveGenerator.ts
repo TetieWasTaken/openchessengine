@@ -7,13 +7,17 @@ export default class MoveGenerator {
   /**
    * Returns all possible moves for a given board and colour
    */
-  static getAllMoves(board: BoardType, colour: "white" | "black"): Move[] {
+  static getAllMoves(
+    board: BoardType,
+    colour: "white" | "black",
+    isRecursion = false,
+  ): Move[] {
     const moves: Move[] = [];
 
     for (let i = 0; i < 8; i++) {
       for (let j = 0; j < 8; j++) {
         if (board[i][j] !== null && board[i][j]?.colour === colour) {
-          moves.push(...MoveGenerator.getMoves(board, [i, j]));
+          moves.push(...MoveGenerator.getMoves(board, [i, j], isRecursion));
         }
       }
     }
@@ -59,26 +63,87 @@ export default class MoveGenerator {
   /**
    * Returns all possible moves for a piece at a given position
    */
-  static getMoves(board: BoardType, position: [number, number]): Move[] {
+  static getMoves(
+    board: BoardType,
+    position: [number, number],
+    isRecursion = false,
+  ): Move[] {
     const piece = board[position[0]][position[1]];
     if (piece === null) {
       return [];
     }
 
+    let moves: Move[] = [];
+
     switch (piece.type) {
       case "P":
-        return MoveGenerator.getPawnMoves(board, position, piece.colour);
+        moves = MoveGenerator.getPawnMoves(board, position, piece.colour);
+        break;
       case "N":
-        return MoveGenerator.getKnightMoves(board, position, piece.colour);
+        moves = MoveGenerator.getKnightMoves(board, position, piece.colour);
+        break;
       case "B":
-        return MoveGenerator.getBishopMoves(board, position, piece.colour);
+        moves = MoveGenerator.getBishopMoves(board, position, piece.colour);
+        break;
       case "R":
-        return MoveGenerator.getRookMoves(board, position, piece.colour);
+        moves = MoveGenerator.getRookMoves(board, position, piece.colour);
+        break;
       case "Q":
-        return MoveGenerator.getQueenMoves(board, position, piece.colour);
+        moves = MoveGenerator.getQueenMoves(board, position, piece.colour);
+        break;
       case "K":
-        return MoveGenerator.getKingMoves(board, position, piece.colour);
+        moves = MoveGenerator.getKingMoves(board, position, piece.colour);
+        break;
     }
+
+    // Filter out moves that would put the king in check
+    return moves.filter((move) => {
+      if (!isRecursion) {
+        const newBoard = MoveGenerator.makeMove(board, move);
+        const inCheck = MoveGenerator.isKingInCheck(newBoard, piece.colour);
+        return !inCheck;
+      } else return true;
+    });
+  }
+
+  /**
+   * Checks if the king of the given colour is in check
+   * @internal
+   */
+  static isKingInCheck(board: BoardType, colour: "white" | "black"): boolean {
+    const kingPosition = MoveGenerator.findKing(board, colour);
+    if (!kingPosition) {
+      return false;
+    }
+
+    const opponentColour = colour === "white" ? "black" : "white";
+    const opponentMoves = MoveGenerator.getAllMoves(
+      board,
+      opponentColour,
+      true,
+    );
+
+    return opponentMoves.some((move) => {
+      return move.to[0] === kingPosition[0] && move.to[1] === kingPosition[1];
+    });
+  }
+
+  /**
+   * Finds the position of the king of the given colour
+   * @internal
+   */
+  static findKing(
+    board: BoardType,
+    colour: "white" | "black",
+  ): [number, number] | null {
+    for (let i = 0; i < 8; i++) {
+      for (let j = 0; j < 8; j++) {
+        if (board[i][j]?.type === "K" && board[i][j]?.colour === colour) {
+          return [i, j];
+        }
+      }
+    }
+    return null;
   }
 
   /**

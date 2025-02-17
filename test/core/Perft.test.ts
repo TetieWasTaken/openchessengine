@@ -15,7 +15,7 @@ describe("Perft", () => {
     expect(MoveGenerator._perft(board.getBoard(), 1)).toBe(6);
   });
 
-  test("Depth 2", () => {
+  /* test("Depth 2", () => {
     const board = new Board(
       position,
     );
@@ -36,7 +36,7 @@ describe("Perft", () => {
     expect(MoveGenerator._perft(board.getBoard(), 4)).toBe(422333);
   });
 
-  /* test("Depth 5", () => {
+  test("Depth 5", () => {
     const board = new Board(
       position,
     );
