@@ -1,5 +1,5 @@
 import type { BoardType } from "../types/Core";
-import fenToBoard from "../utils/FEN";
+import fenToBoard, { toFEN } from "../utils/FEN";
 
 /**
  * Represents a chess board
@@ -12,9 +12,11 @@ export default class Board {
     black: { king: boolean; queen: boolean };
   };
   private enPassantSquare: [number, number] | null = null;
+  private activeColour: "white" | "black" = "white";
 
   constructor(fen?: string) {
     this.board = this.createBoard(fen);
+    this.activeColour = this.parseActiveColour(fen);
     this.castlingRights = this.parseCastlingRights(fen);
     this.enPassantSquare = this.parseEnPassantSquare(fen);
   }
@@ -49,6 +51,45 @@ export default class Board {
       return this.castlingRights[side];
     }
     return this.castlingRights;
+  }
+
+  /**
+   * Get the active colour
+   */
+  public getActiveColour(): "white" | "black" {
+    return this.activeColour;
+  }
+
+  /**
+   * Clone the board
+   */
+  public clone(): Board {
+    return new Board(toFEN(this.board, {
+      activeColour: this.activeColour,
+      castling: this.castlingRights,
+      enPassant: this.enPassantSquare
+        ? String.fromCharCode(this.enPassantSquare[1] + 97) +
+          (this.enPassantSquare[0] + 1)
+        : "-",
+      halfmove: 0,
+      fullmove: 1,
+    }));
+  }
+
+  /**
+   * Set the active colour
+   * @param colour
+   * @param mutate Whether to mutate the board or return a new one
+   */
+  public setActiveColour(
+    colour: "white" | "black",
+    mutate: boolean = true,
+  ): Board {
+    if (mutate) {
+      this.activeColour = colour;
+      return this;
+    }
+    return this.clone().setActiveColour(colour, true);
   }
 
   public removeCastlingRights(
@@ -103,6 +144,13 @@ export default class Board {
     fen: string = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR",
   ): BoardType {
     return fenToBoard(fen);
+  }
+
+  /**
+   * Get the active colour
+   */
+  parseActiveColour(fen: string = ""): "white" | "black" {
+    return fen.split(" ")[1] === "w" ? "white" : "black";
   }
 
   /**

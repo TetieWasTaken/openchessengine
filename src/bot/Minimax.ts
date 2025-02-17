@@ -21,9 +21,9 @@ export function minimaxScore(
     return Eval.evaluate(board.getBoard());
   }
 
+  board.setActiveColour(isMaximising ? "white" : "black");
   const moves = MoveGenerator.getAllMoves(
     board,
-    isMaximising ? "white" : "black",
   );
 
   if (isMaximising) {
@@ -59,9 +59,9 @@ export function minimaxScore(
 export function minimaxRoot(
   board: Board,
   depth: number,
-  activeColour: "white" | "black",
 ): MinimaxResult {
-  const moves = MoveGenerator.getAllMoves(board, activeColour);
+  const activeColour = board.getActiveColour();
+  const moves = MoveGenerator.getAllMoves(board);
   let bestMove: Move = moves[0];
   let bestScore = activeColour === "white" ? -Infinity : Infinity;
 

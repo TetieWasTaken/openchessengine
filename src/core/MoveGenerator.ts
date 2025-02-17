@@ -11,7 +11,6 @@ export default class MoveGenerator {
    */
   static getAllMoves(
     board: Board,
-    colour: "white" | "black",
     isRecursion = false,
   ): Move[] {
     const moves: Move[] = [];
@@ -19,7 +18,10 @@ export default class MoveGenerator {
 
     for (let i = 0; i < 8; i++) {
       for (let j = 0; j < 8; j++) {
-        if (boardData[i][j] !== null && boardData[i][j]?.colour === colour) {
+        if (
+          boardData[i][j] !== null &&
+          boardData[i][j]?.colour === board.getActiveColour()
+        ) {
           moves.push(...MoveGenerator.getMoves(board, [i, j], isRecursion));
         }
       }
@@ -39,7 +41,7 @@ export default class MoveGenerator {
       return 1;
     }
 
-    const moves = MoveGenerator.getAllMoves(board, "white");
+    const moves = MoveGenerator.getAllMoves(board);
     let nodes = 0;
 
     for (const move of moves) {
@@ -72,7 +74,7 @@ export default class MoveGenerator {
 
     return new Board(toFEN(newBoard, {
       // todo: implement these
-      activeColour: "w",
+      activeColour: board.getActiveColour() === "white" ? "b" : "w",
       castling: board.getCastlingRights(),
       enPassant: move.isDoublePawnMove
         ? String(String.fromCharCode(97 + move.to[1]) + move.to[0] + 1)
@@ -146,8 +148,7 @@ export default class MoveGenerator {
 
     const opponentColour = colour === "white" ? "black" : "white";
     const opponentMoves = MoveGenerator.getAllMoves(
-      board,
-      opponentColour,
+      board.setActiveColour(opponentColour, false),
       true,
     );
 
