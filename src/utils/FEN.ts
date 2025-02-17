@@ -7,7 +7,7 @@ import type { BoardType, PieceType, SquareType } from "../types/Core";
  */
 export default function fenToBoard(fen: string): BoardType {
   const board: BoardType = [];
-  const rows = fen.split("/");
+  const rows = fen.split(" ")[0].split("/");
 
   for (let i = rows.length - 1; i >= 0; i--) {
     const row = rows[i];
@@ -40,7 +40,18 @@ export default function fenToBoard(fen: string): BoardType {
   return board;
 }
 
-export function toFEN(board: BoardType): string {
+interface FENOptions {
+  activeColour: string;
+  castling: string;
+  enPassant: string;
+  halfmove: string;
+  fullmove: string;
+}
+
+export function toFEN(
+  board: BoardType,
+  { activeColour, castling, enPassant, halfmove, fullmove }: FENOptions,
+): string {
   return board
     .map((row) => {
       let fen = "";
@@ -62,7 +73,10 @@ export function toFEN(board: BoardType): string {
       return fen;
     })
     .reverse()
-    .join("/");
+    .join("/")
+    .concat(
+      ` ${activeColour} ${castling} ${enPassant} ${halfmove} ${fullmove}`,
+    );
 }
 
 function pieceToFen(piece: PieceType): string {

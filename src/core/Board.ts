@@ -17,33 +17,16 @@ export default class Board {
   }
 
   public toString(): string {
-    let boardStr = "";
+    let boardStr = "\n";
     const pieces = {
-      white: {
-        P: "♙",
-        N: "♘",
-        B: "♗",
-        R: "♖",
-        Q: "♕",
-        K: "♔",
-      },
-      black: {
-        P: "♟",
-        N: "♞",
-        B: "♝",
-        R: "♜",
-        Q: "♛",
-        K: "♚",
-      },
+      black: { P: "♙", N: "♘", B: "♗", R: "♖", Q: "♕", K: "♔" },
+      white: { P: "♟", N: "♞", B: "♝", R: "♜", Q: "♛", K: "♚" },
     };
 
-    for (let row = 0; row < 8; row++) {
-      boardStr += `${8 - row} `;
+    for (let row = 7; row >= 0; row--) {
+      boardStr += `${row + 1} `;
       for (let col = 0; col < 8; col++) {
-        const piece: {
-          type: "P" | "N" | "B" | "R" | "Q" | "K";
-          colour: "white" | "black";
-        } | null = this.board[row][col];
+        const piece = this.board[row][col];
         const square = (row + col) % 2 === 0 ? "◼" : "◻";
         boardStr += piece ? pieces[piece.colour][piece.type] : square;
         boardStr += " ";

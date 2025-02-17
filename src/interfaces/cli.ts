@@ -35,10 +35,24 @@ class FENCLI {
       process.exit(0);
     }
 
+    const newBoard = MoveGenerator.makeMove(board.getBoard(), bestMove);
+    const newFEN = toFEN(newBoard, {
+      activeColour: fenParts.activeColour === "w" ? "b" : "w",
+      // todo: castling, enPassant, halfmove
+      castling: fenParts.castling,
+      enPassant: fenParts.enPassant,
+      halfmove: fenParts.halfmove,
+      fullmove: fenParts.activeColour === "w"
+        ? fenParts.fullmove
+        : String(Number(fenParts.fullmove) + 1),
+    });
+
     console.log(`Best move: ${this.moveToAlgebraic(bestMove)}`);
     console.log(
-      `New FEN: ${toFEN(MoveGenerator.makeMove(board.getBoard(), bestMove))}`,
+      `New FEN: ${newFEN} (depth ${this.depth})`,
     );
+
+    console.log(new Board(newFEN).toString());
   }
 
   private parseArgs(): string {
