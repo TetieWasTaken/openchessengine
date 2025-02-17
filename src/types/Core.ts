@@ -9,4 +9,5 @@ export type Move = {
   from: [number, number];
   to: [number, number];
   promotion?: "Q" | "R" | "B" | "N";
+  isDoublePawnMove?: boolean;
 };

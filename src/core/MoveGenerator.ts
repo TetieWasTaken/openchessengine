@@ -74,7 +74,9 @@ export default class MoveGenerator {
       // todo: implement these
       activeColour: "w",
       castling: board.getCastlingRights(),
-      enPassant: "-",
+      enPassant: move.isDoublePawnMove
+        ? String(String.fromCharCode(97 + move.to[1]) + move.to[0] + 1)
+        : "-",
       halfmove: 0,
       fullmove: 1,
     }));
@@ -98,7 +100,7 @@ export default class MoveGenerator {
 
     switch (piece.type) {
       case "P":
-        moves = MoveGenerator.getPawnMoves(boardData, position, piece.colour);
+        moves = MoveGenerator.getPawnMoves(board, position, piece.colour);
         break;
       case "N":
         moves = MoveGenerator.getKnightMoves(boardData, position, piece.colour);
@@ -177,7 +179,7 @@ export default class MoveGenerator {
    * @internal
    */
   static getPawnMoves(
-    board: BoardType,
+    board: Board,
     position: [number, number],
     colour: "white" | "black",
   ): Move[] {
@@ -185,9 +187,10 @@ export default class MoveGenerator {
 
     const moves: Move[] = [];
     const direction = colour === "white" ? 1 : -1;
+    const boardData = board.getBoard();
 
     // Move forward one square
-    if (board[position[0] + direction][position[1]] === null) {
+    if (boardData[position[0] + direction][position[1]] === null) {
       if (position[0] + direction === 7 || position[0] + direction === 0) {
         moves.push({
           from: position,
@@ -220,20 +223,38 @@ export default class MoveGenerator {
     // Move forward two squares
     if (
       position[0] === (colour === "white" ? 1 : 6) &&
-      board[position[0] + direction][position[1]] === null &&
-      board[position[0] + 2 * direction][position[1]] === null
+      boardData[position[0] + direction][position[1]] === null &&
+      boardData[position[0] + 2 * direction][position[1]] === null
     ) {
       moves.push({
         from: position,
         to: [position[0] + 2 * direction, position[1]],
+        isDoublePawnMove: true,
       });
+    }
+
+    // En passant
+    const enPassantSquare = board.getEnPassantSquare();
+
+    if (enPassantSquare) {
+      if (
+        enPassantSquare[0] === position[0] + direction && (
+          enPassantSquare[1] === position[1] - 1 ||
+          enPassantSquare[1] === position[1] + 1
+        )
+      ) {
+        moves.push({
+          from: position,
+          to: [enPassantSquare[0], enPassantSquare[1]],
+        });
+      }
     }
 
     // Capture diagonally to the left
     if (
       position[1] - 1 >= 0 &&
-      board[position[0] + direction][position[1] - 1] !== null &&
-      board[position[0] + direction][position[1] - 1]?.colour !== colour
+      boardData[position[0] + direction][position[1] - 1] !== null &&
+      boardData[position[0] + direction][position[1] - 1]?.colour !== colour
     ) {
       if (position[0] + direction === 7 || position[0] + direction === 0) {
         moves.push({
@@ -267,8 +288,8 @@ export default class MoveGenerator {
     // Capture diagonally to the right
     if (
       position[1] + 1 < 8 &&
-      board[position[0] + direction][position[1] + 1] !== null &&
-      board[position[0] + direction][position[1] + 1]?.colour !== colour
+      boardData[position[0] + direction][position[1] + 1] !== null &&
+      boardData[position[0] + direction][position[1] + 1]?.colour !== colour
     ) {
       if (position[0] + direction === 7 || position[0] + direction === 0) {
         moves.push({

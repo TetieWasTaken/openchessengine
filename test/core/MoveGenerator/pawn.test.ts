@@ -54,4 +54,13 @@ describe("Move Generator | Pawn", () => {
 
     expect(newBoard.getPiece([7, 4])).toEqual({ type: "R", colour: "white" });
   });
+
+  test("En passant", () => {
+    const board = new Board(
+      "rnbqkbnr/pppp1ppp/8/8/3pP3/2P5/PP3PPP/RNBQKBNR b KQkq e3 0 1",
+    );
+    const moves = MoveGenerator.getMoves(board, [3, 3]);
+
+    expect(moves.map((m) => m.to)).toContainEqual([2, 4]);
+  });
 });

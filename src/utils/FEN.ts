@@ -1,4 +1,4 @@
-import type { BoardType, PieceType, SquareType } from "../types/Core";
+import type { BoardType, Move, PieceType, SquareType } from "../types/Core";
 
 /**
  * Converts a FEN string to a Board
@@ -83,8 +83,20 @@ export function toFEN(
     .reverse()
     .join("/")
     .concat(
-      ` ${activeColour} ${castling} ${enPassant} ${halfmove} ${fullmove}`,
+      ` ${activeColour} ${
+        _toCastlingString(castling)
+      } ${enPassant} ${halfmove} ${fullmove}`,
     );
+}
+
+function _toCastlingString(castling: FENOptions["castling"]): string {
+  if ("white" in castling) {
+    return `${castling.white.king ? "K" : ""}${
+      castling.white.queen ? "Q" : ""
+    }${castling.black.king ? "k" : ""}${castling.black.queen ? "q" : ""}`;
+  }
+
+  return `${castling.king ? "K" : ""}${castling.queen ? "Q" : ""}`;
 }
 
 /**
