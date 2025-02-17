@@ -104,7 +104,12 @@ export default class MoveGenerator {
         moves = MoveGenerator.getQueenMoves(boardData, position, piece.colour);
         break;
       case "K":
-        moves = MoveGenerator.getKingMoves(board, position, piece.colour);
+        moves = MoveGenerator.getKingMoves(
+          board,
+          position,
+          piece.colour,
+          isRecursion,
+        );
         break;
     }
 
@@ -308,8 +313,8 @@ export default class MoveGenerator {
     board: Board,
     position: [number, number],
     colour: "white" | "black",
+    isRecursion = false,
   ): Move[] {
-    const castlingRights = board.getCastlingRights(colour);
     const moves: Move[] = [];
     const directions = [
       [-1, -1],
@@ -335,6 +340,77 @@ export default class MoveGenerator {
             from: position,
             to: [x + dx, y + dy],
           });
+        }
+      }
+    }
+
+    if (!isRecursion) {
+      const kingInCheck = MoveGenerator.isKingInCheck(board, colour);
+
+      if (!kingInCheck) {
+        const castlingRights = board.getCastlingRights(colour) as {
+          king: boolean;
+          queen: boolean;
+        };
+
+        if (castlingRights.king) {
+          const kingSide = colour === "white" ? 0 : 7;
+          const kingSideEmpty = board.getBoard()[kingSide][5] === null &&
+            board.getBoard()[kingSide][6] === null;
+
+          if (kingSideEmpty) {
+            const newBoard = MoveGenerator.makeMove(
+              board,
+              {
+                from: position,
+                to: [kingSide, 5],
+              },
+            );
+
+            if (!MoveGenerator.isKingInCheck(newBoard, colour)) {
+              const finalBoard = MoveGenerator.makeMove(newBoard, {
+                from: [kingSide, 5],
+                to: [kingSide, 6],
+              });
+
+              if (!MoveGenerator.isKingInCheck(finalBoard, colour)) {
+                moves.push({
+                  from: position,
+                  to: [kingSide, 6],
+                });
+              }
+            }
+          }
+        }
+
+        if (castlingRights.queen) {
+          const queenSide = colour === "white" ? 0 : 7;
+          const queenSideEmpty = board.getBoard()[queenSide][1] === null &&
+            board.getBoard()[queenSide][2] === null &&
+            board.getBoard()[queenSide][3] === null;
+          if (queenSideEmpty) {
+            const newBoard = MoveGenerator.makeMove(
+              board,
+              {
+                from: position,
+                to: [queenSide, 3],
+              },
+            );
+
+            if (!MoveGenerator.isKingInCheck(newBoard, colour)) {
+              const finalBoard = MoveGenerator.makeMove(newBoard, {
+                from: [queenSide, 3],
+                to: [queenSide, 2],
+              });
+
+              if (!MoveGenerator.isKingInCheck(finalBoard, colour)) {
+                moves.push({
+                  from: position,
+                  to: [queenSide, 2],
+                });
+              }
+            }
+          }
         }
       }
     }

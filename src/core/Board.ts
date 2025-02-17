@@ -49,6 +49,20 @@ export default class Board {
     return this.castlingRights;
   }
 
+  public removeCastlingRights(
+    side: "white" | "black",
+    type?: "king" | "queen",
+  ): Board {
+    if (type) {
+      this.castlingRights[side][type] = false;
+    } else {
+      this.castlingRights[side].king = false;
+      this.castlingRights[side].queen = false;
+    }
+
+    return this;
+  }
+
   /**
    * Convert the board to a string
    */
