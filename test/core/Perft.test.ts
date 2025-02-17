@@ -22,14 +22,14 @@ describe("Perft", () => {
     expect(MoveGenerator._perft(board, 2)).toBe(264);
   });
 
-  /* test("Depth 3", () => {
+  test("Depth 3", () => {
     const board = new Board(
       position,
     );
-    expect(MoveGenerator._perft(board.getBoard(), 3)).toBe(9467);
+    expect(MoveGenerator._perft(board, 3)).toBe(9467);
   });
 
-  test("Depth 4", () => {
+  /* test("Depth 4", () => {
     const board = new Board(
       position,
     );

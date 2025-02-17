@@ -72,10 +72,70 @@ export default class MoveGenerator {
       newBoard[move.to[0]][move.to[1]] = piece;
     }
 
+    // Castling rights
+    let newCastlingRights = board.getCastlingRights() as {
+      white: {
+        king: boolean;
+        queen: boolean;
+      };
+      black: {
+        king: boolean;
+        queen: boolean;
+      };
+    };
+
+    if (piece?.type === "K") {
+      newCastlingRights = {
+        ...newCastlingRights,
+        [piece.colour]: {
+          king: false,
+          queen: false,
+        },
+      };
+    } else if (piece?.type === "R") {
+      if (piece.colour === "white") {
+        if (move.from[0] === 0 && move.from[1] === 0) {
+          newCastlingRights = {
+            ...newCastlingRights,
+            white: {
+              ...newCastlingRights.white,
+              queen: false,
+            },
+          };
+        } else if (move.from[0] === 0 && move.from[1] === 7) {
+          newCastlingRights = {
+            ...newCastlingRights,
+            white: {
+              ...newCastlingRights.white,
+              king: false,
+            },
+          };
+        }
+      } else {
+        if (move.from[0] === 7 && move.from[1] === 0) {
+          newCastlingRights = {
+            ...newCastlingRights,
+            black: {
+              ...newCastlingRights.black,
+              queen: false,
+            },
+          };
+        } else if (move.from[0] === 7 && move.from[1] === 7) {
+          newCastlingRights = {
+            ...newCastlingRights,
+            black: {
+              ...newCastlingRights.black,
+              king: false,
+            },
+          };
+        }
+      }
+    }
+
     return new Board(toFEN(newBoard, {
       // todo: implement these
       activeColour: board.getActiveColour() === "white" ? "b" : "w",
-      castling: board.getCastlingRights(),
+      castling: newCastlingRights,
       enPassant: move.isDoublePawnMove
         ? String(String.fromCharCode(97 + move.to[1]) + move.to[0] + 1)
         : "-",
