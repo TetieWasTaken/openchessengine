@@ -1,4 +1,8 @@
-import type { BoardType } from "../types/Core";
+import type {
+  BoardType,
+  CastlingRights,
+  SingleCastlingRights,
+} from "../types/Core";
 import fenToBoard, { toFEN } from "../utils/FEN";
 
 /**
@@ -7,9 +11,9 @@ import fenToBoard, { toFEN } from "../utils/FEN";
 export default class Board {
   private board: BoardType;
   // todo: separate type
-  private castlingRights: {
-    white: { king: boolean; queen: boolean };
-    black: { king: boolean; queen: boolean };
+  private castlingRights: CastlingRights = {
+    white: { king: true, queen: true },
+    black: { king: true, queen: true },
   };
   private enPassantSquare: [number, number] | null = null;
   private activeColour: "white" | "black" = "white";
@@ -43,10 +47,7 @@ export default class Board {
    */
   public getCastlingRights(
     side?: "white" | "black",
-  ): { king: boolean; queen: boolean } | {
-    white: { king: boolean; queen: boolean };
-    black: { king: boolean; queen: boolean };
-  } {
+  ): CastlingRights | SingleCastlingRights {
     if (side) {
       return this.castlingRights[side];
     }

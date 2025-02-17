@@ -1,4 +1,4 @@
-import type { BoardType, Move } from "../types/Core";
+import type { BoardType, CastlingRights, Move } from "../types/Core";
 import { toFEN } from "../utils/FEN";
 import Board from "./Board";
 
@@ -73,16 +73,7 @@ export default class MoveGenerator {
     }
 
     // Castling rights
-    let newCastlingRights = board.getCastlingRights() as {
-      white: {
-        king: boolean;
-        queen: boolean;
-      };
-      black: {
-        king: boolean;
-        queen: boolean;
-      };
-    };
+    let newCastlingRights = board.getCastlingRights() as CastlingRights;
 
     if (piece?.type === "K") {
       newCastlingRights = {

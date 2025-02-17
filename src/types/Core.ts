@@ -11,3 +11,10 @@ export type Move = {
   promotion?: "Q" | "R" | "B" | "N";
   isDoublePawnMove?: boolean;
 };
+
+export type SingleCastlingRights = { king: boolean; queen: boolean };
+
+export type CastlingRights = {
+  white: SingleCastlingRights;
+  black: SingleCastlingRights;
+};

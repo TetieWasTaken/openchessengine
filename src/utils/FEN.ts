@@ -1,4 +1,10 @@
-import type { BoardType, Move, PieceType, SquareType } from "../types/Core";
+import type {
+  BoardType,
+  CastlingRights,
+  PieceType,
+  SingleCastlingRights,
+  SquareType,
+} from "../types/Core";
 
 /**
  * Converts a FEN string to a Board
@@ -42,10 +48,7 @@ export default function fenToBoard(fen: string): BoardType {
 
 interface FENOptions {
   activeColour: string;
-  castling: { king: boolean; queen: boolean } | {
-    white: { king: boolean; queen: boolean };
-    black: { king: boolean; queen: boolean };
-  };
+  castling: SingleCastlingRights | CastlingRights;
   enPassant: string;
   halfmove: number;
   fullmove: number;

@@ -27,10 +27,11 @@ class FENCLI {
       process.exit(1);
     }
 
+    board.setActiveColour(fenParts.activeColour === "w" ? "white" : "black");
+
     const bestMove = Search(
       board,
       this.depth,
-      fenParts.activeColour === "w" ? "white" : "black",
     );
 
     if (!bestMove) {
