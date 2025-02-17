@@ -36,4 +36,22 @@ describe("Move Generator | Pawn", () => {
 
     expect(moves).toEqual([]);
   });
+
+  test("Promotion", () => {
+    const board = new Board("k7/4P3/8/8/8/8/8/7K w - - 0 1");
+    const moves = MoveGenerator.getMoves(board, [6, 4]);
+
+    expect(moves.map((m) => m.promotion)).toEqual(["Q", "R", "B", "N"]);
+  });
+
+  test("Rook promotion", () => {
+    const board = new Board("k7/4P3/8/8/8/8/8/7K w - - 0 1");
+    const newBoard = MoveGenerator.makeMove(board, {
+      from: [6, 4],
+      to: [7, 4],
+      promotion: "R",
+    });
+
+    expect(newBoard.getPiece([7, 4])).toEqual({ type: "R", colour: "white" });
+  });
 });

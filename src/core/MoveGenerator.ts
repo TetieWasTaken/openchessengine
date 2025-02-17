@@ -59,7 +59,16 @@ export default class MoveGenerator {
 
     const piece = newBoard[move.from[0]][move.from[1]];
     newBoard[move.from[0]][move.from[1]] = null;
-    newBoard[move.to[0]][move.to[1]] = piece;
+
+    // Checking for pawn should be superfluous, but good for robustness
+    if (move.promotion && piece?.type === "P") {
+      newBoard[move.to[0]][move.to[1]] = {
+        type: move.promotion,
+        colour: piece.colour,
+      };
+    } else {
+      newBoard[move.to[0]][move.to[1]] = piece;
+    }
 
     return new Board(toFEN(newBoard, {
       // todo: implement these
@@ -179,10 +188,33 @@ export default class MoveGenerator {
 
     // Move forward one square
     if (board[position[0] + direction][position[1]] === null) {
-      moves.push({
-        from: position,
-        to: [position[0] + direction, position[1]],
-      });
+      if (position[0] + direction === 7 || position[0] + direction === 0) {
+        moves.push({
+          from: position,
+          to: [position[0] + direction, position[1]],
+          promotion: "Q",
+        });
+        moves.push({
+          from: position,
+          to: [position[0] + direction, position[1]],
+          promotion: "R",
+        });
+        moves.push({
+          from: position,
+          to: [position[0] + direction, position[1]],
+          promotion: "B",
+        });
+        moves.push({
+          from: position,
+          to: [position[0] + direction, position[1]],
+          promotion: "N",
+        });
+      } else {
+        moves.push({
+          from: position,
+          to: [position[0] + direction, position[1]],
+        });
+      }
     }
 
     // Move forward two squares
@@ -203,10 +235,33 @@ export default class MoveGenerator {
       board[position[0] + direction][position[1] - 1] !== null &&
       board[position[0] + direction][position[1] - 1]?.colour !== colour
     ) {
-      moves.push({
-        from: position,
-        to: [position[0] + direction, position[1] - 1],
-      });
+      if (position[0] + direction === 7 || position[0] + direction === 0) {
+        moves.push({
+          from: position,
+          to: [position[0] + direction, position[1] - 1],
+          promotion: "Q",
+        });
+        moves.push({
+          from: position,
+          to: [position[0] + direction, position[1] - 1],
+          promotion: "R",
+        });
+        moves.push({
+          from: position,
+          to: [position[0] + direction, position[1] - 1],
+          promotion: "B",
+        });
+        moves.push({
+          from: position,
+          to: [position[0] + direction, position[1] - 1],
+          promotion: "N",
+        });
+      } else {
+        moves.push({
+          from: position,
+          to: [position[0] + direction, position[1] - 1],
+        });
+      }
     }
 
     // Capture diagonally to the right
@@ -215,10 +270,33 @@ export default class MoveGenerator {
       board[position[0] + direction][position[1] + 1] !== null &&
       board[position[0] + direction][position[1] + 1]?.colour !== colour
     ) {
-      moves.push({
-        from: position,
-        to: [position[0] + direction, position[1] + 1],
-      });
+      if (position[0] + direction === 7 || position[0] + direction === 0) {
+        moves.push({
+          from: position,
+          to: [position[0] + direction, position[1] + 1],
+          promotion: "Q",
+        });
+        moves.push({
+          from: position,
+          to: [position[0] + direction, position[1] + 1],
+          promotion: "R",
+        });
+        moves.push({
+          from: position,
+          to: [position[0] + direction, position[1] + 1],
+          promotion: "B",
+        });
+        moves.push({
+          from: position,
+          to: [position[0] + direction, position[1] + 1],
+          promotion: "N",
+        });
+      } else {
+        moves.push({
+          from: position,
+          to: [position[0] + direction, position[1] + 1],
+        });
+      }
     }
 
     return moves;

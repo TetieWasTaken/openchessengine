@@ -8,4 +8,5 @@ export type BoardType = SquareType[][];
 export type Move = {
   from: [number, number];
   to: [number, number];
+  promotion?: "Q" | "R" | "B" | "N";
 };
