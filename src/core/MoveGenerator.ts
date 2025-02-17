@@ -75,6 +75,35 @@ export default class MoveGenerator {
     // Castling rights
     let newCastlingRights = board.getCastlingRights() as CastlingRights;
 
+    const capturedPiece = newBoard[move.to[0]][move.to[1]];
+    if (capturedPiece && capturedPiece.type === "R") {
+      if (capturedPiece.colour === "white") {
+        if (move.to[0] === 0 && move.to[1] === 0) {
+          newCastlingRights = {
+            ...newCastlingRights,
+            white: { ...newCastlingRights.white, queen: false },
+          };
+        } else if (move.to[0] === 0 && move.to[1] === 7) {
+          newCastlingRights = {
+            ...newCastlingRights,
+            white: { ...newCastlingRights.white, king: false },
+          };
+        }
+      } else {
+        if (move.to[0] === 7 && move.to[1] === 0) {
+          newCastlingRights = {
+            ...newCastlingRights,
+            black: { ...newCastlingRights.black, queen: false },
+          };
+        } else if (move.to[0] === 7 && move.to[1] === 7) {
+          newCastlingRights = {
+            ...newCastlingRights,
+            black: { ...newCastlingRights.black, king: false },
+          };
+        }
+      }
+    }
+
     if (piece?.type === "K") {
       newCastlingRights = {
         ...newCastlingRights,
@@ -123,13 +152,22 @@ export default class MoveGenerator {
       }
     }
 
+    let enPassantSquare = "-";
+    if (move.isDoublePawnMove) {
+      if (piece?.colour === "white") {
+        enPassantSquare = String.fromCharCode(97 + move.to[1]) +
+          (move.to[0] - 1 + 1);
+      } else {
+        enPassantSquare = String.fromCharCode(97 + move.to[1]) +
+          (move.to[0] + 1 + 1);
+      }
+    }
+
     return new Board(toFEN(newBoard, {
       // todo: implement these
       activeColour: board.getActiveColour() === "white" ? "b" : "w",
       castling: newCastlingRights,
-      enPassant: move.isDoublePawnMove
-        ? String(String.fromCharCode(97 + move.to[1]) + move.to[0] + 1)
-        : "-",
+      enPassant: enPassantSquare,
       halfmove: 0,
       fullmove: 1,
     }));
