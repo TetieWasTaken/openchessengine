@@ -61,6 +61,7 @@ export function toFEN(board: BoardType): string {
       if (emptyCount > 0) fen += emptyCount;
       return fen;
     })
+    .reverse()
     .join("/");
 }
 
