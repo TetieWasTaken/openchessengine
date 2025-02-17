@@ -11,10 +11,12 @@ export default class Board {
     white: { king: boolean; queen: boolean };
     black: { king: boolean; queen: boolean };
   };
+  private enPassantSquare: [number, number] | null = null;
 
   constructor(fen?: string) {
     this.board = this.createBoard(fen);
     this.castlingRights = this.parseCastlingRights(fen);
+    this.enPassantSquare = this.parseEnPassantSquare(fen);
   }
 
   /**
@@ -124,5 +126,26 @@ export default class Board {
         queen: castlingPart.includes("q"),
       },
     };
+  }
+
+  /**
+   * Get the en passant square
+   */
+  public getEnPassantSquare(): [number, number] | null {
+    return this.enPassantSquare;
+  }
+
+  /**
+   * Parse the en passant square from a FEN string
+   * @param fen
+   */
+  private parseEnPassantSquare(fen: string = ""): [number, number] | null {
+    const enPassantPart = fen.split(" ")[3] || "-";
+    if (enPassantPart === "-") {
+      return null;
+    }
+
+    const [file, rank] = enPassantPart;
+    return [parseInt(rank) - 1, file.charCodeAt(0) - 97];
   }
 }
