@@ -1,6 +1,12 @@
 import type { BoardType, Move } from "../types/Core";
 
+/**
+ * Helper class to generate moves for a given board
+ */
 export default class MoveGenerator {
+  /**
+   * Returns all possible moves for a given board and colour
+   */
   static getAllMoves(board: BoardType, colour: "white" | "black"): Move[] {
     const moves: Move[] = [];
 
@@ -15,6 +21,9 @@ export default class MoveGenerator {
     return moves;
   }
 
+  /**
+   * Makes a move on the board and returns the new board
+   */
   static makeMove(board: BoardType, move: Move): BoardType {
     const newBoard = board.map((row) => [...row]);
     const { from, to } = move;
@@ -25,6 +34,9 @@ export default class MoveGenerator {
     return newBoard;
   }
 
+  /**
+   * Returns all possible moves for a piece at a given position
+   */
   static getMoves(board: BoardType, position: [number, number]): Move[] {
     const piece = board[position[0]][position[1]];
     if (piece === null) {
@@ -47,6 +59,10 @@ export default class MoveGenerator {
     }
   }
 
+  /**
+   * Returns all possible moves for a pawn
+   * @internal
+   */
   static getPawnMoves(
     board: BoardType,
     position: [number, number],
@@ -104,6 +120,10 @@ export default class MoveGenerator {
     return moves;
   }
 
+  /**
+   * Returns all possible moves for a knight
+   * @internal
+   */
   static getKnightMoves(
     board: BoardType,
     position: [number, number],
@@ -142,6 +162,10 @@ export default class MoveGenerator {
     return moves;
   }
 
+  /**
+   * Returns all possible moves for a bishop
+   * @internal
+   */
   static getBishopMoves(
     board: BoardType,
     position: [number, number],
@@ -150,6 +174,10 @@ export default class MoveGenerator {
     return MoveGenerator.getDiagonalMoves(board, position, colour);
   }
 
+  /**
+   * Returns all possible moves for a rook
+   * @internal
+   */
   static getRookMoves(
     board: BoardType,
     position: [number, number],
@@ -158,6 +186,10 @@ export default class MoveGenerator {
     return MoveGenerator.getOrthogonalMoves(board, position, colour);
   }
 
+  /**
+   * Returns all possible moves for a queen
+   * @internal
+   */
   static getQueenMoves(
     board: BoardType,
     position: [number, number],
@@ -169,6 +201,10 @@ export default class MoveGenerator {
     ];
   }
 
+  /**
+   * Returns all possible moves for a king
+   * @internal
+   */
   static getKingMoves(
     board: BoardType,
     position: [number, number],
@@ -206,6 +242,10 @@ export default class MoveGenerator {
     return moves;
   }
 
+  /**
+   * Returns all possible orthogonal moves for a piece
+   * @internal
+   */
   static getOrthogonalMoves(
     board: BoardType,
     position: [number, number],
@@ -255,6 +295,10 @@ export default class MoveGenerator {
     return moves;
   }
 
+  /**
+   * Returns all possible diagonal moves for a piece
+   * @internal
+   */
   static getDiagonalMoves(
     board: BoardType,
     position: [number, number],

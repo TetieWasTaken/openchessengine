@@ -1,14 +1,17 @@
-// src/cli.ts
 import Board from "../core/Board";
 import Search from "../bot/Search";
 import MoveGenerator from "../core/MoveGenerator";
 import { parseFEN, toFEN } from "../utils/FEN";
 import { Move } from "../types/Core";
 
+/**
+ * cli for interacting with the bot
+ */
 class FENCLI {
-  private readonly depth: number = 3;
+  private readonly depth: number = 1;
 
   public run() {
+    // parse the FEN from the arguments (-f <FEN>)
     const fen = this.parseArgs();
     const fenParts = parseFEN(fen);
 
@@ -55,6 +58,10 @@ class FENCLI {
     console.log(new Board(newFEN).toString());
   }
 
+  /**
+   * Parse the arguments and return the FEN
+   * @internal
+   */
   private parseArgs(): string {
     const args = process.argv.slice(2);
 
@@ -64,11 +71,17 @@ class FENCLI {
       }
     }
 
-    console.error("Usage: ts-node cli.ts -f <FEN>");
+    console.error("Usage: node cli.js -f <FEN>");
     process.exit(1);
   }
 
+  /**
+   * Convert a move to algebraic notation
+   * @param move
+   * @internal
+   */
   private moveToAlgebraic(move: Move): string {
+    // todo: add promotion, castling, captures, etc...
     const fileFrom = String.fromCharCode(97 + move.from[1]);
     const rankFrom = move.from[0] + 1;
     const fileTo = String.fromCharCode(97 + move.to[1]);
@@ -78,5 +91,5 @@ class FENCLI {
   }
 }
 
-// Run the CLI
+// run cli when file is runned
 new FENCLI().run();

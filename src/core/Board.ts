@@ -1,6 +1,9 @@
 import type { BoardType } from "../types/Core";
 import fenToBoard from "../utils/FEN";
 
+/**
+ * Represents a chess board
+ */
 export default class Board {
   private board: BoardType;
 
@@ -8,14 +11,24 @@ export default class Board {
     this.board = this.createBoard(fen);
   }
 
+  /**
+   * Get a piece from the board
+   * @param param0 The coordinates of the piece
+   */
   public getPiece([x, y]: [number, number]): BoardType[number][number] | null {
     return this.board[x][y];
   }
 
+  /**
+   * Getter for the board
+   */
   public getBoard(): BoardType {
     return this.board;
   }
 
+  /**
+   * Convert the board to a string
+   */
   public toString(): string {
     let boardStr = "\n";
     const pieces = {
@@ -42,6 +55,11 @@ export default class Board {
     return false;
   }
 
+  /**
+   * Create a board from a FEN string
+   * @param [fen] The FEN string
+   * @internal
+   */
   private createBoard(
     fen: string = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR",
   ): BoardType {

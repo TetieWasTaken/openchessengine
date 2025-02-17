@@ -1,6 +1,13 @@
 import { BoardType, PieceType } from "../types/Core";
 
+/**
+ * Board evaluation helper class
+ */
 export default class Eval {
+  /**
+   * Evaluates the position and returns a score
+   * @param board
+   */
   static evaluate(board: BoardType): number {
     let score = 0;
 
@@ -19,6 +26,10 @@ export default class Eval {
     return score;
   }
 
+  /**
+   * Returns the value of a piece
+   * @param piece
+   */
   private static getPieceValue(piece: PieceType): number {
     switch (piece.type) {
       case "P":

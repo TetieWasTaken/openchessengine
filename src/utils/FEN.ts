@@ -48,6 +48,11 @@ interface FENOptions {
   fullmove: string;
 }
 
+/**
+ * Converts a Board to a FEN string
+ * @param board
+ * @param options
+ */
 export function toFEN(
   board: BoardType,
   { activeColour, castling, enPassant, halfmove, fullmove }: FENOptions,
@@ -79,6 +84,10 @@ export function toFEN(
     );
 }
 
+/**
+ * Converts a piece to its FEN representation
+ * @param piece
+ */
 function pieceToFen(piece: PieceType): string {
   const map: { [key: string]: string } = {
     P: "P",
@@ -103,6 +112,10 @@ type FENParts = {
   fullmove: string;
 };
 
+/**
+ * Parses a FEN string into its parts
+ * @param fen
+ */
 export function parseFEN(fen: string): FENParts {
   const parts = fen.split(" ");
   return {

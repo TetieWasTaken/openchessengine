@@ -1,4 +1,4 @@
-import type { BoardType } from "../types/Core";
+import type { BoardType, Move } from "../types/Core";
 import MoveGenerator from "../core/MoveGenerator";
 import Eval from "./Eval";
 
@@ -23,16 +23,14 @@ export default function Minimax(
     isMaximising ? "white" : "black",
   );
 
+  // Make the move and evaluate the position
+  // when maximising, we want to get the highest score
   if (isMaximising) {
     let bestMove = -Infinity;
     for (const move of moves) {
       const newBoard = MoveGenerator.makeMove(board, move);
       const score = Minimax(newBoard, depth - 1, false);
       bestMove = Math.max(bestMove, score);
-
-      if (Number.isNaN(bestMove)) {
-        throw new Error("bestMove is NaN");
-      }
     }
 
     return bestMove;
@@ -42,10 +40,6 @@ export default function Minimax(
       const newBoard = MoveGenerator.makeMove(board, move);
       const score = Minimax(newBoard, depth - 1, true);
       bestMove = Math.min(bestMove, score);
-
-      if (Number.isNaN(bestMove)) {
-        throw new Error("bestMove is NaN");
-      }
     }
 
     return bestMove;
