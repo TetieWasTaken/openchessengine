@@ -3,7 +3,7 @@ import MoveGenerator from "../../../src/core/MoveGenerator";
 
 describe("Move Generator | King", () => {
   test("White king at [1, 1]", () => {
-    const board = new Board("8/8/8/8/8/8/1K6/8").getBoard();
+    const board = new Board("8/8/8/8/8/8/1K6/8");
     const moves = MoveGenerator.getMoves(board, [1, 1]);
 
     // Ignore the order of the moves, as it doesn't matter
@@ -26,14 +26,14 @@ describe("Move Generator | King", () => {
   });
 
   test("King with capture", () => {
-    const board = new Board("8/8/8/8/8/1p6/1K6/8").getBoard();
+    const board = new Board("8/8/8/8/8/1p6/1K6/8");
     const moves = MoveGenerator.getMoves(board, [1, 1]);
 
     expect(moves.map((m) => m.to)).toContainEqual([2, 1]);
   });
 
   test("King with blocking piece", () => {
-    const board = new Board("8/8/8/8/8/1P6/1K6/8").getBoard();
+    const board = new Board("8/8/8/8/8/1P6/1K6/8");
     const moves = MoveGenerator.getMoves(board, [1, 1]);
 
     expect(moves.map((m) => m.to)).not.toContainEqual([2, 1]);

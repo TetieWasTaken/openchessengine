@@ -42,10 +42,13 @@ export default function fenToBoard(fen: string): BoardType {
 
 interface FENOptions {
   activeColour: string;
-  castling: string;
+  castling: { king: boolean; queen: boolean } | {
+    white: { king: boolean; queen: boolean };
+    black: { king: boolean; queen: boolean };
+  };
   enPassant: string;
-  halfmove: string;
-  fullmove: string;
+  halfmove: number;
+  fullmove: number;
 }
 
 /**

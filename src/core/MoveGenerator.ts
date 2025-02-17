@@ -1,4 +1,6 @@
 import type { BoardType, Move } from "../types/Core";
+import { toFEN } from "../utils/FEN";
+import Board from "./Board";
 
 /**
  * Helper class to generate moves for a given board
@@ -8,15 +10,16 @@ export default class MoveGenerator {
    * Returns all possible moves for a given board and colour
    */
   static getAllMoves(
-    board: BoardType,
+    board: Board,
     colour: "white" | "black",
     isRecursion = false,
   ): Move[] {
     const moves: Move[] = [];
+    const boardData = board.getBoard();
 
     for (let i = 0; i < 8; i++) {
       for (let j = 0; j < 8; j++) {
-        if (board[i][j] !== null && board[i][j]?.colour === colour) {
+        if (boardData[i][j] !== null && boardData[i][j]?.colour === colour) {
           moves.push(...MoveGenerator.getMoves(board, [i, j], isRecursion));
         }
       }
@@ -31,7 +34,7 @@ export default class MoveGenerator {
    * @param depth
    * @internal
    */
-  static _perft(board: BoardType, depth: number): number {
+  static _perft(board: Board, depth: number): number {
     if (depth === 0) {
       return 1;
     }
@@ -50,25 +53,34 @@ export default class MoveGenerator {
   /**
    * Makes a move on the board and returns the new board
    */
-  static makeMove(board: BoardType, move: Move): BoardType {
-    const newBoard = board.map((row) => [...row]);
-    const { from, to } = move;
+  static makeMove(board: Board, move: Move): Board {
+    const boardData = board.getBoard();
+    const newBoard = boardData.map((row) => row.slice());
 
-    newBoard[to[0]][to[1]] = newBoard[from[0]][from[1]];
-    newBoard[from[0]][from[1]] = null;
+    const piece = newBoard[move.from[0]][move.from[1]];
+    newBoard[move.from[0]][move.from[1]] = null;
+    newBoard[move.to[0]][move.to[1]] = piece;
 
-    return newBoard;
+    return new Board(toFEN(newBoard, {
+      // todo: implement these
+      activeColour: "w",
+      castling: board.getCastlingRights(),
+      enPassant: "-",
+      halfmove: 0,
+      fullmove: 1,
+    }));
   }
 
   /**
    * Returns all possible moves for a piece at a given position
    */
   static getMoves(
-    board: BoardType,
+    board: Board,
     position: [number, number],
     isRecursion = false,
   ): Move[] {
-    const piece = board[position[0]][position[1]];
+    const boardData = board.getBoard();
+    const piece = boardData[position[0]][position[1]];
     if (piece === null) {
       return [];
     }
@@ -77,19 +89,19 @@ export default class MoveGenerator {
 
     switch (piece.type) {
       case "P":
-        moves = MoveGenerator.getPawnMoves(board, position, piece.colour);
+        moves = MoveGenerator.getPawnMoves(boardData, position, piece.colour);
         break;
       case "N":
-        moves = MoveGenerator.getKnightMoves(board, position, piece.colour);
+        moves = MoveGenerator.getKnightMoves(boardData, position, piece.colour);
         break;
       case "B":
-        moves = MoveGenerator.getBishopMoves(board, position, piece.colour);
+        moves = MoveGenerator.getBishopMoves(boardData, position, piece.colour);
         break;
       case "R":
-        moves = MoveGenerator.getRookMoves(board, position, piece.colour);
+        moves = MoveGenerator.getRookMoves(boardData, position, piece.colour);
         break;
       case "Q":
-        moves = MoveGenerator.getQueenMoves(board, position, piece.colour);
+        moves = MoveGenerator.getQueenMoves(boardData, position, piece.colour);
         break;
       case "K":
         moves = MoveGenerator.getKingMoves(board, position, piece.colour);
@@ -110,8 +122,8 @@ export default class MoveGenerator {
    * Checks if the king of the given colour is in check
    * @internal
    */
-  static isKingInCheck(board: BoardType, colour: "white" | "black"): boolean {
-    const kingPosition = MoveGenerator.findKing(board, colour);
+  static isKingInCheck(board: Board, colour: "white" | "black"): boolean {
+    const kingPosition = MoveGenerator.findKing(board.getBoard(), colour);
     if (!kingPosition) {
       return false;
     }
@@ -293,10 +305,11 @@ export default class MoveGenerator {
    * @internal
    */
   static getKingMoves(
-    board: BoardType,
+    board: Board,
     position: [number, number],
     colour: "white" | "black",
   ): Move[] {
+    const castlingRights = board.getCastlingRights(colour);
     const moves: Move[] = [];
     const directions = [
       [-1, -1],
@@ -315,7 +328,7 @@ export default class MoveGenerator {
 
       // Check if the move is on the board
       if (x + dx >= 0 && x + dx < 8 && y + dy >= 0 && y + dy < 8) {
-        const piece = board[x + dx][y + dy];
+        const piece = board.getBoard()[x + dx][y + dy];
 
         if (piece === null || piece.colour !== colour) {
           moves.push({

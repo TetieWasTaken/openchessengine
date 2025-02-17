@@ -12,17 +12,17 @@ describe("Perft", () => {
     const board = new Board(
       position,
     );
-    expect(MoveGenerator._perft(board.getBoard(), 1)).toBe(6);
+    expect(MoveGenerator._perft(board, 1)).toBe(6);
   });
 
-  /* test("Depth 2", () => {
+  test("Depth 2", () => {
     const board = new Board(
       position,
     );
-    expect(MoveGenerator._perft(board.getBoard(), 2)).toBe(264);
+    expect(MoveGenerator._perft(board, 2)).toBe(264);
   });
 
-  test("Depth 3", () => {
+  /* test("Depth 3", () => {
     const board = new Board(
       position,
     );

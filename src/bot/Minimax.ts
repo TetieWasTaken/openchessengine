@@ -2,6 +2,7 @@ import type { BoardType, Move } from "../types/Core";
 import MoveGenerator from "../core/MoveGenerator";
 import Eval from "./Eval";
 import { MinimaxResult } from "../types/Bot";
+import Board from "../core/Board";
 
 /**
  * Recursive minimax evaluation, see https://www.chessprogramming.org/Minimax
@@ -11,13 +12,13 @@ import { MinimaxResult } from "../types/Bot";
  * @returns the score of the best move found
  */
 export function minimaxScore(
-  board: BoardType,
+  board: Board,
   depth: number,
   isMaximising: boolean,
 ): number {
   if (depth === 0) {
     // Reached the end of the search, evaluate the position!
-    return Eval.evaluate(board);
+    return Eval.evaluate(board.getBoard());
   }
 
   const moves = MoveGenerator.getAllMoves(
@@ -56,7 +57,7 @@ export function minimaxScore(
  * @returns the best move and its score
  */
 export function minimaxRoot(
-  board: BoardType,
+  board: Board,
   depth: number,
   activeColour: "white" | "black",
 ): MinimaxResult {

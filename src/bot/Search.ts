@@ -1,4 +1,5 @@
-import type { BoardType, Move } from "../types/Core";
+import Board from "../core/Board";
+import type { Move } from "../types/Core";
 import { minimaxRoot } from "./Minimax";
 
 /**
@@ -9,7 +10,7 @@ import { minimaxRoot } from "./Minimax";
  * @returns The best move found.
  */
 export default function Search(
-  board: BoardType,
+  board: Board,
   depth = 3,
   activeColour: "white" | "black" = "white",
 ): Move {
