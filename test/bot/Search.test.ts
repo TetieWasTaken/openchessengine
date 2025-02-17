@@ -6,7 +6,7 @@ import Board from "../../src/core/Board";
 describe("Search", () => {
   test("Checkmate in 1", () => {
     const board = new Board("kr6/pp6/8/3N4/8/8/8/4K3");
-    const move = Search(board.getBoard());
+    const move = Search(board.getBoard(), 3, "white");
     expect(move).toEqual({ from: [4, 3], to: [6, 2] });
   });
 

@@ -8,7 +8,7 @@ import { Move } from "../types/Core";
  * cli for interacting with the bot
  */
 class FENCLI {
-  private readonly depth: number = 1;
+  private readonly depth: number = 3;
 
   public run() {
     // parse the FEN from the arguments (-f <FEN>)

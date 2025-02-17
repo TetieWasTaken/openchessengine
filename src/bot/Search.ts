@@ -11,7 +11,7 @@ import Minimax from "./Minimax";
  */
 export default function Search(
   board: BoardType,
-  depth = 1,
+  depth = 3,
   activeColour: "white" | "black" = "white",
 ): Move {
   let bestMove: Move = { from: [0, 0], to: [0, 0] };
