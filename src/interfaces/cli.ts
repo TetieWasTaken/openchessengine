@@ -70,9 +70,9 @@ class FENCLI {
 
   private moveToAlgebraic(move: Move): string {
     const fileFrom = String.fromCharCode(97 + move.from[1]);
-    const rankFrom = 8 - move.from[0];
+    const rankFrom = move.from[0] + 1;
     const fileTo = String.fromCharCode(97 + move.to[1]);
-    const rankTo = 8 - move.to[0];
+    const rankTo = move.to[0] + 1;
 
     return `${fileFrom}${rankFrom}${fileTo}${rankTo}`;
   }
