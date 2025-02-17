@@ -1,5 +1,5 @@
 {
-  "name": "openchessbot",
+  "name": "openchessengine",
   "version": "1.0.0",
   "scripts": {
     "build": "tsc",

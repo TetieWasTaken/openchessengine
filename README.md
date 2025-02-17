@@ -1,4 +1,4 @@
-# openchessbot
+# openchessengine
 
 Work in progress, come back later!
 
@@ -6,8 +6,8 @@ Work in progress, come back later!
 
 1. Clone the repository
 ```bash
-gh repo clone TetieWasTaken/openchessbot # github cli
-git clone https://github.com/TetieWasTaken/openchessbot.git # git
+gh repo clone TetieWasTaken/openchessengine # github cli
+git clone https://github.com/TetieWasTaken/openchessengine.git # git
 ```
 
 2. Install the dependencies
