@@ -9,7 +9,7 @@ const position =
 describe("Perft", () => {
   // Position 4 from https://www.chessprogramming.org/Perft_Results#Position_4
 
-  /*test("Depth 1", () => {
+  test("Depth 1", () => {
     const board = new Board(
       position,
     );
@@ -28,23 +28,23 @@ describe("Perft", () => {
       position,
     );
     expect(MoveGenerator._perft(board, 3)).toBe(9467);
-  });*/
+  });
 
-  /* test("Depth 4", () => {
+  test("Depth 4", () => {
     const board = new Board(
       position,
     );
     expect(MoveGenerator._perft(board, 4)).toBe(422333);
-  });*/
+  });
 
-  test("Depth 5", () => {
+  /* test("Depth 5", () => {
     const board = new Board(
       position,
     );
     expect(MoveGenerator._perft(board, 5)).toBe(15833292);
   });
 
-  /* test("Depth 6", () => {
+  test("Depth 6", () => {
     const board = new Board(
       position,
     );

@@ -1,83 +1,38 @@
-import type { BoardType, Move } from "../types/Core";
+import type { Move } from "../types/Core";
 import MoveGenerator from "../core/MoveGenerator";
 import Eval from "./Eval";
 import { MinimaxResult } from "../types/Bot";
 import Board from "../core/Board";
 
 /**
- * Recursive minimax evaluation, see https://www.chessprogramming.org/Minimax
+ * Minimax algorithm (see https://www.chessprogramming.org/Minimax)
  * @param board
- * @param depth remaining depth to search
- * @param isMaximising whether the algorithm should maximise or minimise the score
- * @returns the score of the best move found
+ * @param depth
+ * @param isMaximising
  */
-export function minimaxScore(
+export function minimax(
   board: Board,
   depth: number,
-  isMaximising: boolean,
-): number {
+  isMaximising: boolean = board.getActiveColour() === "white",
+): { score: number; move?: Move } {
   if (depth === 0) {
-    // Reached the end of the search, evaluate the position!
-    return Eval.evaluate(board.getBoard());
+    return { score: Eval.evaluate(board.getBoard()) };
   }
 
   board.setActiveColour(isMaximising ? "white" : "black");
-  const moves = MoveGenerator.getAllMoves(
-    board,
-  );
-
-  if (isMaximising) {
-    let bestScore = -Infinity;
-
-    for (const move of moves) {
-      const newBoard = MoveGenerator.makeMove(board, move);
-      const score = minimaxScore(newBoard, depth - 1, false);
-      bestScore = Math.max(bestScore, score);
-    }
-
-    return bestScore;
-  } else {
-    let bestScore = Infinity;
-
-    for (const move of moves) {
-      const newBoard = MoveGenerator.makeMove(board, move);
-      const score = minimaxScore(newBoard, depth - 1, true);
-      bestScore = Math.min(bestScore, score);
-    }
-
-    return bestScore;
-  }
-}
-
-/**
- * Top-level minimax function that selects the best move
- * @param board
- * @param depth total search depth
- * @param activeColour the colour to move
- * @returns the best move and its score
- */
-export function minimaxRoot(
-  board: Board,
-  depth: number,
-): MinimaxResult {
-  const activeColour = board.getActiveColour();
   const moves = MoveGenerator.getAllMoves(board);
-  let bestMove: Move = moves[0];
-  let bestScore = activeColour === "white" ? -Infinity : Infinity;
+  let best: MinimaxResult = {
+    score: isMaximising ? -Infinity : Infinity,
+    move: moves[0],
+  };
 
   for (const move of moves) {
     const newBoard = MoveGenerator.makeMove(board, move);
-    // Note: at root, switch the maximisation flag
-    const score = minimaxScore(newBoard, depth - 1, activeColour !== "white");
-
-    if (
-      (activeColour === "white" && score > bestScore) ||
-      (activeColour === "black" && score < bestScore)
-    ) {
-      bestScore = score;
-      bestMove = move;
+    const result = minimax(newBoard, depth - 1, !isMaximising);
+    if (isMaximising ? result.score > best.score : result.score < best.score) {
+      best = { score: result.score, move };
     }
   }
 
-  return { bestMove, bestScore };
+  return best;
 }

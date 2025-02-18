@@ -1,6 +1,6 @@
 import Board from "../core/Board";
 import type { Move } from "../types/Core";
-import { minimaxRoot } from "./Minimax";
+import { minimax } from "./Minimax";
 
 /**
  * Search for the best move using the minimaxRoot function.
@@ -12,6 +12,9 @@ export default function Search(
   board: Board,
   depth = 3,
 ): Move {
-  const { bestMove } = minimaxRoot(board, depth);
-  return bestMove;
+  const { move } = minimax(board, depth);
+  if (!move) {
+    throw new Error("No move found");
+  }
+  return move;
 }
