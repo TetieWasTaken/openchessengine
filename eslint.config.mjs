@@ -3,10 +3,21 @@
 import eslint from '@eslint/js';
 import tseslint from 'typescript-eslint';
 
-export default tseslint.config(
-  eslint.configs.recommended,
-  tseslint.configs.recommended,
+export default [
   {
-    ignores: ['node_modules', 'build', 'babel.config.js'],
-  }
-);
+    ignores: ['node_modules/', 'build/', 'babel.config.js'],
+  },
+  ...tseslint.config(
+    eslint.configs.recommended,
+    tseslint.configs.strictTypeChecked,
+    tseslint.configs.stylisticTypeChecked,
+    {
+      languageOptions: {
+        parserOptions: {
+          projectService: true,
+          tsconfigRootDir: import.meta.dirname,
+        },
+      },
+    }
+  )
+];
