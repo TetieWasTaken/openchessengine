@@ -1,6 +1,6 @@
 import type { Move } from "../types/Core";
 import MoveGenerator from "../core/MoveGenerator";
-import Eval from "./Eval";
+import { evaluate } from "./Eval";
 import { MinimaxResult } from "../types/Bot";
 import Board from "../core/Board";
 
@@ -20,7 +20,7 @@ export function minimax(
   isMaximising: boolean = board.getActiveColour() === "white",
 ): { score: number; move?: Move } {
   if (depth === 0) {
-    return { score: Eval.evaluate(board.getBoard()) };
+    return { score: evaluate(board.getBoard()) };
   }
 
   board.setActiveColour(isMaximising ? "white" : "black");
