@@ -18,7 +18,7 @@ npm install
 3. Build & run
 ```bash
 npm run build
-node build/src/interfaces/cli.js -f "your_fen_string_here"
+node dist/src/interfaces/cli.js -f "your_fen_string_here"
 ```
 
 Or run tests:
