@@ -58,6 +58,8 @@ export default class MoveGenerator {
     const boardData = board.getBoard();
     const newBoard = boardData.map((row) => row.slice());
 
+    const capturedPiece = newBoard[move.to[0]][move.to[1]];
+
     const piece = newBoard[move.from[0]][move.from[1]];
     newBoard[move.from[0]][move.from[1]] = null;
 
@@ -74,7 +76,6 @@ export default class MoveGenerator {
     // Castling rights
     let newCastlingRights = board.getCastlingRights() as CastlingRights;
 
-    const capturedPiece = newBoard[move.to[0]][move.to[1]];
     if (capturedPiece && capturedPiece.type === "R") {
       if (capturedPiece.colour === "white") {
         if (move.to[0] === 0 && move.to[1] === 0) {

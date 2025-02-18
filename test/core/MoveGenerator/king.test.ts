@@ -81,4 +81,15 @@ describe("Move Generator | King", () => {
     expect(whiteMoves.map((m) => m.to)).not.toContainEqual([0, 6]);
     expect(whiteMoves.map((m) => m.to)).toContainEqual([0, 2]);
   });
+
+  test("Castling after rook taken", () => {
+    const board = new Board("r3k2r/8/8/8/8/6n1/8/R3K2R b KQkq - 0 1");
+    const newBoard = MoveGenerator.makeMove(board, {
+      from: [2, 6],
+      to: [0, 7],
+    });
+
+    const moves = MoveGenerator.getMoves(newBoard, [0, 4]);
+    expect(moves.map((m) => m.to)).not.toContainEqual([0, 6]);
+  });
 });
