@@ -11,6 +11,7 @@ export type Move = {
   promotion?: "Q" | "R" | "B" | "N";
   isDoublePawnMove?: boolean;
   castle?: "K" | "Q";
+  isEnPassantCapture?: boolean;
 };
 
 export type SingleCastlingRights = { king: boolean; queen: boolean };

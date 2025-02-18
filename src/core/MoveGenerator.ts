@@ -161,6 +161,10 @@ export default class MoveGenerator {
       }
     }
 
+    if (move.isEnPassantCapture) {
+      newBoard[move.from[0]][move.to[1]] = null;
+    }
+
     let enPassantSquare = "-";
     if (move.isDoublePawnMove) {
       if (piece?.colour === "white") {
@@ -282,8 +286,6 @@ export default class MoveGenerator {
     position: [number, number],
     colour: "white" | "black",
   ): Move[] {
-    // todo: add en passant
-
     const moves: Move[] = [];
     const direction = colour === "white" ? 1 : -1;
     const boardData = board.getBoard();
@@ -345,6 +347,7 @@ export default class MoveGenerator {
         moves.push({
           from: position,
           to: [enPassantSquare[0], enPassantSquare[1]],
+          isEnPassantCapture: true,
         });
       }
     }

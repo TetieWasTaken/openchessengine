@@ -63,4 +63,75 @@ describe("Move Generator | Pawn", () => {
 
     expect(moves.map((m) => m.to)).toContainEqual([2, 4]);
   });
+
+  test("En passant square", () => {
+    const board = new Board(
+      "K7/7p/8/8/8/8/P7/7k w - - 0 1",
+    );
+
+    expect(board.getEnPassantSquare()).toBeNull();
+    const moves = MoveGenerator.getMoves(board, [6, 7]);
+    expect(moves.map((m) => m.to)).toContainEqual([4, 7]);
+    expect(moves.find((m) => m.to[0] === 4 && m.to[1] === 7)?.isDoublePawnMove)
+      .toBe(true);
+
+    const blackBoard = MoveGenerator.makeMove(board, {
+      from: [6, 7],
+      to: [4, 7],
+      isDoublePawnMove: true,
+    });
+
+    expect(blackBoard.getEnPassantSquare()).toEqual([5, 7]);
+
+    const whiteBoard = MoveGenerator.makeMove(blackBoard, {
+      from: [1, 0],
+      to: [3, 0],
+      isDoublePawnMove: true,
+    });
+
+    expect(whiteBoard.getEnPassantSquare()).toEqual([2, 0]);
+  });
+
+  test("En passant capture", () => {
+    const board = new Board(
+      "7k/p7/8/1P6/1p6/8/P7/7K w - - 0 1",
+    );
+
+    const newBoard = MoveGenerator.makeMove(board, {
+      from: [1, 0],
+      to: [3, 0],
+      isDoublePawnMove: true,
+    });
+
+    const afterEnPassant = MoveGenerator.makeMove(newBoard, {
+      from: [3, 1],
+      to: [2, 0],
+      isEnPassantCapture: true,
+    });
+
+    expect(afterEnPassant.getPiece([2, 0])).toEqual({
+      type: "P",
+      colour: "black",
+    });
+    expect(afterEnPassant.getPiece([3, 0])).toBeNull();
+
+    const otherSide = MoveGenerator.makeMove(afterEnPassant, {
+      from: [6, 0],
+      to: [4, 0],
+      isDoublePawnMove: true,
+    });
+
+    const afterOtherSide = MoveGenerator.makeMove(otherSide, {
+      from: [4, 1],
+      to: [5, 0],
+      isEnPassantCapture: true,
+    });
+
+    expect(afterOtherSide.getPiece([5, 0])).toEqual({
+      type: "P",
+      colour: "white",
+    });
+
+    expect(afterOtherSide.getPiece([4, 0])).toBeNull();
+  });
 });
