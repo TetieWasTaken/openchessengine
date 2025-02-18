@@ -13,13 +13,28 @@ export default [
       import: importPlugin,
     },
     rules: {
-      'import/no-default-export': 'error'
-    }
+      'import/no-default-export': 'error',
+    },
   },
   ...tseslint.config(
     eslint.configs.recommended,
     tseslint.configs.strictTypeChecked,
     tseslint.configs.stylisticTypeChecked,
+    {
+      plugins: {
+        import: importPlugin,
+      },
+      settings: {
+        "import/resolver": {
+          "typescript": true,
+          "node": true,
+        }
+      },
+      rules: {
+        ...importPlugin.configs?.recommended?.rules ?? {},
+        ...importPlugin.configs?.typescript?.rules ?? {},
+      },
+    },
     {
       languageOptions: {
         parserOptions: {
@@ -28,5 +43,5 @@ export default [
         },
       },
     }
-  )
+  ),
 ];
