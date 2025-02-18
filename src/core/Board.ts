@@ -5,12 +5,12 @@ import type {
   SingleCastlingRights,
 } from "../types/Core";
 import { DEFAULT_FEN } from "../utils/constants";
-import fenToBoard from "../utils/FEN";
+import { fenToBoard } from "../utils/FEN";
 
 /**
  * Represents a chess board
  */
-export default class Board {
+export class Board {
   private board: BoardType = [];
   private castlingRights: CastlingRights = {
     white: { king: true, queen: true },

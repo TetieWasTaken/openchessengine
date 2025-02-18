@@ -1,4 +1,4 @@
-import Board from "../core/Board";
+import { Board } from "../core/Board";
 import type {
   BoardType,
   CastlingRights,
@@ -12,7 +12,7 @@ import type {
  * @param fen A FEN string
  * @returns A Board
  */
-export default function fenToBoard(fen: string): BoardType {
+export function fenToBoard(fen: string): BoardType {
   const board: BoardType = [];
   const rows = fen.split(" ")[0].split("/");
 

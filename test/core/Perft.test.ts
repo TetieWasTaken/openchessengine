@@ -1,7 +1,7 @@
 // see https://www.chessprogramming.org/Perft_Results
 
-import MoveGenerator from "../../src/core/MoveGenerator";
-import Board from "../../src/core/Board";
+import { MoveGenerator } from "../../src/core/MoveGenerator";
+import { Board } from "../../src/core/Board";
 
 /*
 describe("Perft p4", () => {

@@ -1,6 +1,6 @@
-import Board from "../core/Board";
-import Search from "../bot/Search";
-import MoveGenerator from "../core/MoveGenerator";
+import { Board } from "../core/Board";
+import { search } from "../bot/Search";
+import { MoveGenerator } from "../core/MoveGenerator";
 import { parseFEN, toFEN } from "../utils/FEN";
 import { Move } from "../types/Core";
 
@@ -29,7 +29,7 @@ class FENCLI {
 
     board.setActiveColour(fenParts.activeColour === "w" ? "white" : "black");
 
-    const bestMove = Search(
+    const bestMove = search(
       board,
       this.depth,
     );

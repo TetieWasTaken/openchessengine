@@ -1,4 +1,4 @@
-import Board from "../core/Board";
+import { Board } from "../core/Board";
 import type { Move } from "../types/Core";
 import { minimax } from "./Minimax";
 
@@ -8,7 +8,7 @@ import { minimax } from "./Minimax";
  * @param depth How many moves ahead to search.
  * @returns The best move found.
  */
-export default function Search(
+export function search(
   board: Board,
   depth = 3,
 ): Move {

@@ -1,10 +1,10 @@
 import type { BoardType, CastlingRights, Move } from "../types/Core";
-import Board from "./Board";
+import { Board } from "./Board";
 
 /**
  * Helper class to generate moves for a given board
  */
-export default class MoveGenerator {
+export class MoveGenerator {
   /**
    * Returns all possible moves for a given board and colour
    */

@@ -1,5 +1,5 @@
-import Board from "../../../src/core/Board";
-import MoveGenerator from "../../../src/core/MoveGenerator";
+import { Board } from "../../../src/core/Board";
+import { MoveGenerator } from "../../../src/core/MoveGenerator";
 
 describe("Move Generator | King", () => {
   test("White king at [1, 1]", () => {

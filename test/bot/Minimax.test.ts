@@ -1,5 +1,5 @@
 import { minimax } from "../../src/bot/Minimax";
-import Board from "../../src/core/Board";
+import { Board } from "../../src/core/Board";
 
 // See https://lichess.org/editor/ for position setup
 
