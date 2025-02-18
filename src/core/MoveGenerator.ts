@@ -104,6 +104,15 @@ export default class MoveGenerator {
       }
     }
 
+    if (move.castle) {
+      const kingSide = move.castle === "K";
+      const rookFrom = kingSide ? [move.to[0], 7] : [move.to[0], 0];
+      const rookTo = kingSide ? [move.to[0], 5] : [move.to[0], 3];
+
+      newBoard[rookTo[0]][rookTo[1]] = newBoard[rookFrom[0]][rookFrom[1]];
+      newBoard[rookFrom[0]][rookFrom[1]] = null;
+    }
+
     if (piece?.type === "K") {
       newCastlingRights = {
         ...newCastlingRights,
@@ -566,6 +575,7 @@ export default class MoveGenerator {
                 moves.push({
                   from: position,
                   to: [kingSide, 6],
+                  castle: "K",
                 });
               }
             }
@@ -596,6 +606,7 @@ export default class MoveGenerator {
                 moves.push({
                   from: position,
                   to: [queenSide, 2],
+                  castle: "Q",
                 });
               }
             }

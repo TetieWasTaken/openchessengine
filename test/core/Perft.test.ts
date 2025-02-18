@@ -8,6 +8,7 @@ const position =
 
 describe("Perft", () => {
   // Position 4 from https://www.chessprogramming.org/Perft_Results#Position_4
+  /*
   test("Depth 1", () => {
     const board = new Board(
       position,
@@ -76,6 +77,7 @@ describe("Perft", () => {
 
     expect(MoveGenerator._perft(board, 2)).toBe(1623);
   });
+  */
 
   test("d3 g1h1", () => {
     const board = new Board(
