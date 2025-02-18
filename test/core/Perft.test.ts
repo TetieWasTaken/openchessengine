@@ -13,28 +13,44 @@ describe("Perft", () => {
     const board = new Board(
       position,
     );
-    expect(MoveGenerator._perft(board, 1)).toBe(6);
+
+    const start = performance.now();
+    const perft = MoveGenerator._perft(board, 1);
+    console.log(performance.now() - start);
+    expect(perft).toBe(6);
   });
 
   test("Depth 2", () => {
     const board = new Board(
       position,
     );
-    expect(MoveGenerator._perft(board, 2)).toBe(264);
+
+    const start = performance.now();
+    const perft = MoveGenerator._perft(board, 2);
+    console.log(performance.now() - start);
+    expect(perft).toBe(264);
   });
 
   test("Depth 3", () => {
     const board = new Board(
       position,
     );
-    expect(MoveGenerator._perft(board, 3)).toBe(9467);
+
+    const start = performance.now();
+    const perft = MoveGenerator._perft(board, 3);
+    console.log(performance.now() - start);
+    expect(perft).toBe(9467);
   });
 
   test("Depth 4", () => {
     const board = new Board(
       position,
     );
-    expect(MoveGenerator._perft(board, 4)).toBe(422333);
+
+    const start = performance.now();
+    const perft = MoveGenerator._perft(board, 4);
+    console.log(performance.now() - start);
+    expect(perft).toBe(422333);
   });
 
   /* test("Depth 5", () => {

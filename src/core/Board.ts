@@ -1,28 +1,57 @@
 import type {
+  BoardData,
   BoardType,
   CastlingRights,
   SingleCastlingRights,
 } from "../types/Core";
-import fenToBoard, { toFEN } from "../utils/FEN";
+import { DEFAULT_FEN } from "../utils/constants";
+import fenToBoard from "../utils/FEN";
 
 /**
  * Represents a chess board
  */
 export default class Board {
-  private board: BoardType;
-  // todo: separate type
+  private board: BoardType = [];
   private castlingRights: CastlingRights = {
     white: { king: true, queen: true },
     black: { king: true, queen: true },
   };
   private enPassantSquare: [number, number] | null = null;
   private activeColour: "white" | "black" = "white";
+  private halfmove: number = 0;
+  private fullmove: number = 0;
 
-  constructor(fen?: string) {
-    this.board = this.createBoard(fen);
+  constructor(data?: string | BoardData) {
+    if (!data || typeof data === "string") {
+      this.fromFEN(data);
+    } else if (data) {
+      this.board = data.board;
+      this.activeColour = data.activeColour;
+      this.castlingRights = data.castlingRights;
+      this.enPassantSquare = data.enPassant;
+      this.halfmove = data.halfmove;
+      this.fullmove = data.fullmove;
+    }
+  }
+
+  /**
+   * Create a board from a FEN string
+   * @param fen The FEN string
+   */
+  public fromFEN(fen: string | undefined): Board {
+    if (!fen) {
+      fen = DEFAULT_FEN;
+    }
+
+    const [board, activeColour, castling, enPassant, halfmove, fullmove] = fen
+      .split(" ");
+    this.board = this.createBoard(board);
     this.activeColour = this.parseActiveColour(fen);
     this.castlingRights = this.parseCastlingRights(fen);
     this.enPassantSquare = this.parseEnPassantSquare(fen);
+    this.halfmove = parseInt(halfmove);
+    this.fullmove = parseInt(fullmove);
+    return this;
   }
 
   /**
@@ -55,6 +84,20 @@ export default class Board {
   }
 
   /**
+   * Get the halfmove clock
+   */
+  public getHalfmove(): number {
+    return this.halfmove;
+  }
+
+  /**
+   * Get the fullmove number
+   */
+  public getFullmove(): number {
+    return this.fullmove;
+  }
+
+  /**
    * Get the active colour
    */
   public getActiveColour(): "white" | "black" {
@@ -65,16 +108,17 @@ export default class Board {
    * Clone the board
    */
   public clone(): Board {
-    return new Board(toFEN(this.board, {
+    return new Board({
+      board: this.board.map((row) => [...row]),
       activeColour: this.activeColour,
-      castling: this.castlingRights,
-      enPassant: this.enPassantSquare
-        ? String.fromCharCode(this.enPassantSquare[1] + 97) +
-          (this.enPassantSquare[0] + 1)
-        : "-",
-      halfmove: 0,
-      fullmove: 1,
-    }));
+      castlingRights: {
+        white: { ...this.castlingRights.white },
+        black: { ...this.castlingRights.black },
+      },
+      enPassant: this.enPassantSquare,
+      halfmove: this.halfmove,
+      fullmove: this.fullmove,
+    });
   }
 
   /**
@@ -159,12 +203,9 @@ export default class Board {
    * @param fen The FEN string
    * @internal
    */
-  private parseCastlingRights(fen: string = ""): {
-    white: { king: boolean; queen: boolean };
-    black: { king: boolean; queen: boolean };
-  } {
+  private parseCastlingRights(fen: string = ""): CastlingRights {
     // todo: move to FEN.ts and generalise fen parsing
-    const castlingPart = fen.split(" ")[2] || "KQkq";
+    const castlingPart = fen.split(" ")[2];
     return {
       white: {
         king: castlingPart.includes("K"),

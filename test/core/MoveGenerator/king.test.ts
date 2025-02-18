@@ -26,14 +26,14 @@ describe("Move Generator | King", () => {
   });
 
   test("King with capture", () => {
-    const board = new Board("8/8/8/8/8/1p6/1K6/8");
+    const board = new Board("8/8/8/8/8/1p6/1K6/8 w - - 0 1");
     const moves = MoveGenerator.getMoves(board, [1, 1]);
 
     expect(moves.map((m) => m.to)).toContainEqual([2, 1]);
   });
 
   test("King with blocking piece", () => {
-    const board = new Board("8/8/8/8/8/1P6/1K6/8");
+    const board = new Board("8/8/8/8/8/1P6/1K6/8 w - - 0 1");
     const moves = MoveGenerator.getMoves(board, [1, 1]);
 
     expect(moves.map((m) => m.to)).not.toContainEqual([2, 1]);

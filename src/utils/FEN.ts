@@ -1,3 +1,4 @@
+import Board from "../core/Board";
 import type {
   BoardType,
   CastlingRights,
@@ -60,36 +61,52 @@ interface FENOptions {
  * @param options
  */
 export function toFEN(
-  board: BoardType,
-  { activeColour, castling, enPassant, halfmove, fullmove }: FENOptions,
+  board: Board,
 ): string {
-  return board
-    .map((row) => {
-      let fen = "";
-      let emptyCount = 0;
+  const fenParts = [
+    _toBoardString(board),
+    board.getActiveColour() === "white" ? "w" : "b",
+    _toCastlingString(board.getCastlingRights()),
+    board.getEnPassantSquare() ? board.getEnPassantSquare() : "-",
+    board.getHalfmove().toString(),
+    board.getFullmove().toString(),
+  ];
 
-      for (const square of row) {
-        if (square === null) {
-          emptyCount++;
-        } else {
-          if (emptyCount > 0) {
-            fen += emptyCount;
-            emptyCount = 0;
-          }
-          fen += pieceToFen(square);
+  return fenParts.join(" ");
+}
+
+function _toBoardString(board: Board): string {
+  let fen = "";
+
+  for (let i = board.getBoard().length - 1; i >= 0; i--) {
+    const row = board.getBoard()[i];
+    let empty = 0;
+
+    for (let j = 0; j < row.length; j++) {
+      const square = row[j];
+
+      if (square === null) {
+        empty++;
+      } else {
+        if (empty) {
+          fen += empty.toString();
+          empty = 0;
         }
-      }
 
-      if (emptyCount > 0) fen += emptyCount;
-      return fen;
-    })
-    .reverse()
-    .join("/")
-    .concat(
-      ` ${activeColour} ${
-        _toCastlingString(castling)
-      } ${enPassant} ${halfmove} ${fullmove}`,
-    );
+        fen += pieceToFen(square);
+      }
+    }
+
+    if (empty) {
+      fen += empty.toString();
+    }
+
+    if (i !== 0) {
+      fen += "/";
+    }
+  }
+
+  return fen;
 }
 
 function _toCastlingString(castling: FENOptions["castling"]): string {

@@ -20,3 +20,12 @@ export type CastlingRights = {
   white: SingleCastlingRights;
   black: SingleCastlingRights;
 };
+
+export type BoardData = {
+  board: BoardType;
+  activeColour: "white" | "black";
+  castlingRights: CastlingRights;
+  enPassant: [number, number] | null;
+  halfmove: number;
+  fullmove: number;
+};

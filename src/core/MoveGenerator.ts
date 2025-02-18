@@ -1,5 +1,4 @@
 import type { BoardType, CastlingRights, Move } from "../types/Core";
-import { toFEN } from "../utils/FEN";
 import Board from "./Board";
 
 /**
@@ -165,25 +164,23 @@ export default class MoveGenerator {
       newBoard[move.from[0]][move.to[1]] = null;
     }
 
-    let enPassantSquare = "-";
+    let enPassantSquare: [number, number] | null = null;
     if (move.isDoublePawnMove) {
       if (piece?.colour === "white") {
-        enPassantSquare = String.fromCharCode(97 + move.to[1]) +
-          (move.to[0] - 1 + 1);
+        enPassantSquare = [move.to[0] - 1, move.to[1]];
       } else {
-        enPassantSquare = String.fromCharCode(97 + move.to[1]) +
-          (move.to[0] + 1 + 1);
+        enPassantSquare = [move.to[0] + 1, move.to[1]];
       }
     }
 
-    return new Board(toFEN(newBoard, {
-      // todo: implement these
-      activeColour: board.getActiveColour() === "white" ? "b" : "w",
-      castling: newCastlingRights,
+    return new Board({
+      board: newBoard,
+      activeColour: board.getActiveColour() === "white" ? "black" : "white",
+      castlingRights: newCastlingRights,
       enPassant: enPassantSquare,
-      halfmove: 0,
-      fullmove: 1,
-    }));
+      halfmove: board.getHalfmove() + 1,
+      fullmove: board.getFullmove(),
+    });
   }
 
   /**

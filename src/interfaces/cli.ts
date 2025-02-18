@@ -40,19 +40,7 @@ class FENCLI {
     }
 
     const newBoard = MoveGenerator.makeMove(board, bestMove);
-    const newFEN = toFEN(newBoard.getBoard(), {
-      activeColour: fenParts.activeColour === "w" ? "b" : "w",
-      // todo: castling, enPassant, halfmove
-      castling: {
-        white: { king: false, queen: false },
-        black: { king: false, queen: false },
-      },
-      enPassant: fenParts.enPassant,
-      halfmove: Number(fenParts.halfmove) + 1,
-      fullmove: fenParts.activeColour === "w"
-        ? Number(fenParts.fullmove)
-        : Number(fenParts.fullmove) + 1,
-    });
+    const newFEN = toFEN(newBoard);
 
     console.log(`Best move: ${this.moveToAlgebraic(bestMove)}`);
     console.log(

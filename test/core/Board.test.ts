@@ -22,7 +22,7 @@ describe("Board generator", () => {
   });
 
   test("Custom FEN", () => {
-    const board = new Board("8/8/8/8/3k4/8/8/8");
+    const board = new Board("8/8/8/8/3k4/8/8/8 w - - 0 1");
     expect(board.getPiece([3, 3])?.type).toBe("K");
   });
 
