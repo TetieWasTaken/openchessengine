@@ -18,13 +18,13 @@ export default class Board {
   };
   private enPassantSquare: [number, number] | null = null;
   private activeColour: "white" | "black" = "white";
-  private halfmove: number = 0;
-  private fullmove: number = 0;
+  private halfmove = 0;
+  private fullmove = 0;
 
   constructor(data?: string | BoardData) {
     if (!data || typeof data === "string") {
       this.fromFEN(data);
-    } else if (data) {
+    } else {
       this.board = data.board;
       this.activeColour = data.activeColour;
       this.castlingRights = data.castlingRights;
@@ -38,7 +38,7 @@ export default class Board {
    * Create a board from a FEN string
    * @param fen The FEN string
    */
-  public fromFEN(fen: string | undefined): Board {
+  public fromFEN(fen: string | undefined): this {
     if (!fen) {
       fen = DEFAULT_FEN;
     }
@@ -128,19 +128,19 @@ export default class Board {
    */
   public setActiveColour(
     colour: "white" | "black",
-    mutate: boolean = true,
-  ): Board {
+    mutate = true,
+  ): this {
     if (mutate) {
       this.activeColour = colour;
       return this;
     }
-    return this.clone().setActiveColour(colour, true);
+    return (this.clone() as this).setActiveColour(colour, true);
   }
 
   public removeCastlingRights(
     side: "white" | "black",
     type?: "king" | "queen",
-  ): Board {
+  ): this {
     if (type) {
       this.castlingRights[side][type] = false;
     } else {
@@ -162,7 +162,7 @@ export default class Board {
     };
 
     for (let row = 7; row >= 0; row--) {
-      boardStr += `${row + 1} `;
+      boardStr += `${(row + 1).toString()} `;
       for (let col = 0; col < 8; col++) {
         const piece = this.board[row][col];
         const square = (row + col) % 2 === 0 ? "◼" : "◻";
@@ -186,7 +186,7 @@ export default class Board {
    * @internal
    */
   private createBoard(
-    fen: string = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR",
+    fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR",
   ): BoardType {
     return fenToBoard(fen);
   }
@@ -196,7 +196,7 @@ export default class Board {
    * @param castling The FEN string
    * @internal
    */
-  private parseCastlingRights(castling: string = ""): CastlingRights {
+  private parseCastlingRights(castling = ""): CastlingRights {
     return {
       white: {
         king: castling.includes("K"),
@@ -220,7 +220,7 @@ export default class Board {
    * Parse the en passant square from a FEN string
    * @param data
    */
-  private parseEnPassantSquare(data: string = ""): [number, number] | null {
+  private parseEnPassantSquare(data = ""): [number, number] | null {
     if (data === "-") {
       return null;
     }

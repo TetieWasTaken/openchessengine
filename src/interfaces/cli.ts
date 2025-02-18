@@ -34,17 +34,12 @@ class FENCLI {
       this.depth,
     );
 
-    if (!bestMove) {
-      console.log("No legal moves available");
-      process.exit(0);
-    }
-
     const newBoard = MoveGenerator.makeMove(board, bestMove);
     const newFEN = toFEN(newBoard);
 
     console.log(`Best move: ${this.moveToAlgebraic(bestMove)}`);
     console.log(
-      `New FEN: ${newFEN} (depth ${this.depth})`,
+      `New FEN: ${newFEN} (depth ${this.depth.toString()})`,
     );
 
     console.log(new Board(newFEN).toString());
@@ -75,9 +70,9 @@ class FENCLI {
   private moveToAlgebraic(move: Move): string {
     // todo: add promotion, castling, captures, etc...
     const fileFrom = String.fromCharCode(97 + move.from[1]);
-    const rankFrom = move.from[0] + 1;
+    const rankFrom = (move.from[0] + 1).toString();
     const fileTo = String.fromCharCode(97 + move.to[1]);
-    const rankTo = move.to[0] + 1;
+    const rankTo = (move.to[0] + 1).toString();
 
     return `${fileFrom}${rankFrom}${fileTo}${rankTo}`;
   }

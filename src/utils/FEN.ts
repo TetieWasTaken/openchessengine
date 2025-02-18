@@ -20,11 +20,9 @@ export default function fenToBoard(fen: string): BoardType {
     const row = rows[i];
     const boardRow: SquareType[] = [];
 
-    for (let j = 0; j < row.length; j++) {
-      const char = row[j];
-
+    for (const char of row) {
       // If the character is a number, add that many empty squares
-      if (char.match(/[1-8]/)) {
+      if (/[1-8]/.exec(char)) {
         const num = parseInt(char);
 
         for (let k = 0; k < num; k++) {
@@ -82,9 +80,7 @@ function _toBoardString(board: Board): string {
     const row = board.getBoard()[i];
     let empty = 0;
 
-    for (let j = 0; j < row.length; j++) {
-      const square = row[j];
-
+    for (const square of row) {
       if (square === null) {
         empty++;
       } else {
@@ -124,7 +120,7 @@ function _toCastlingString(castling: FENOptions["castling"]): string {
  * @param piece
  */
 function pieceToFen(piece: PieceType): string {
-  const map: { [key: string]: string } = {
+  const map: Record<string, string> = {
     P: "P",
     N: "N",
     B: "B",
@@ -138,14 +134,14 @@ function pieceToFen(piece: PieceType): string {
     : map[piece.type].toLowerCase();
 }
 
-type FENParts = {
+interface FENParts {
   board: string;
   activeColour: string;
   castling: string;
   enPassant: string;
   halfmove: string;
   fullmove: string;
-};
+}
 
 /**
  * Parses a FEN string into its parts

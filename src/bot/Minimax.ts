@@ -15,8 +15,8 @@ import Board from "../core/Board";
 export function minimax(
   board: Board,
   depth: number,
-  alpha: number = -Infinity,
-  beta: number = Infinity,
+  alpha = -Infinity,
+  beta = Infinity,
   isMaximising: boolean = board.getActiveColour() === "white",
 ): { score: number; move?: Move } {
   if (depth === 0) {
