@@ -46,9 +46,9 @@ export default class Board {
     const [board, activeColour, castling, enPassant, halfmove, fullmove] = fen
       .split(" ");
     this.board = this.createBoard(board);
-    this.activeColour = this.parseActiveColour(fen);
-    this.castlingRights = this.parseCastlingRights(fen);
-    this.enPassantSquare = this.parseEnPassantSquare(fen);
+    this.activeColour = activeColour === "w" ? "white" : "black";
+    this.castlingRights = this.parseCastlingRights(castling);
+    this.enPassantSquare = this.parseEnPassantSquare(enPassant);
     this.halfmove = parseInt(halfmove);
     this.fullmove = parseInt(fullmove);
     return this;
@@ -192,28 +192,19 @@ export default class Board {
   }
 
   /**
-   * Get the active colour
-   */
-  parseActiveColour(fen: string = ""): "white" | "black" {
-    return fen.split(" ")[1] === "w" ? "white" : "black";
-  }
-
-  /**
    * Parse castling rights from a FEN string
-   * @param fen The FEN string
+   * @param castling The FEN string
    * @internal
    */
-  private parseCastlingRights(fen: string = ""): CastlingRights {
-    // todo: move to FEN.ts and generalise fen parsing
-    const castlingPart = fen.split(" ")[2];
+  private parseCastlingRights(castling: string = ""): CastlingRights {
     return {
       white: {
-        king: castlingPart.includes("K"),
-        queen: castlingPart.includes("Q"),
+        king: castling.includes("K"),
+        queen: castling.includes("Q"),
       },
       black: {
-        king: castlingPart.includes("k"),
-        queen: castlingPart.includes("q"),
+        king: castling.includes("k"),
+        queen: castling.includes("q"),
       },
     };
   }
@@ -227,15 +218,14 @@ export default class Board {
 
   /**
    * Parse the en passant square from a FEN string
-   * @param fen
+   * @param data
    */
-  private parseEnPassantSquare(fen: string = ""): [number, number] | null {
-    const enPassantPart = fen.split(" ")[3] || "-";
-    if (enPassantPart === "-") {
+  private parseEnPassantSquare(data: string = ""): [number, number] | null {
+    if (data === "-") {
       return null;
     }
 
-    const [file, rank] = enPassantPart;
+    const [file, rank] = data;
     return [parseInt(rank) - 1, file.charCodeAt(0) - 97];
   }
 }

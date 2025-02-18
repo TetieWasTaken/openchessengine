@@ -5,7 +5,7 @@
     "build": "tsc",
     "start": "ts-node src/interfaces/CLI.ts",
     "test": "jest",
-    "lint": "npx eslint ."
+    "lint": "npx eslint"
   },
   "keywords": [],
   "author": "",
