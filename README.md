@@ -22,6 +22,7 @@ npm run start -- -f "kr5R/p7/2B5/3N4/8/8/1r6/8 b - - 0 1" -d 3
 ```
 ###### 1) Note that the engine needs one extra depth to find checkmates, so a depth of 3 will find checkmates in 2. This will be fixed in the future.
 ###### 2) Be sure to use quotes around the FEN string and use double dashes when using `npm run`: (`start -- -f`)
+###### 3) The engine does not yet prioritise checkmates, so it may not find the quickest checkmate in the given depth if there are other checkmates available.
 
 ## Installation
 
