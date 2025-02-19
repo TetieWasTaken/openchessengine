@@ -30,12 +30,17 @@ export function fenToBoard(fen: string): BoardType {
         }
       } else {
         // The character is a piece, add it to the board
-        const piece: PieceType = {
-          type: char.toUpperCase() as PieceType["type"],
-          colour: char === char.toUpperCase() ? "white" : "black",
-        };
+        if (!isPieceType(char.toUpperCase())) {
+          throw new Error(`Invalid piece type: ${char}`);
+        } else {
+          const piece: PieceType = {
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion -- Not sure why eslint is complaining
+            type: char.toUpperCase() as PieceType["type"],
+            colour: char === char.toUpperCase() ? "white" : "black",
+          };
 
-        boardRow.push(piece);
+          boardRow.push(piece);
+        }
       }
     }
 
@@ -64,7 +69,9 @@ export function toFEN(
   const fenParts = [
     _toBoardString(board),
     board.getActiveColour() === "white" ? "w" : "b",
-    _toCastlingString(board.getCastlingRights()) || "-",
+    _toCastlingString(board.getCastlingRights()) !== ""
+      ? _toCastlingString(board.getCastlingRights())
+      : "-",
     board.getEnPassantSquare() ? board.getEnPassantSquare() : "-",
     board.getHalfmove().toString(),
     board.getFullmove().toString(),
@@ -84,7 +91,7 @@ function _toBoardString(board: Board): string {
       if (square === null) {
         empty++;
       } else {
-        if (empty) {
+        if (empty !== 0) {
           fen += empty.toString();
           empty = 0;
         }
@@ -93,7 +100,7 @@ function _toBoardString(board: Board): string {
       }
     }
 
-    if (empty) {
+    if (empty !== 0) {
       fen += empty.toString();
     }
 
@@ -141,6 +148,14 @@ interface FENParts {
   enPassant: string;
   halfmove: string;
   fullmove: string;
+}
+
+/**
+ * Checks if a character is a valid piece type
+ * @param char
+ */
+function isPieceType(char: string): char is PieceType["type"] {
+  return ["P", "N", "B", "R", "Q", "K"].includes(char);
 }
 
 /**

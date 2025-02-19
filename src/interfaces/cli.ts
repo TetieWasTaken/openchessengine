@@ -1,14 +1,16 @@
+/* eslint-disable no-console */
+
 import { Board } from "../core/Board";
 import { search } from "../bot/Search";
-import { getAllMoves, makeMove } from "../core/MoveGenerator";
-import { parseFEN, toFEN } from "../utils/FEN";
-import { Move } from "../types/Core";
+import { makeMove } from "../core/MoveGenerator";
+import { toFEN } from "../utils/FEN";
+import type { Move } from "../types/Core";
 
 /**
  * cli for interacting with the bot
  */
 class FENCLI {
-  public run() {
+  public run(): void {
     // parse the FEN, depth, and autoplay from the arguments (-f <FEN> -d <depth> -a)
     const { fen, depth, autoplay } = this.parseArgs();
 
@@ -31,7 +33,7 @@ class FENCLI {
     }
   }
 
-  private playMove(board: Board, depth: number) {
+  private playMove(board: Board, depth: number): void {
     const bestMove = search(board, depth);
 
     if (!bestMove) {
@@ -43,25 +45,25 @@ class FENCLI {
     const newFEN = toFEN(newBoard);
 
     console.log(`Best move: ${this.moveToAlgebraic(bestMove)}`);
-    console.log(`New FEN: ${newFEN} (depth ${depth})`);
+    console.log(`New FEN: ${newFEN} (depth ${depth.toString()})`);
 
     console.log(new Board(newFEN).toString());
   }
 
-  private autoplay(board: Board, depth: number) {
+  private autoplay(board: Board, depth: number): void {
     while (depth > 0) {
-      if (!getAllMoves(board).length) {
-        console.log("No more valid moves available.");
+      const bestMove = search(board, depth);
+
+      if (!bestMove) {
+        console.log("No valid moves available.");
         break;
       }
-
-      const bestMove = search(board, depth);
 
       board = makeMove(board, bestMove);
       const newFEN = toFEN(board);
 
       console.log(`Best move: ${this.moveToAlgebraic(bestMove)}`);
-      console.log(`New FEN: ${newFEN} (depth ${depth})`);
+      console.log(`New FEN: ${newFEN} (depth ${depth.toString()})`);
       console.log(board.toString());
 
       depth--;
@@ -79,9 +81,9 @@ class FENCLI {
     let autoplay = false;
 
     for (let i = 0; i < args.length; i++) {
-      if (["-f", "--fen"].includes(args[i]) && args[i + 1]) {
+      if (["-f", "--fen"].includes(args[i]) && args[i + 1] !== "") {
         fen = args[i + 1];
-      } else if (["-d", "--depth"].includes(args[i]) && args[i + 1]) {
+      } else if (["-d", "--depth"].includes(args[i]) && args[i + 1] !== "") {
         depth = parseInt(args[i + 1], 10);
         if (isNaN(depth) || depth <= 0) {
           console.error("Invalid depth value. It must be a positive integer.");
@@ -92,7 +94,7 @@ class FENCLI {
       }
     }
 
-    if (!fen) {
+    if (fen === "") {
       console.error("Usage: -f <FEN> [-d <depth>] [-a]");
       process.exit(1);
     }

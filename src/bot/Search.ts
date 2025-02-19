@@ -11,10 +11,7 @@ import { minimax } from "./Minimax";
 export function search(
   board: Board,
   depth: number,
-): Move {
+): Move | undefined {
   const { move } = minimax(board, depth);
-  if (!move) {
-    throw new Error("No move found");
-  }
   return move;
 }

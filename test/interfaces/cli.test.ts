@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+
 import { exec, ExecException } from "node:child_process";
 
 describe("cli", () => {
@@ -7,11 +9,13 @@ describe("cli", () => {
 
     exec(
       `npm run start -- -f "${fen}" -d 4`,
-      (error: ExecException | null, stdout: string, stderr: string): void => {
+      (error: ExecException | null, stdout: string): void => {
         if (error) {
-          console.error(`exec error: ${error}`);
-          return done(error);
+          console.error(`exec error: ${error.message}`);
+          done(error);
+          return;
         }
+
         try {
           expect(stdout).toContain(expectedFen);
           done();

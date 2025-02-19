@@ -1,9 +1,4 @@
-import type {
-  BoardType,
-  CastlingRights,
-  Move,
-  SingleCastlingRights,
-} from "../types/Core";
+import type { BoardType, CastlingRights, Move } from "../types/Core";
 import { Board } from "./Board";
 import { getKnightMoves } from "./pieces/knight";
 import { getPawnMoves } from "./pieces/pawn";
@@ -71,9 +66,9 @@ export function makeMove(board: Board, move: Move): Board {
   newBoard[move.from[0]][move.from[1]] = null;
 
   // Checking for pawn should be superfluous, but good for robustness
-  if (Boolean(move.promotion) && piece?.type === "P") {
+  if (move.promotion !== undefined && piece?.type === "P") {
     newBoard[move.to[0]][move.to[1]] = {
-      type: move.promotion!,
+      type: move.promotion,
       colour: piece.colour,
     };
   } else {
@@ -81,8 +76,12 @@ export function makeMove(board: Board, move: Move): Board {
   }
 
   // Castling rights
-  // eslint-disabe-next-line @typescript-eslint/no-unsafe-type-assertion
-  let newCastlingRights = board.getCastlingRights() as CastlingRights;
+  let newCastlingRights: CastlingRights = {
+    white: { king: false, queen: false },
+    black: { king: false, queen: false },
+  };
+  const castlingRights = board.getCastlingRights();
+  newCastlingRights = { ...newCastlingRights, ...castlingRights };
 
   if (capturedPiece && capturedPiece.type === "R") {
     if (capturedPiece.colour === "white") {
@@ -112,7 +111,7 @@ export function makeMove(board: Board, move: Move): Board {
     }
   }
 
-  if (move.castle !== null && move.castle !== undefined) {
+  if (move.castle !== undefined) {
     const kingSide = move.castle === "K";
     const rookFrom = kingSide ? [move.to[0], 7] : [move.to[0], 0];
     const rookTo = kingSide ? [move.to[0], 5] : [move.to[0], 3];

@@ -46,6 +46,12 @@ export default [
   ),
   {
     rules: {
+      '@typescript-eslint/no-unnecessary-condition': [
+        'error',
+        {
+          allowConstantLoopConditions: true,
+        },
+      ],
       eqeqeq: 'error',
       'no-console': 'error',
       'no-debugger': 'error',
