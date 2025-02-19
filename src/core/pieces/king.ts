@@ -4,12 +4,13 @@ import { isKingInCheck, makeMove } from "../MoveGenerator";
 
 /**
  * Returns all possible moves for a king
+ *
  * @internal
  */
 export function getKingMoves(
   board: Board,
   position: [number, number],
-  colour: "white" | "black",
+  colour: "black" | "white",
   isRecursion = false,
 ): Move[] {
   const moves: Move[] = [];

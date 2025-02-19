@@ -18,9 +18,9 @@ describe("Move Generator | King", () => {
       [2, 2],
     ];
 
-    expectedMoves.forEach((move) => {
+    for (const move of expectedMoves) {
       expect(moves.map((m) => m.to)).toContainEqual(move);
-    });
+    }
 
     expect(moves.length).toBe(expectedMoves.length);
   });

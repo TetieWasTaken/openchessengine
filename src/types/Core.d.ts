@@ -1,34 +1,34 @@
-export interface PieceType {
-  type: "P" | "N" | "B" | "R" | "Q" | "K";
-  colour: "white" | "black";
+export type PieceType = {
+  colour: "black" | "white";
+  type: "B" | "K" | "N" | "P" | "Q" | "R";
 }
 export type SquareType = PieceType | null;
 export type BoardType = SquareType[][];
 
-export interface Move {
-  from: [number, number];
-  to: [number, number];
-  promotion?: "Q" | "R" | "B" | "N";
-  isDoublePawnMove?: boolean;
+export type Move = {
   castle?: "K" | "Q";
+  from: [number, number];
+  isDoublePawnMove?: boolean;
   isEnPassantCapture?: boolean;
+  promotion?: "B" | "N" | "Q" | "R";
+  to: [number, number];
 }
 
-export interface SingleCastlingRights {
+export type SingleCastlingRights = {
   king: boolean;
   queen: boolean;
 }
 
-export interface CastlingRights {
-  white: SingleCastlingRights;
+export type CastlingRights = {
   black: SingleCastlingRights;
+  white: SingleCastlingRights;
 }
 
-export interface BoardData {
+export type BoardData = {
+  activeColour: "black" | "white";
   board: BoardType;
-  activeColour: "white" | "black";
   castlingRights: CastlingRights;
   enPassant: [number, number] | null;
-  halfmove: number;
   fullmove: number;
+  halfmove: number;
 }

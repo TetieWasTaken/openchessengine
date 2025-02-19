@@ -4,12 +4,13 @@ import { getDiagonalMoves } from "../MoveGenerator";
 
 /**
  * Returns all possible moves for a bishop
+ *
  * @internal
  */
 export function getBishopMoves(
   board: Board,
   position: [number, number],
-  colour: "white" | "black",
+  colour: "black" | "white",
 ): Move[] {
   return getDiagonalMoves(board, position, colour);
 }

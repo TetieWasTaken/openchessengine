@@ -7,7 +7,7 @@ describe("Minimax", () => {
   test("Checkmate in 1", () => {
     const board = new Board("kr6/pp6/8/3N4/8/8/8/4K3 w - - 0 1");
     const move = minimax(board, 3);
-    expect(move.score).toBeGreaterThan(1000);
+    expect(move.score).toBeGreaterThan(1_000);
   });
 
   test("Four pieces", () => {

@@ -32,7 +32,7 @@ describe("Perft p4", () => {
     );
 
     const perft = _perft(board, 3);
-    expect(perft).toBe(9467);
+    expect(perft).toBe(9_467);
   });
 
   /*
@@ -75,7 +75,7 @@ describe("Perft p5", () => {
     );
 
     const perft = _perft(board, 2);
-    expect(perft).toBe(1486);
+    expect(perft).toBe(1_486);
   });
 
   test("Depth 3", () => {
@@ -84,7 +84,7 @@ describe("Perft p5", () => {
     );
 
     const perft = _perft(board, 3);
-    expect(perft).toBe(62379);
+    expect(perft).toBe(62_379);
   });
 
   /* test("Depth 4", () => {

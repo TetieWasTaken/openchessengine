@@ -3,12 +3,13 @@ import type { Board } from "../Board";
 
 /**
  * Returns all possible moves for a knight
+ *
  * @internal
  */
 export function getKnightMoves(
   board: Board,
   position: [number, number],
-  colour: "white" | "black",
+  colour: "black" | "white",
 ): Move[] {
   const boardData = board.getBoard();
   const moves: Move[] = [];

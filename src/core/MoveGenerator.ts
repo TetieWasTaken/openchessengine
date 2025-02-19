@@ -34,6 +34,7 @@ export function getAllMoves(
 
 /**
  * Returns the number of nodes at a given depth, see https://www.chessprogramming.org/Perft
+ *
  * @param board
  * @param depth
  * @internal
@@ -97,8 +98,7 @@ export function makeMove(board: Board, move: Move): Board {
           white: { ...newCastlingRights.white, king: false },
         };
       }
-    } else {
-      if (move.to[0] === 7 && move.to[1] === 0) {
+    } else if (move.to[0] === 7 && move.to[1] === 0) {
         newCastlingRights = {
           ...newCastlingRights,
           black: { ...newCastlingRights.black, queen: false },
@@ -109,7 +109,6 @@ export function makeMove(board: Board, move: Move): Board {
           black: { ...newCastlingRights.black, king: false },
         };
       }
-    }
   }
 
   if (move.castle !== undefined) {
@@ -148,8 +147,7 @@ export function makeMove(board: Board, move: Move): Board {
           },
         };
       }
-    } else {
-      if (move.from[0] === 7 && move.from[1] === 0) {
+    } else if (move.from[0] === 7 && move.from[1] === 0) {
         newCastlingRights = {
           ...newCastlingRights,
           black: {
@@ -166,7 +164,6 @@ export function makeMove(board: Board, move: Move): Board {
           },
         };
       }
-    }
   }
 
   if (move.isEnPassantCapture === true) {
@@ -249,11 +246,12 @@ export function getMoves(
 
 /**
  * Checks if the king of the given colour is in check
+ *
  * @internal
  */
 export function isKingInCheck(
   board: Board,
-  colour: "white" | "black",
+  colour: "black" | "white",
 ): boolean {
   const kingPosition = findKing(board.getBoard(), colour);
   if (!kingPosition) {
@@ -266,18 +264,17 @@ export function isKingInCheck(
     true,
   );
 
-  return opponentMoves.some((move) => {
-    return move.to[0] === kingPosition[0] && move.to[1] === kingPosition[1];
-  });
+  return opponentMoves.some((move) => move.to[0] === kingPosition[0] && move.to[1] === kingPosition[1]);
 }
 
 /**
  * Finds the position of the king of the given colour
+ *
  * @internal
  */
 export function findKing(
   board: BoardType,
-  colour: "white" | "black",
+  colour: "black" | "white",
 ): [number, number] | null {
   for (let i = 0; i < 8; i++) {
     for (let j = 0; j < 8; j++) {
@@ -286,17 +283,19 @@ export function findKing(
       }
     }
   }
+
   return null;
 }
 
 /**
  * Returns all possible orthogonal moves for a piece
+ *
  * @internal
  */
 export function getOrthogonalMoves(
   board: Board,
   position: [number, number],
-  colour: "white" | "black",
+  colour: "black" | "white",
 ): Move[] {
   const boardData = board.getBoard();
   const moves: Move[] = [];
@@ -345,12 +344,13 @@ export function getOrthogonalMoves(
 
 /**
  * Returns all possible diagonal moves for a piece
+ *
  * @internal
  */
 export function getDiagonalMoves(
   board: Board,
   position: [number, number],
-  colour: "white" | "black",
+  colour: "black" | "white",
 ): Move[] {
   const boardData = board.getBoard();
   const moves: Move[] = [];

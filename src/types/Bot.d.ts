@@ -1,6 +1,6 @@
-import { Move } from "./Core";
+import type { Move } from "./Core";
 
-export interface MinimaxResult {
+export type MinimaxResult = {
   move: Move;
   score: number;
 }

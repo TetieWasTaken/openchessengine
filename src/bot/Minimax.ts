@@ -1,12 +1,13 @@
-import { Board } from "../core/Board";
+import type { Board } from "../core/Board";
 import { getAllMoves, makeMove } from "../core/MoveGenerator";
-import { MinimaxResult } from "../types/Bot";
+import type { MinimaxResult } from "../types/Bot";
 import type { Move } from "../types/Core";
 
 import { evaluate } from "./Eval";
 
 /**
  * Minimax algorithm (see https://chessprogramming.org/Minimax)
+ *
  * @param board
  * @param depth
  * @param alpha
@@ -19,7 +20,7 @@ export function minimax(
   alpha = -Infinity,
   beta = Infinity,
   isMaximising: boolean = board.getActiveColour() === "white",
-): { score: number; move?: Move } {
+): { move?: Move, score: number; } {
   if (depth === 0) {
     return { score: evaluate(board.getBoard()) };
   }
@@ -38,13 +39,16 @@ export function minimax(
       if (result.score > best.score) {
         best = { score: result.score, move };
       }
+
       alpha = Math.max(alpha, result.score);
     } else {
       if (result.score < best.score) {
         best = { score: result.score, move };
       }
+
       beta = Math.min(beta, result.score);
     }
+
     if (beta <= alpha) {
       break;
     }

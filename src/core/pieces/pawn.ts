@@ -3,12 +3,13 @@ import type { Board } from "../Board";
 
 /**
  * Returns all possible moves for a pawn
+ *
  * @internal
  */
 export function getPawnMoves(
   board: Board,
   position: [number, number],
-  colour: "white" | "black",
+  colour: "black" | "white",
 ): Move[] {
   const moves: Move[] = [];
   const direction = colour === "white" ? 1 : -1;
@@ -61,8 +62,7 @@ export function getPawnMoves(
   // En passant
   const enPassantSquare = board.getEnPassantSquare();
 
-  if (enPassantSquare) {
-    if (
+  if (enPassantSquare && 
       enPassantSquare[0] === position[0] + direction && (
         enPassantSquare[1] === position[1] - 1 ||
         enPassantSquare[1] === position[1] + 1
@@ -74,7 +74,6 @@ export function getPawnMoves(
         isEnPassantCapture: true,
       });
     }
-  }
 
   // Capture diagonally to the left
   if (

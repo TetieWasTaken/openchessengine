@@ -1,4 +1,4 @@
-import { Board } from "../core/Board";
+import type { Board } from "../core/Board";
 import type {
   BoardType,
   CastlingRights,
@@ -9,6 +9,7 @@ import type {
 
 /**
  * Converts a FEN string to a Board
+ *
  * @param fen A FEN string
  * @returns A Board
  */
@@ -22,8 +23,8 @@ export function fenToBoard(fen: string): BoardType {
 
     for (const char of row) {
       // If the character is a number, add that many empty squares
-      if (/[1-8]/.exec(char)) {
-        const num = parseInt(char);
+      if (/[1-8]/.test(char)) {
+        const num = Number.parseInt(char);
 
         for (let k = 0; k < num; k++) {
           boardRow.push(null);
@@ -50,16 +51,17 @@ export function fenToBoard(fen: string): BoardType {
   return board;
 }
 
-interface FENOptions {
+type FENOptions = {
   activeColour: string;
-  castling: SingleCastlingRights | CastlingRights;
+  castling: CastlingRights | SingleCastlingRights;
   enPassant: string;
-  halfmove: number;
   fullmove: number;
+  halfmove: number;
 }
 
 /**
  * Converts a Board to a FEN string
+ *
  * @param board
  * @param options
  */
@@ -124,6 +126,7 @@ function _toCastlingString(castling: FENOptions["castling"]): string {
 
 /**
  * Converts a piece to its FEN representation
+ *
  * @param piece
  */
 function pieceToFen(piece: PieceType): string {
@@ -141,17 +144,18 @@ function pieceToFen(piece: PieceType): string {
     : map[piece.type].toLowerCase();
 }
 
-interface FENParts {
-  board: string;
+type FENParts = {
   activeColour: string;
+  board: string;
   castling: string;
   enPassant: string;
-  halfmove: string;
   fullmove: string;
+  halfmove: string;
 }
 
 /**
  * Checks if a character is a valid piece type
+ *
  * @param char
  */
 function isPieceType(char: string): char is PieceType["type"] {
@@ -160,6 +164,7 @@ function isPieceType(char: string): char is PieceType["type"] {
 
 /**
  * Parses a FEN string into its parts
+ *
  * @param fen
  */
 export function parseFEN(fen: string): FENParts {

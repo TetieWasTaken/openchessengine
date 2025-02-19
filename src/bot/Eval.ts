@@ -1,7 +1,8 @@
-import { BoardType, PieceType } from "../types/Core";
+import type { BoardType, PieceType } from "../types/Core";
 
 /**
  * Evaluates the board and returns a score.
+ *
  * @param board - The chess board to evaluate.
  * @returns The evaluation score.
  */
@@ -24,6 +25,7 @@ export function evaluate(board: BoardType): number {
 
 /**
  * Returns the value of a chess piece.
+ *
  * @param piece - The piece whose value is to be determined.
  * @returns The value assigned to the piece.
  */
@@ -39,7 +41,7 @@ function getPieceValue(piece: PieceType): number {
     case "Q":
       return 9;
     case "K":
-      return 10000;
+      return 10_000;
     default:
       return 0;
   }

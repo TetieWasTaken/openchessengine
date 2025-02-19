@@ -1,4 +1,4 @@
-/* eslint-disable no-console */
+ 
 
 import { search } from "../bot/Search";
 import { Board } from "../core/Board";
@@ -23,6 +23,7 @@ class FENCLI {
       } else {
         console.error("Invalid FEN: Unknown error");
       }
+
       process.exit(1);
     }
 
@@ -72,9 +73,10 @@ class FENCLI {
 
   /**
    * Parse the arguments and return the FEN, depth, and autoplay flag
+   *
    * @internal
    */
-  private parseArgs(): { fen: string; depth: number; autoplay: boolean } {
+  private parseArgs(): { autoplay: boolean, depth: number; fen: string; } {
     const args = process.argv.slice(2);
     let fen = "";
     let depth = 4;
@@ -84,7 +86,7 @@ class FENCLI {
       if (["-f", "--fen"].includes(args[i]) && args[i + 1] !== "") {
         fen = args[i + 1];
       } else if (["-d", "--depth"].includes(args[i]) && args[i + 1] !== "") {
-        depth = parseInt(args[i + 1], 10);
+        depth = Number.parseInt(args[i + 1], 10);
         if (isNaN(depth) || depth <= 0) {
           console.error("Invalid depth value. It must be a positive integer.");
           process.exit(1);
@@ -104,6 +106,7 @@ class FENCLI {
 
   /**
    * Convert a move to algebraic notation
+   *
    * @param move
    * @internal
    */

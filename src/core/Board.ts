@@ -12,16 +12,21 @@ import { fenToBoard } from "../utils/FEN";
  */
 export class Board {
   private board: BoardType = [];
+
   private castlingRights: CastlingRights = {
     white: { king: true, queen: true },
     black: { king: true, queen: true },
   };
+
   private enPassantSquare: [number, number] | null = null;
-  private activeColour: "white" | "black" = "white";
+
+  private activeColour: "black" | "white" = "white";
+
   private halfmove = 0;
+
   private fullmove = 1;
 
-  constructor(data?: string | BoardData) {
+  constructor(data?: BoardData | string) {
     if (data === undefined || typeof data === "string") {
       this.fromFEN(data);
     } else {
@@ -36,6 +41,7 @@ export class Board {
 
   /**
    * Create a board from a FEN string
+   *
    * @param fen The FEN string
    */
   public fromFEN(fen: string | undefined): this {
@@ -49,13 +55,14 @@ export class Board {
     this.activeColour = activeColour === "w" ? "white" : "black";
     this.castlingRights = this.parseCastlingRights(castling);
     this.enPassantSquare = this.parseEnPassantSquare(enPassant);
-    this.halfmove = parseInt(halfmove);
-    this.fullmove = parseInt(fullmove);
+    this.halfmove = Number.parseInt(halfmove);
+    this.fullmove = Number.parseInt(fullmove);
     return this;
   }
 
   /**
    * Get a piece from the board
+   *
    * @param param0 The coordinates of the piece
    */
   public getPiece([x, y]: [number, number]): BoardType[number][number] | null {
@@ -71,15 +78,17 @@ export class Board {
 
   /**
    * Getter for the castling rights
+   *
    * @param side
    * @returns
    */
   public getCastlingRights(
-    side?: "white" | "black",
+    side?: "black" | "white",
   ): CastlingRights | SingleCastlingRights {
     if (side !== undefined) {
       return this.castlingRights[side];
     }
+
     return this.castlingRights;
   }
 
@@ -100,7 +109,7 @@ export class Board {
   /**
    * Get the active colour
    */
-  public getActiveColour(): "white" | "black" {
+  public getActiveColour(): "black" | "white" {
     return this.activeColour;
   }
 
@@ -123,17 +132,19 @@ export class Board {
 
   /**
    * Set the active colour
+   *
    * @param colour
    * @param mutate Whether to mutate the board or return a new one
    */
   public setActiveColour(
-    colour: "white" | "black",
+    colour: "black" | "white",
     mutate = true,
   ): this {
     if (mutate) {
       this.activeColour = colour;
       return this;
     }
+
     const newBoard = this.clone();
     newBoard.setActiveColour(colour, true);
 
@@ -142,7 +153,7 @@ export class Board {
   }
 
   public removeCastlingRights(
-    side: "white" | "black",
+    side: "black" | "white",
     type?: "king" | "queen",
   ): this {
     if (type !== undefined) {
@@ -173,8 +184,10 @@ export class Board {
         boardStr += piece ? pieces[piece.colour][piece.type] : square;
         boardStr += " ";
       }
+
       boardStr += "\n";
     }
+
     boardStr += "  a b c d e f g h\n";
     return boardStr;
   }
@@ -186,6 +199,7 @@ export class Board {
 
   /**
    * Create a board from a FEN string
+   *
    * @param [fen] The FEN string
    * @internal
    */
@@ -197,6 +211,7 @@ export class Board {
 
   /**
    * Parse castling rights from a FEN string
+   *
    * @param castling The FEN string
    * @internal
    */
@@ -222,6 +237,7 @@ export class Board {
 
   /**
    * Parse the en passant square from a FEN string
+   *
    * @param data
    */
   private parseEnPassantSquare(data = ""): [number, number] | null {
@@ -230,6 +246,6 @@ export class Board {
     }
 
     const [file, rank] = data;
-    return [parseInt(rank) - 1, file.charCodeAt(0) - 97];
+    return [Number.parseInt(rank) - 1, file.charCodeAt(0) - 97];
   }
 }

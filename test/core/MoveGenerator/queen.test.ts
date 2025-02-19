@@ -35,9 +35,9 @@ describe("Move Generator | Queen", () => {
       [7, 7],
     ];
 
-    expectedMoves.forEach((move) => {
+    for (const move of expectedMoves) {
       expect(moves.map((m) => m.to)).toContainEqual(move);
-    });
+    }
 
     expect(moves.length).toBe(expectedMoves.length);
   });

@@ -24,9 +24,9 @@ describe("Move Generator | Rook", () => {
       [1, 7],
     ];
 
-    expectedMoves.forEach((move) => {
+    for (const move of expectedMoves) {
       expect(moves.map((m) => m.to)).toContainEqual(move);
-    });
+    }
 
     expect(moves.length).toBe(expectedMoves.length);
   });
