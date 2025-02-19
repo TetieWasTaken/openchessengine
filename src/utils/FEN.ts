@@ -64,7 +64,7 @@ export function toFEN(
   const fenParts = [
     _toBoardString(board),
     board.getActiveColour() === "white" ? "w" : "b",
-    _toCastlingString(board.getCastlingRights()),
+    _toCastlingString(board.getCastlingRights()) || "-",
     board.getEnPassantSquare() ? board.getEnPassantSquare() : "-",
     board.getHalfmove().toString(),
     board.getFullmove().toString(),
