@@ -3,6 +3,7 @@
 import eslint from '@eslint/js';
 import tseslint from 'typescript-eslint';
 import * as importPlugin from 'eslint-plugin-import';
+import { common, typescript, prettier } from "eslint-config-neon";
 
 export default [
   {
@@ -98,4 +99,7 @@ export default [
       '@typescript-eslint/use-unknown-in-catch-callback-variable': 'error',
     },
   },
+  ...common,
+  ...typescript,
+  ...prettier,
 ];
