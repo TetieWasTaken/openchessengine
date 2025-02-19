@@ -36,7 +36,7 @@ describe("Move Generator | Queen", () => {
     ];
 
     for (const move of expectedMoves) {
-      expect(moves.map((m) => m.to)).toContainEqual(move);
+      expect(moves.map((move) => move.to)).toContainEqual(move);
     }
 
     expect(moves.length).toBe(expectedMoves.length);
@@ -46,19 +46,19 @@ describe("Move Generator | Queen", () => {
     const board = new Board("8/1q6/8/8/3q4/8/1Q6/8 w - - 0 1");
     const moves = getMoves(board, [1, 1]);
 
-    expect(moves.map((m) => m.to)).toContainEqual([6, 1]);
-    expect(moves.map((m) => m.to)).not.toContainEqual([7, 1]);
-    expect(moves.map((m) => m.to)).toContainEqual([3, 3]);
-    expect(moves.map((m) => m.to)).not.toContainEqual([4, 4]);
+    expect(moves.map((move) => move.to)).toContainEqual([6, 1]);
+    expect(moves.map((move) => move.to)).not.toContainEqual([7, 1]);
+    expect(moves.map((move) => move.to)).toContainEqual([3, 3]);
+    expect(moves.map((move) => move.to)).not.toContainEqual([4, 4]);
   });
 
   test("Queen with blocking piece", () => {
     const board = new Board("8/1Q6/8/8/3Q4/8/1Q6/8 w - - 0 1");
     const moves = getMoves(board, [1, 1]);
 
-    expect(moves.map((m) => m.to)).not.toContainEqual([6, 1]);
-    expect(moves.map((m) => m.to)).not.toContainEqual([7, 1]);
-    expect(moves.map((m) => m.to)).not.toContainEqual([3, 3]);
-    expect(moves.map((m) => m.to)).not.toContainEqual([4, 4]);
+    expect(moves.map((move) => move.to)).not.toContainEqual([6, 1]);
+    expect(moves.map((move) => move.to)).not.toContainEqual([7, 1]);
+    expect(moves.map((move) => move.to)).not.toContainEqual([3, 3]);
+    expect(moves.map((move) => move.to)).not.toContainEqual([4, 4]);
   });
 });

@@ -6,7 +6,7 @@ describe("Move Generator | Bishop", () => {
     const board = new Board("8/8/8/8/8/8/1B6/8 w - - 0 1");
     const moves = getMoves(board, [1, 1]);
 
-    expect(moves.map((m) => m.to)).toEqual([
+    expect(moves.map((move) => move.to)).toEqual([
       [0, 0],
       [0, 2],
       [2, 0],
@@ -23,7 +23,7 @@ describe("Move Generator | Bishop", () => {
     const board = new Board("7b/8/8/8/8/8/1B6/8 w - - 0 1");
     const moves = getMoves(board, [1, 1]);
 
-    expect(moves.map((m) => m.to)).toEqual([
+    expect(moves.map((move) => move.to)).toEqual([
       [0, 0],
       [0, 2],
       [2, 0],
@@ -40,7 +40,7 @@ describe("Move Generator | Bishop", () => {
     const board = new Board("8/8/8/8/8/2b5/1B6/8 w - - 0 1");
     const moves = getMoves(board, [1, 1]);
 
-    expect(moves.map((m) => m.to)).toEqual([
+    expect(moves.map((move) => move.to)).toEqual([
       [0, 0],
       [0, 2],
       [2, 0],

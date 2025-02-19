@@ -1,21 +1,10 @@
-import { exec, type ExecException } from "node:child_process";
+import { exec } from "node:child_process";
+import { promisify } from "node:util";
 
-async function execPromise(
-  command: string,
-): Promise<{ stderr: string; stdout: string }> {
-  return new Promise((resolve, reject) => {
-    exec(
-      command,
-      (error: ExecException | null, stdout: string, stderr: string) => {
-        if (error) {
-          reject(error);
-          return;
-        }
+const execPromise = promisify(exec);
 
-        resolve({ stdout, stderr });
-      },
-    );
-  });
+async function runCommand(command: string): Promise<{ stderr: string; stdout: string }> {
+  return execPromise(command);
 }
 
 describe("cli", () => {
@@ -25,7 +14,7 @@ describe("cli", () => {
 
     (async () => {
       try {
-        const { stdout } = await execPromise(
+        const { stdout } = await runCommand(
           `npm run start -- -f "${fen}" -d 4`,
         );
         expect(stdout).toContain(expectedFen);

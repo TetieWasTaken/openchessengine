@@ -10,7 +10,7 @@ import type {
 /**
  * Converts a FEN string to a Board
  *
- * @param fen A FEN string
+ * @param fen - A FEN string
  * @returns A Board
  */
 export function fenToBoard(fen: string): BoardType {
@@ -24,24 +24,22 @@ export function fenToBoard(fen: string): BoardType {
     for (const char of row) {
       // If the character is a number, add that many empty squares
       if (/[1-8]/.test(char)) {
-        const num = Number.parseInt(char);
+        const num = Number.parseInt(char, 10);
 
         for (let k = 0; k < num; k++) {
           boardRow.push(null);
         }
-      } else {
+      } else if (isPieceType(char.toUpperCase())) {
         // The character is a piece, add it to the board
-        if (!isPieceType(char.toUpperCase())) {
-          throw new Error(`Invalid piece type: ${char}`);
-        } else {
-          const piece: PieceType = {
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion -- Not sure why eslint is complaining
-            type: char.toUpperCase() as PieceType["type"],
-            colour: char === char.toUpperCase() ? "white" : "black",
-          };
+        const piece: PieceType = {
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion -- Not sure why eslint is complaining
+          type: char.toUpperCase() as PieceType["type"],
+          colour: char === char.toUpperCase() ? "white" : "black",
+        };
 
-          boardRow.push(piece);
-        }
+        boardRow.push(piece);
+      } else {
+        throw new Error(`Invalid piece type: ${char}`);
       }
     }
 
@@ -57,23 +55,20 @@ type FENOptions = {
   enPassant: string;
   fullmove: number;
   halfmove: number;
-}
+};
 
 /**
  * Converts a Board to a FEN string
  *
- * @param board
- * @param options
+ * @param board -
  */
-export function toFEN(
-  board: Board,
-): string {
+export function toFEN(board: Board): string {
   const fenParts = [
     _toBoardString(board),
     board.getActiveColour() === "white" ? "w" : "b",
-    _toCastlingString(board.getCastlingRights()) !== ""
-      ? _toCastlingString(board.getCastlingRights())
-      : "-",
+    _toCastlingString(board.getCastlingRights()) === ""
+      ? "-"
+      : _toCastlingString(board.getCastlingRights()),
     board.getEnPassantSquare() ? board.getEnPassantSquare() : "-",
     board.getHalfmove().toString(),
     board.getFullmove().toString(),
@@ -116,9 +111,8 @@ function _toBoardString(board: Board): string {
 
 function _toCastlingString(castling: FENOptions["castling"]): string {
   if ("white" in castling) {
-    return `${castling.white.king ? "K" : ""}${
-      castling.white.queen ? "Q" : ""
-    }${castling.black.king ? "k" : ""}${castling.black.queen ? "q" : ""}`;
+    return `${castling.white.king ? "K" : ""}${castling.white.queen ? "Q" : ""
+      }${castling.black.king ? "k" : ""}${castling.black.queen ? "q" : ""}`;
   }
 
   return `${castling.king ? "K" : ""}${castling.queen ? "Q" : ""}`;
@@ -127,9 +121,10 @@ function _toCastlingString(castling: FENOptions["castling"]): string {
 /**
  * Converts a piece to its FEN representation
  *
- * @param piece
+ * @param piece -
  */
 function pieceToFen(piece: PieceType): string {
+  /* eslint-disable id-length */
   const map: Record<string, string> = {
     P: "P",
     N: "N",
@@ -138,6 +133,7 @@ function pieceToFen(piece: PieceType): string {
     Q: "Q",
     K: "K",
   };
+  /* eslint-enable id-length */
 
   return piece.colour === "white"
     ? map[piece.type]
@@ -151,12 +147,12 @@ type FENParts = {
   enPassant: string;
   fullmove: string;
   halfmove: string;
-}
+};
 
 /**
  * Checks if a character is a valid piece type
  *
- * @param char
+ * @param char -
  */
 function isPieceType(char: string): char is PieceType["type"] {
   return ["P", "N", "B", "R", "Q", "K"].includes(char);
@@ -165,7 +161,7 @@ function isPieceType(char: string): char is PieceType["type"] {
 /**
  * Parses a FEN string into its parts
  *
- * @param fen
+ * @param fen -
  */
 export function parseFEN(fen: string): FENParts {
   const parts = fen.split(" ");

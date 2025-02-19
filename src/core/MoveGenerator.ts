@@ -1,5 +1,4 @@
 import type { BoardType, CastlingRights, Move } from "../types/Core";
-
 import { Board } from "./Board";
 import { getBishopMoves } from "./pieces/bishop";
 import { getKingMoves } from "./pieces/king";
@@ -35,8 +34,8 @@ export function getAllMoves(
 /**
  * Returns the number of nodes at a given depth, see https://www.chessprogramming.org/Perft
  *
- * @param board
- * @param depth
+ * @param board -
+ * @param depth -
  * @internal
  */
 export function _perft(board: Board, depth: number): number {
@@ -99,16 +98,16 @@ export function makeMove(board: Board, move: Move): Board {
         };
       }
     } else if (move.to[0] === 7 && move.to[1] === 0) {
-        newCastlingRights = {
-          ...newCastlingRights,
-          black: { ...newCastlingRights.black, queen: false },
-        };
-      } else if (move.to[0] === 7 && move.to[1] === 7) {
-        newCastlingRights = {
-          ...newCastlingRights,
-          black: { ...newCastlingRights.black, king: false },
-        };
-      }
+      newCastlingRights = {
+        ...newCastlingRights,
+        black: { ...newCastlingRights.black, queen: false },
+      };
+    } else if (move.to[0] === 7 && move.to[1] === 7) {
+      newCastlingRights = {
+        ...newCastlingRights,
+        black: { ...newCastlingRights.black, king: false },
+      };
+    }
   }
 
   if (move.castle !== undefined) {
@@ -148,22 +147,22 @@ export function makeMove(board: Board, move: Move): Board {
         };
       }
     } else if (move.from[0] === 7 && move.from[1] === 0) {
-        newCastlingRights = {
-          ...newCastlingRights,
-          black: {
-            ...newCastlingRights.black,
-            queen: false,
-          },
-        };
-      } else if (move.from[0] === 7 && move.from[1] === 7) {
-        newCastlingRights = {
-          ...newCastlingRights,
-          black: {
-            ...newCastlingRights.black,
-            king: false,
-          },
-        };
-      }
+      newCastlingRights = {
+        ...newCastlingRights,
+        black: {
+          ...newCastlingRights.black,
+          queen: false,
+        },
+      };
+    } else if (move.from[0] === 7 && move.from[1] === 7) {
+      newCastlingRights = {
+        ...newCastlingRights,
+        black: {
+          ...newCastlingRights.black,
+          king: false,
+        },
+      };
+    }
   }
 
   if (move.isEnPassantCapture === true) {
@@ -236,11 +235,12 @@ export function getMoves(
 
   // Filter out moves that would put the king in check
   return moves.filter((move) => {
-    if (!isRecursion) {
+    if (isRecursion) return true;
+    else {
       const newBoard = makeMove(board, move);
       const inCheck = isKingInCheck(newBoard, piece.colour);
       return !inCheck;
-    } else return true;
+    }
   });
 }
 
@@ -264,7 +264,9 @@ export function isKingInCheck(
     true,
   );
 
-  return opponentMoves.some((move) => move.to[0] === kingPosition[0] && move.to[1] === kingPosition[1]);
+  return opponentMoves.some((move) =>
+    move.to[0] === kingPosition[0] && move.to[1] === kingPosition[1]
+  );
 }
 
 /**
@@ -326,14 +328,14 @@ export function getOrthogonalMoves(
           from: position,
           to: [x, y],
         });
-      } else if (piece.colour !== colour) {
+      } else if (piece.colour === colour) {
+        break;
+      } else {
         moves.push({
           from: position,
           to: [x, y],
         });
 
-        break;
-      } else {
         break;
       }
     }
@@ -381,14 +383,14 @@ export function getDiagonalMoves(
           from: position,
           to: [x, y],
         });
-      } else if (piece.colour !== colour) {
+      } else if (piece.colour === colour) {
+        break;
+      } else {
         moves.push({
           from: position,
           to: [x, y],
         });
 
-        break;
-      } else {
         break;
       }
     }

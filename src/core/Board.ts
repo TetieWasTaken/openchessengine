@@ -4,8 +4,8 @@ import type {
   CastlingRights,
   SingleCastlingRights,
 } from "../types/Core";
-import { DEFAULT_FEN } from "../utils/constants";
 import { fenToBoard } from "../utils/FEN";
+import { DEFAULT_FEN } from "../utils/constants";
 
 /**
  * Represents a chess board
@@ -26,7 +26,7 @@ export class Board {
 
   private fullmove = 1;
 
-  constructor(data?: BoardData | string) {
+  public constructor(data?: BoardData | string) {
     if (data === undefined || typeof data === "string") {
       this.fromFEN(data);
     } else {
@@ -42,30 +42,32 @@ export class Board {
   /**
    * Create a board from a FEN string
    *
-   * @param fen The FEN string
+   * @param fen - The FEN string
    */
   public fromFEN(fen: string | undefined): this {
-    if (fen === undefined || fen.trim() === "") {
-      fen = DEFAULT_FEN;
+    let fenString = fen;
+    if (fenString === undefined || fenString.trim() === "") {
+      fenString = DEFAULT_FEN;
     }
 
-    const [board, activeColour, castling, enPassant, halfmove, fullmove] = fen
+    const [board, activeColour, castling, enPassant, halfmove, fullmove] = fenString
       .split(" ");
     this.board = this.createBoard(board);
     this.activeColour = activeColour === "w" ? "white" : "black";
     this.castlingRights = this.parseCastlingRights(castling);
     this.enPassantSquare = this.parseEnPassantSquare(enPassant);
-    this.halfmove = Number.parseInt(halfmove);
-    this.fullmove = Number.parseInt(fullmove);
+    this.halfmove = Number.parseInt(halfmove, 10);
+    this.fullmove = Number.parseInt(fullmove, 10);
     return this;
   }
 
   /**
    * Get a piece from the board
    *
-   * @param param0 The coordinates of the piece
+   * @param coords - The coordinates of the piece.
    */
-  public getPiece([x, y]: [number, number]): BoardType[number][number] | null {
+  public getPiece(coords: [number, number]): BoardType[number][number] | null {
+    const [x, y] = coords;
     return this.board[x][y];
   }
 
@@ -79,7 +81,7 @@ export class Board {
   /**
    * Getter for the castling rights
    *
-   * @param side
+   * @param side -
    * @returns
    */
   public getCastlingRights(
@@ -133,8 +135,8 @@ export class Board {
   /**
    * Set the active colour
    *
-   * @param colour
-   * @param mutate Whether to mutate the board or return a new one
+   * @param colour -
+   * @param mutate - Whether to mutate the board or return a new one
    */
   public setActiveColour(
     colour: "black" | "white",
@@ -156,11 +158,11 @@ export class Board {
     side: "black" | "white",
     type?: "king" | "queen",
   ): this {
-    if (type !== undefined) {
-      this.castlingRights[side][type] = false;
-    } else {
+    if (type === undefined) {
       this.castlingRights[side].king = false;
       this.castlingRights[side].queen = false;
+    } else {
+      this.castlingRights[side][type] = false;
     }
 
     return this;
@@ -171,10 +173,12 @@ export class Board {
    */
   public toString(): string {
     let boardStr = "\n";
+    /* eslint-disable id-length */
     const pieces = {
       black: { P: "♙", N: "♘", B: "♗", R: "♖", Q: "♕", K: "♔" },
       white: { P: "♟", N: "♞", B: "♝", R: "♜", Q: "♛", K: "♚" },
     };
+    /* eslint-enable id-length */
 
     for (let row = 7; row >= 0; row--) {
       boardStr += `${(row + 1).toString()} `;
@@ -192,15 +196,10 @@ export class Board {
     return boardStr;
   }
 
-  public isCheckmate(): boolean {
-    // todo: implement
-    return false;
-  }
-
   /**
    * Create a board from a FEN string
    *
-   * @param [fen] The FEN string
+   * @param fen - The FEN string
    * @internal
    */
   private createBoard(
@@ -212,7 +211,7 @@ export class Board {
   /**
    * Parse castling rights from a FEN string
    *
-   * @param castling The FEN string
+   * @param castling - The FEN string
    * @internal
    */
   private parseCastlingRights(castling = ""): CastlingRights {
@@ -238,7 +237,7 @@ export class Board {
   /**
    * Parse the en passant square from a FEN string
    *
-   * @param data
+   * @param data -
    */
   private parseEnPassantSquare(data = ""): [number, number] | null {
     if (data === "-") {
@@ -246,6 +245,15 @@ export class Board {
     }
 
     const [file, rank] = data;
-    return [Number.parseInt(rank) - 1, file.charCodeAt(0) - 97];
+    if (!file.codePointAt(0)) {
+      throw new Error("Invalid FEN string");
+    }
+
+    const fileCode = file.codePointAt(0);
+    if (fileCode === undefined) {
+      throw new Error("Invalid FEN string");
+    }
+
+    return [Number.parseInt(rank, 10) - 1, fileCode - 97];
   }
 }

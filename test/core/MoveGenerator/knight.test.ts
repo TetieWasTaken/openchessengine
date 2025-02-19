@@ -6,7 +6,7 @@ describe("Move Generator | Knight", () => {
     const board = new Board("8/8/8/8/8/8/1N6/8 w - - 0 1");
     const moves = getMoves(board, [1, 1]);
 
-    expect(moves.map((m) => m.to)).toEqual([
+    expect(moves.map((move) => move.to)).toEqual([
       [0, 3],
       [2, 3],
       [3, 0],
@@ -18,7 +18,7 @@ describe("Move Generator | Knight", () => {
     const board = new Board("8/8/8/8/n7/8/1N6/8 w - - 0 1");
     const moves = getMoves(board, [1, 1]);
 
-    expect(moves.map((m) => m.to)).toEqual([
+    expect(moves.map((move) => move.to)).toEqual([
       [0, 3],
       [2, 3],
       [3, 0],
@@ -30,7 +30,7 @@ describe("Move Generator | Knight", () => {
     const board = new Board("8/8/8/8/P7/8/1N6/8 w - - 0 1");
     const moves = getMoves(board, [1, 1]);
 
-    expect(moves.map((m) => m.to)).toEqual([
+    expect(moves.map((move) => move.to)).toEqual([
       [0, 3],
       [2, 3],
       [3, 2],

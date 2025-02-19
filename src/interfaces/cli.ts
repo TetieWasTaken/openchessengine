@@ -1,5 +1,3 @@
- 
-
 import { search } from "../bot/Search";
 import { Board } from "../core/Board";
 import { makeMove } from "../core/MoveGenerator";
@@ -51,9 +49,11 @@ class FENCLI {
     console.log(new Board(newFEN).toString());
   }
 
-  private autoplay(board: Board, depth: number): void {
-    while (depth > 0) {
-      const bestMove = search(board, depth);
+  private autoplay(initialBoard: Board, depth: number): void {
+    let board = initialBoard;
+    let currentDepth = depth;
+    while (currentDepth > 0) {
+      const bestMove = search(board, currentDepth);
 
       if (!bestMove) {
         console.log("No valid moves available.");
@@ -64,10 +64,10 @@ class FENCLI {
       const newFEN = toFEN(board);
 
       console.log(`Best move: ${this.moveToAlgebraic(bestMove)}`);
-      console.log(`New FEN: ${newFEN} (depth ${depth.toString()})`);
+      console.log(`New FEN: ${newFEN} (depth ${currentDepth.toString()})`);
       console.log(board.toString());
 
-      depth--;
+      currentDepth--;
     }
   }
 
@@ -76,7 +76,7 @@ class FENCLI {
    *
    * @internal
    */
-  private parseArgs(): { autoplay: boolean, depth: number; fen: string; } {
+  private parseArgs(): { autoplay: boolean; depth: number; fen: string } {
     const args = process.argv.slice(2);
     let fen = "";
     let depth = 4;
@@ -87,7 +87,7 @@ class FENCLI {
         fen = args[i + 1];
       } else if (["-d", "--depth"].includes(args[i]) && args[i + 1] !== "") {
         depth = Number.parseInt(args[i + 1], 10);
-        if (isNaN(depth) || depth <= 0) {
+        if (Number.isNaN(depth) || depth <= 0) {
           console.error("Invalid depth value. It must be a positive integer.");
           process.exit(1);
         }
@@ -107,14 +107,13 @@ class FENCLI {
   /**
    * Convert a move to algebraic notation
    *
-   * @param move
+   * @param move -
    * @internal
    */
   private moveToAlgebraic(move: Move): string {
-    // todo: add promotion, castling, captures, etc...
-    const fileFrom = String.fromCharCode(97 + move.from[1]);
+    const fileFrom = String.fromCodePoint(97 + move.from[1]);
     const rankFrom = (move.from[0] + 1).toString();
-    const fileTo = String.fromCharCode(97 + move.to[1]);
+    const fileTo = String.fromCodePoint(97 + move.to[1]);
     const rankTo = (move.to[0] + 1).toString();
 
     return `${fileFrom}${rankFrom}${fileTo}${rankTo}`;

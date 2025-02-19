@@ -25,7 +25,7 @@ describe("Move Generator | Rook", () => {
     ];
 
     for (const move of expectedMoves) {
-      expect(moves.map((m) => m.to)).toContainEqual(move);
+      expect(moves.map((move) => move.to)).toContainEqual(move);
     }
 
     expect(moves.length).toBe(expectedMoves.length);
@@ -35,15 +35,15 @@ describe("Move Generator | Rook", () => {
     const board = new Board("8/1r6/8/8/8/8/1R6/8 w - - 0 1");
     const moves = getMoves(board, [1, 1]);
 
-    expect(moves.map((m) => m.to)).toContainEqual([6, 1]);
-    expect(moves.map((m) => m.to)).not.toContainEqual([7, 1]);
+    expect(moves.map((move) => move.to)).toContainEqual([6, 1]);
+    expect(moves.map((move) => move.to)).not.toContainEqual([7, 1]);
   });
 
   test("Rook with blocking piece", () => {
     const board = new Board("8/1R6/8/8/8/8/1R6/8 w - - 0 1");
     const moves = getMoves(board, [1, 1]);
 
-    expect(moves.map((m) => m.to)).not.toContainEqual([6, 1]);
-    expect(moves.map((m) => m.to)).not.toContainEqual([7, 1]);
+    expect(moves.map((move) => move.to)).not.toContainEqual([6, 1]);
+    expect(moves.map((move) => move.to)).not.toContainEqual([7, 1]);
   });
 });

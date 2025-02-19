@@ -13,7 +13,7 @@ describe("Move Generator | Pawn", () => {
     const board = new Board("8/p7/1P6/8/8/8/8/8 b - - 0 1");
     const moves = getMoves(board, [6, 0]);
 
-    expect(moves.map((m) => m.to)).toEqual([
+    expect(moves.map((move) => move.to)).toEqual([
       [5, 0],
       [4, 0],
       [5, 1],
@@ -24,7 +24,7 @@ describe("Move Generator | Pawn", () => {
     const board = new Board("8/8/8/8/8/8/P7/8 w - - 0 1");
     const moves = getMoves(board, [1, 0]);
 
-    expect(moves.map((m) => m.to)).toEqual([
+    expect(moves.map((move) => move.to)).toEqual([
       [2, 0],
       [3, 0],
     ]);
@@ -41,7 +41,7 @@ describe("Move Generator | Pawn", () => {
     const board = new Board("k7/4P3/8/8/8/8/8/7K w - - 0 1");
     const moves = getMoves(board, [6, 4]);
 
-    expect(moves.map((m) => m.promotion)).toEqual(["Q", "R", "B", "N"]);
+    expect(moves.map((move) => move.promotion)).toEqual(["Q", "R", "B", "N"]);
   });
 
   test("Rook promotion", () => {
@@ -61,7 +61,7 @@ describe("Move Generator | Pawn", () => {
     );
     const moves = getMoves(board, [3, 3]);
 
-    expect(moves.map((m) => m.to)).toContainEqual([2, 4]);
+    expect(moves.map((move) => move.to)).toContainEqual([2, 4]);
   });
 
   test("En passant square", () => {
@@ -71,8 +71,11 @@ describe("Move Generator | Pawn", () => {
 
     expect(board.getEnPassantSquare()).toBeNull();
     const moves = getMoves(board, [6, 7]);
-    expect(moves.map((m) => m.to)).toContainEqual([4, 7]);
-    expect(moves.find((m) => m.to[0] === 4 && m.to[1] === 7)?.isDoublePawnMove)
+    expect(moves.map((move) => move.to)).toContainEqual([4, 7]);
+    expect(
+      moves.find((move) => move.to[0] === 4 && move.to[1] === 7)
+        ?.isDoublePawnMove,
+    )
       .toBe(true);
 
     const blackBoard = makeMove(board, {
