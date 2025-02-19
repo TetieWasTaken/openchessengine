@@ -1,6 +1,6 @@
 import { Board } from "../core/Board";
 import { search } from "../bot/Search";
-import { MoveGenerator } from "../core/MoveGenerator";
+import { getAllMoves, makeMove } from "../core/MoveGenerator";
 import { parseFEN, toFEN } from "../utils/FEN";
 import { Move } from "../types/Core";
 
@@ -8,16 +8,13 @@ import { Move } from "../types/Core";
  * cli for interacting with the bot
  */
 class FENCLI {
-  private readonly depth: number = 3;
-
   public run() {
-    // parse the FEN from the arguments (-f <FEN>)
-    const fen = this.parseArgs();
-    const fenParts = parseFEN(fen);
+    // parse the FEN, depth, and autoplay from the arguments (-f <FEN> -d <depth> -a)
+    const { fen, depth, autoplay } = this.parseArgs();
 
     let board: Board;
     try {
-      board = new Board(fenParts.board);
+      board = new Board(fen);
     } catch (error) {
       if (error instanceof Error) {
         console.error(`Invalid FEN: ${error.message}`);
@@ -27,39 +24,80 @@ class FENCLI {
       process.exit(1);
     }
 
-    board.setActiveColour(fenParts.activeColour === "w" ? "white" : "black");
+    if (autoplay) {
+      this.autoplay(board, depth);
+    } else {
+      this.playMove(board, depth);
+    }
+  }
 
-    const bestMove = search(
-      board,
-      this.depth,
-    );
+  private playMove(board: Board, depth: number) {
+    const bestMove = search(board, depth);
 
-    const newBoard = MoveGenerator.makeMove(board, bestMove);
+    if (!bestMove) {
+      console.log("No valid moves available.");
+      return;
+    }
+
+    const newBoard = makeMove(board, bestMove);
     const newFEN = toFEN(newBoard);
 
     console.log(`Best move: ${this.moveToAlgebraic(bestMove)}`);
-    console.log(
-      `New FEN: ${newFEN} (depth ${this.depth.toString()})`,
-    );
+    console.log(`New FEN: ${newFEN} (depth ${depth})`);
 
     console.log(new Board(newFEN).toString());
   }
 
+  private autoplay(board: Board, depth: number) {
+    while (depth > 0) {
+      if (!getAllMoves(board).length) {
+        console.log("No more valid moves available.");
+        break;
+      }
+
+      const bestMove = search(board, depth);
+
+      board = makeMove(board, bestMove);
+      const newFEN = toFEN(board);
+
+      console.log(`Best move: ${this.moveToAlgebraic(bestMove)}`);
+      console.log(`New FEN: ${newFEN} (depth ${depth})`);
+      console.log(board.toString());
+
+      depth--;
+    }
+  }
+
   /**
-   * Parse the arguments and return the FEN
+   * Parse the arguments and return the FEN, depth, and autoplay flag
    * @internal
    */
-  private parseArgs(): string {
+  private parseArgs(): { fen: string; depth: number; autoplay: boolean } {
     const args = process.argv.slice(2);
+    let fen = "";
+    let depth = 4;
+    let autoplay = false;
 
     for (let i = 0; i < args.length; i++) {
       if (["-f", "--fen"].includes(args[i]) && args[i + 1]) {
-        return args[i + 1];
+        fen = args[i + 1];
+      } else if (["-d", "--depth"].includes(args[i]) && args[i + 1]) {
+        depth = parseInt(args[i + 1], 10);
+        if (isNaN(depth) || depth <= 0) {
+          console.error("Invalid depth value. It must be a positive integer.");
+          process.exit(1);
+        }
+      } else if (["-a", "--autoplay"].includes(args[i])) {
+        autoplay = true;
       }
     }
 
-    console.error("Usage: node cli.js -f <FEN>");
-    process.exit(1);
+    if (!fen) {
+      console.error("Usage: -f <FEN> [-d <depth>] [-a]");
+      process.exit(1);
+    }
+
+    return { fen, depth, autoplay };
   }
 
   /**
@@ -78,5 +116,5 @@ class FENCLI {
   }
 }
 
-// run cli when file is runned
+// run cli
 new FENCLI().run();

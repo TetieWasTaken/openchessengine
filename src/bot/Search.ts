@@ -10,7 +10,7 @@ import { minimax } from "./Minimax";
  */
 export function search(
   board: Board,
-  depth = 3,
+  depth: number,
 ): Move {
   const { move } = minimax(board, depth);
   if (!move) {
