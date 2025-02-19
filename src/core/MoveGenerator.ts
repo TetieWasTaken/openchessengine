@@ -183,8 +183,11 @@ export function makeMove(board: Board, move: Move): Board {
     activeColour: board.getActiveColour() === "white" ? "black" : "white",
     castlingRights: newCastlingRights,
     enPassant: enPassantSquare,
-    halfmove: board.getHalfmove() + 1,
-    fullmove: board.getFullmove(),
+    halfmove: piece?.type === "P" || capturedPiece
+      ? 0
+      : board.getHalfmove() + 1,
+    fullmove: board.getFullmove() +
+      (board.getActiveColour() === "black" ? 1 : 0),
   });
 }
 

@@ -19,7 +19,7 @@ export class Board {
   private enPassantSquare: [number, number] | null = null;
   private activeColour: "white" | "black" = "white";
   private halfmove = 0;
-  private fullmove = 0;
+  private fullmove = 1;
 
   constructor(data?: string | BoardData) {
     if (data === undefined || typeof data === "string") {
