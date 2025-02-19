@@ -22,7 +22,7 @@ export class Board {
   private fullmove = 0;
 
   constructor(data?: string | BoardData) {
-    if (!data || typeof data === "string") {
+    if (data === undefined || typeof data === "string") {
       this.fromFEN(data);
     } else {
       this.board = data.board;
@@ -39,7 +39,7 @@ export class Board {
    * @param fen The FEN string
    */
   public fromFEN(fen: string | undefined): this {
-    if (!fen) {
+    if (fen === undefined || fen.trim() === "") {
       fen = DEFAULT_FEN;
     }
 
@@ -77,7 +77,7 @@ export class Board {
   public getCastlingRights(
     side?: "white" | "black",
   ): CastlingRights | SingleCastlingRights {
-    if (side) {
+    if (side !== undefined) {
       return this.castlingRights[side];
     }
     return this.castlingRights;
@@ -134,14 +134,18 @@ export class Board {
       this.activeColour = colour;
       return this;
     }
-    return (this.clone() as this).setActiveColour(colour, true);
+    const newBoard = this.clone();
+    newBoard.setActiveColour(colour, true);
+
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion
+    return newBoard as this;
   }
 
   public removeCastlingRights(
     side: "white" | "black",
     type?: "king" | "queen",
   ): this {
-    if (type) {
+    if (type !== undefined) {
       this.castlingRights[side][type] = false;
     } else {
       this.castlingRights[side].king = false;
