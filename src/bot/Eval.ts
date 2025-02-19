@@ -10,16 +10,26 @@ import type { PieceType } from "../types/Core";
 export function evaluate(board: Board): number {
   const boardData = board.getBoard();
   let score = 0;
+  let whiteKing = false;
+  let blackKing = false;
 
   // Loop through the board and add the value of each piece to the score.
   for (const row of boardData) {
     for (const piece of row) {
       if (piece === null) continue; // No piece on this square
 
-      const value = getPieceValue(piece);
-      score += piece.colour === "white" ? value : -value; // Deduct value for enemy pieces
+      if (piece.type === "K") {
+        if (piece.colour === "white") whiteKing = true;
+        if (piece.colour === "black") blackKing = true;
+      } else {
+        const value = getPieceValue(piece);
+        score += piece.colour === "white" ? value : -value; // Deduct value for enemy pieces
+      }
     }
   }
+
+  if (!whiteKing) return -Infinity;
+  else if (!blackKing) return Infinity;
 
   return score;
 }
@@ -47,8 +57,6 @@ function getPieceValue(piece: PieceType): number {
       return 5.44;
     case "Q":
       return 9.75;
-    case "K":
-      return 10_000;
     default:
       return 0;
   }

@@ -21,7 +21,7 @@ export function minimax(
   isMaximising: boolean = board.getActiveColour() === "white",
 ): { move?: Move; score: number } {
   if (depth === 0) {
-    return { score: evaluate(board.getBoard()) };
+    return { score: evaluate(board) };
   }
 
   board.setActiveColour(isMaximising ? "white" : "black");
