@@ -1,27 +1,33 @@
-import type { BoardType, PieceType } from "../types/Core";
+import type { Board } from "../core/Board";
+import type { PieceType } from "../types/Core";
 
 /**
  * Evaluates the board and returns a score.
  *
- * @param board - The chess board to evaluate.
+ * @param board - The position to evaluate.
  * @returns The evaluation score.
  */
-export function evaluate(board: BoardType): number {
+export function evaluate(board: Board): number {
+  const boardData = board.getBoard();
   let score = 0;
 
   // Loop through the board and add the value of each piece to the score.
-  for (let i = 0; i < 8; i++) {
-    for (let j = 0; j < 8; j++) {
-      const piece = board[i][j];
+  for (const row of boardData) {
+    for (const piece of row) {
+      if (piece === null) continue; // No piece on this square
 
-      if (piece === null) continue;
       const value = getPieceValue(piece);
-      score += piece.colour === "white" ? value : -value;
+      score += piece.colour === "white" ? value : -value; // Deduct value for enemy pieces
     }
   }
 
   return score;
 }
+
+// see https://www.chessprogramming.org/Evaluation
+// see https://en.wikipedia.org/wiki/Chess_piece_relative_value
+// see https://www.jsr.org/hs/index.php/path/article/download/4356/1910/26327 (table 4)
+// piece values below are based on the average between AlphaZero and Lasker (see wikipedia page)
 
 /**
  * Returns the value of a chess piece.
@@ -34,12 +40,13 @@ function getPieceValue(piece: PieceType): number {
     case "P":
       return 1;
     case "N":
+      return 3.28;
     case "B":
-      return 3;
+      return 3.42;
     case "R":
-      return 5;
+      return 5.44;
     case "Q":
-      return 9;
+      return 9.75;
     case "K":
       return 10_000;
     default:
