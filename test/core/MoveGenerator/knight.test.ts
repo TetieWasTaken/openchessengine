@@ -1,10 +1,10 @@
 import { Board } from "../../../src/core/Board";
-import { MoveGenerator } from "../../../src/core/MoveGenerator";
+import { getMoves } from "../../../src/core/MoveGenerator";
 
 describe("Move Generator | Knight", () => {
   test("White knight at [1, 1]", () => {
     const board = new Board("8/8/8/8/8/8/1N6/8 w - - 0 1");
-    const moves = MoveGenerator.getMoves(board, [1, 1]);
+    const moves = getMoves(board, [1, 1]);
 
     expect(moves.map((m) => m.to)).toEqual([
       [0, 3],
@@ -16,7 +16,7 @@ describe("Move Generator | Knight", () => {
 
   test("Knight with capture", () => {
     const board = new Board("8/8/8/8/n7/8/1N6/8 w - - 0 1");
-    const moves = MoveGenerator.getMoves(board, [1, 1]);
+    const moves = getMoves(board, [1, 1]);
 
     expect(moves.map((m) => m.to)).toEqual([
       [0, 3],
@@ -28,7 +28,7 @@ describe("Move Generator | Knight", () => {
 
   test("Knight with blocking piece", () => {
     const board = new Board("8/8/8/8/P7/8/1N6/8 w - - 0 1");
-    const moves = MoveGenerator.getMoves(board, [1, 1]);
+    const moves = getMoves(board, [1, 1]);
 
     expect(moves.map((m) => m.to)).toEqual([
       [0, 3],

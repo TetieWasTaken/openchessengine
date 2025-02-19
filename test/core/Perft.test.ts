@@ -1,9 +1,8 @@
 // see https://www.chessprogramming.org/Perft_Results
 
-import { MoveGenerator } from "../../src/core/MoveGenerator";
+import { _perft } from "../../src/core/MoveGenerator";
 import { Board } from "../../src/core/Board";
 
-/*
 describe("Perft p4", () => {
   // Position 4 from https://www.chessprogramming.org/Perft_Results#Position_4
   const position =
@@ -14,7 +13,7 @@ describe("Perft p4", () => {
       position,
     );
 
-    const perft = MoveGenerator._perft(board, 1);
+    const perft = _perft(board, 1);
     expect(perft).toBe(6);
   });
 
@@ -23,7 +22,7 @@ describe("Perft p4", () => {
       position,
     );
 
-    const perft = MoveGenerator._perft(board, 2);
+    const perft = _perft(board, 2);
     expect(perft).toBe(264);
   });
 
@@ -32,16 +31,17 @@ describe("Perft p4", () => {
       position,
     );
 
-    const perft = MoveGenerator._perft(board, 3);
+    const perft = _perft(board, 3);
     expect(perft).toBe(9467);
   });
 
+  /*
   test("Depth 4", () => {
     const board = new Board(
       position,
     );
 
-    const perft = MoveGenerator._perft(board, 4);
+    const perft = _perft(board, 4);
     expect(perft).toBe(422333);
   });
 
@@ -50,11 +50,11 @@ describe("Perft p4", () => {
       position,
     );
 
-    const perft = MoveGenerator._perft(board, 5);
+    const perft = _perft(board, 5);
     expect(perft).toBe(15833292);
   });
+  */
 });
-*/
 
 describe("Perft p5", () => {
   // Position 5 from https://www.chessprogramming.org/Perft_Results#Position_5
@@ -65,7 +65,7 @@ describe("Perft p5", () => {
       position,
     );
 
-    const perft = MoveGenerator._perft(board, 1);
+    const perft = _perft(board, 1);
     expect(perft).toBe(44);
   });
 
@@ -74,7 +74,7 @@ describe("Perft p5", () => {
       position,
     );
 
-    const perft = MoveGenerator._perft(board, 2);
+    const perft = _perft(board, 2);
     expect(perft).toBe(1486);
   });
 
@@ -83,7 +83,7 @@ describe("Perft p5", () => {
       position,
     );
 
-    const perft = MoveGenerator._perft(board, 3);
+    const perft = _perft(board, 3);
     expect(perft).toBe(62379);
   });
 
@@ -92,7 +92,7 @@ describe("Perft p5", () => {
       position,
     );
 
-    const perft = MoveGenerator._perft(board, 4);
+    const perft = _perft(board, 4);
     expect(perft).toBe(2103487);
   });
 
@@ -101,7 +101,7 @@ describe("Perft p5", () => {
       position,
     );
 
-    const perft = MoveGenerator._perft(board, 5);
+    const perft = _perft(board, 5);
     expect(perft).toBe(89941194);
   }); */
 });

@@ -1,17 +1,17 @@
 import { Board } from "../../../src/core/Board";
-import { MoveGenerator } from "../../../src/core/MoveGenerator";
+import { getMoves, makeMove } from "../../../src/core/MoveGenerator";
 
 describe("Move Generator | Pawn", () => {
   test("White pawn at [1, 1] with blocking piece", () => {
     const board = new Board("8/8/8/8/8/1p6/1P6/8 w - - 0 1");
-    const moves = MoveGenerator.getMoves(board, [1, 1]);
+    const moves = getMoves(board, [1, 1]);
 
     expect(moves).toEqual([]);
   });
 
   test("Black pawn at [6, 0] with capture", () => {
     const board = new Board("8/p7/1P6/8/8/8/8/8 b - - 0 1");
-    const moves = MoveGenerator.getMoves(board, [6, 0]);
+    const moves = getMoves(board, [6, 0]);
 
     expect(moves.map((m) => m.to)).toEqual([
       [5, 0],
@@ -22,7 +22,7 @@ describe("Move Generator | Pawn", () => {
 
   test("White pawn at [1, 0]", () => {
     const board = new Board("8/8/8/8/8/8/P7/8 w - - 0 1");
-    const moves = MoveGenerator.getMoves(board, [1, 0]);
+    const moves = getMoves(board, [1, 0]);
 
     expect(moves.map((m) => m.to)).toEqual([
       [2, 0],
@@ -32,21 +32,21 @@ describe("Move Generator | Pawn", () => {
 
   test("Black pawn at [6, 0] with blocking piece", () => {
     const board = new Board("8/p7/P7/8/8/8/8/8 b - - 0 1");
-    const moves = MoveGenerator.getMoves(board, [6, 0]);
+    const moves = getMoves(board, [6, 0]);
 
     expect(moves).toEqual([]);
   });
 
   test("Promotion", () => {
     const board = new Board("k7/4P3/8/8/8/8/8/7K w - - 0 1");
-    const moves = MoveGenerator.getMoves(board, [6, 4]);
+    const moves = getMoves(board, [6, 4]);
 
     expect(moves.map((m) => m.promotion)).toEqual(["Q", "R", "B", "N"]);
   });
 
   test("Rook promotion", () => {
     const board = new Board("k7/4P3/8/8/8/8/8/7K w - - 0 1");
-    const newBoard = MoveGenerator.makeMove(board, {
+    const newBoard = makeMove(board, {
       from: [6, 4],
       to: [7, 4],
       promotion: "R",
@@ -59,7 +59,7 @@ describe("Move Generator | Pawn", () => {
     const board = new Board(
       "rnbqkbnr/pppp1ppp/8/8/3pP3/2P5/PP3PPP/RNBQKBNR b KQkq e3 0 1",
     );
-    const moves = MoveGenerator.getMoves(board, [3, 3]);
+    const moves = getMoves(board, [3, 3]);
 
     expect(moves.map((m) => m.to)).toContainEqual([2, 4]);
   });
@@ -70,12 +70,12 @@ describe("Move Generator | Pawn", () => {
     );
 
     expect(board.getEnPassantSquare()).toBeNull();
-    const moves = MoveGenerator.getMoves(board, [6, 7]);
+    const moves = getMoves(board, [6, 7]);
     expect(moves.map((m) => m.to)).toContainEqual([4, 7]);
     expect(moves.find((m) => m.to[0] === 4 && m.to[1] === 7)?.isDoublePawnMove)
       .toBe(true);
 
-    const blackBoard = MoveGenerator.makeMove(board, {
+    const blackBoard = makeMove(board, {
       from: [6, 7],
       to: [4, 7],
       isDoublePawnMove: true,
@@ -83,7 +83,7 @@ describe("Move Generator | Pawn", () => {
 
     expect(blackBoard.getEnPassantSquare()).toEqual([5, 7]);
 
-    const whiteBoard = MoveGenerator.makeMove(blackBoard, {
+    const whiteBoard = makeMove(blackBoard, {
       from: [1, 0],
       to: [3, 0],
       isDoublePawnMove: true,
@@ -97,13 +97,13 @@ describe("Move Generator | Pawn", () => {
       "7k/p7/8/1P6/1p6/8/P7/7K w - - 0 1",
     );
 
-    const newBoard = MoveGenerator.makeMove(board, {
+    const newBoard = makeMove(board, {
       from: [1, 0],
       to: [3, 0],
       isDoublePawnMove: true,
     });
 
-    const afterEnPassant = MoveGenerator.makeMove(newBoard, {
+    const afterEnPassant = makeMove(newBoard, {
       from: [3, 1],
       to: [2, 0],
       isEnPassantCapture: true,
@@ -115,13 +115,13 @@ describe("Move Generator | Pawn", () => {
     });
     expect(afterEnPassant.getPiece([3, 0])).toBeNull();
 
-    const otherSide = MoveGenerator.makeMove(afterEnPassant, {
+    const otherSide = makeMove(afterEnPassant, {
       from: [6, 0],
       to: [4, 0],
       isDoublePawnMove: true,
     });
 
-    const afterOtherSide = MoveGenerator.makeMove(otherSide, {
+    const afterOtherSide = makeMove(otherSide, {
       from: [4, 1],
       to: [5, 0],
       isEnPassantCapture: true,

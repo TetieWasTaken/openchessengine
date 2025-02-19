@@ -1,10 +1,10 @@
 import { Board } from "../../../src/core/Board";
-import { MoveGenerator } from "../../../src/core/MoveGenerator";
+import { getMoves } from "../../../src/core/MoveGenerator";
 
 describe("Move Generator | Queen", () => {
   test("White queen at [1, 1]", () => {
     const board = new Board("8/8/8/8/8/8/1Q6/8 w - - 0 1");
-    const moves = MoveGenerator.getMoves(board, [1, 1]);
+    const moves = getMoves(board, [1, 1]);
 
     // Ignore the order of the moves, as it doesn't matter
     const expectedMoves = [
@@ -44,7 +44,7 @@ describe("Move Generator | Queen", () => {
 
   test("Queen with capture", () => {
     const board = new Board("8/1q6/8/8/3q4/8/1Q6/8 w - - 0 1");
-    const moves = MoveGenerator.getMoves(board, [1, 1]);
+    const moves = getMoves(board, [1, 1]);
 
     expect(moves.map((m) => m.to)).toContainEqual([6, 1]);
     expect(moves.map((m) => m.to)).not.toContainEqual([7, 1]);
@@ -54,7 +54,7 @@ describe("Move Generator | Queen", () => {
 
   test("Queen with blocking piece", () => {
     const board = new Board("8/1Q6/8/8/3Q4/8/1Q6/8 w - - 0 1");
-    const moves = MoveGenerator.getMoves(board, [1, 1]);
+    const moves = getMoves(board, [1, 1]);
 
     expect(moves.map((m) => m.to)).not.toContainEqual([6, 1]);
     expect(moves.map((m) => m.to)).not.toContainEqual([7, 1]);

@@ -1,5 +1,5 @@
 import type { Move } from "../types/Core";
-import { MoveGenerator } from "../core/MoveGenerator";
+import { getAllMoves, makeMove } from "../core/MoveGenerator";
 import { evaluate } from "./Eval";
 import { MinimaxResult } from "../types/Bot";
 import { Board } from "../core/Board";
@@ -24,14 +24,14 @@ export function minimax(
   }
 
   board.setActiveColour(isMaximising ? "white" : "black");
-  const moves = MoveGenerator.getAllMoves(board);
+  const moves = getAllMoves(board);
   let best: MinimaxResult = {
     score: isMaximising ? -Infinity : Infinity,
     move: moves[0],
   };
 
   for (const move of moves) {
-    const newBoard = MoveGenerator.makeMove(board, move);
+    const newBoard = makeMove(board, move);
     const result = minimax(newBoard, depth - 1, alpha, beta, !isMaximising);
     if (isMaximising) {
       if (result.score > best.score) {
