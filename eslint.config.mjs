@@ -3,7 +3,7 @@
 import eslint from '@eslint/js';
 import tseslint from 'typescript-eslint';
 import * as importPlugin from 'eslint-plugin-import';
-import { common, typescript, prettier } from "eslint-config-neon";
+import { common, typescript, prettier } from 'eslint-config-neon';
 
 export default [
   {
@@ -34,9 +34,9 @@ export default [
         import: importPlugin,
       },
       settings: {
-        "import/resolver": {
-          "typescript": true,
-          "node": true,
+        'import/resolver': {
+          'typescript': true,
+          'node': true,
         },
       },
       rules: {
@@ -101,5 +101,22 @@ export default [
   },
   ...common,
   ...typescript,
+  {
+    rules: {
+      'id-length': [
+        'error', {
+          'exceptions': [
+            '_',
+            'i',
+            'j',
+            'k',
+            'x',
+            'y',
+            'z'
+          ]
+        }
+      ],
+    },
+  },
   ...prettier,
 ];
