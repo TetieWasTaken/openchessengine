@@ -20,7 +20,6 @@ export default [
         {
           groups: ['builtin', 'external', 'internal', 'parent', 'sibling', 'index'],
           alphabetize: { order: 'asc', caseInsensitive: true },
-          'newlines-between': 'always',
         },
       ],
     },
