@@ -1,11 +1,12 @@
 import type { BoardType, CastlingRights, Move } from "../types/Core";
+
 import { Board } from "./Board";
+import { getBishopMoves } from "./pieces/bishop";
+import { getKingMoves } from "./pieces/king";
 import { getKnightMoves } from "./pieces/knight";
 import { getPawnMoves } from "./pieces/pawn";
-import { getBishopMoves } from "./pieces/bishop";
-import { getRookMoves } from "./pieces/rook";
 import { getQueenMoves } from "./pieces/queen";
-import { getKingMoves } from "./pieces/king";
+import { getRookMoves } from "./pieces/rook";
 
 /**
  * Returns all possible moves for a given board and colour

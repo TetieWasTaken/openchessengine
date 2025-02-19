@@ -1,7 +1,7 @@
 // see https://www.chessprogramming.org/Perft_Results
 
-import { _perft } from "../../src/core/MoveGenerator";
 import { Board } from "../../src/core/Board";
+import { _perft } from "../../src/core/MoveGenerator";
 
 describe("Perft p4", () => {
   // Position 4 from https://www.chessprogramming.org/Perft_Results#Position_4

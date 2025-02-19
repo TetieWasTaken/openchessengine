@@ -1,10 +1,10 @@
 /* eslint-disable no-console */
 
-import { Board } from "../core/Board";
 import { search } from "../bot/Search";
+import { Board } from "../core/Board";
 import { makeMove } from "../core/MoveGenerator";
-import { toFEN } from "../utils/FEN";
 import type { Move } from "../types/Core";
+import { toFEN } from "../utils/FEN";
 
 /**
  * cli for interacting with the bot

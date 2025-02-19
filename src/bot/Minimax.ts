@@ -1,8 +1,9 @@
-import type { Move } from "../types/Core";
-import { getAllMoves, makeMove } from "../core/MoveGenerator";
-import { evaluate } from "./Eval";
-import { MinimaxResult } from "../types/Bot";
 import { Board } from "../core/Board";
+import { getAllMoves, makeMove } from "../core/MoveGenerator";
+import { MinimaxResult } from "../types/Bot";
+import type { Move } from "../types/Core";
+
+import { evaluate } from "./Eval";
 
 /**
  * Minimax algorithm (see https://chessprogramming.org/Minimax)

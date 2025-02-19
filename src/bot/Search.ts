@@ -1,5 +1,6 @@
 import { Board } from "../core/Board";
 import type { Move } from "../types/Core";
+
 import { minimax } from "./Minimax";
 
 /**
