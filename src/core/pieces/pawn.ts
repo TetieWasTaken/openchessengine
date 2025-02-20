@@ -9,7 +9,7 @@ import type { Board } from "../board";
 export function getPawnMoves(
   board: Board,
   position: [number, number],
-  colour: "black" | "white",
+  colour = board.getActiveColour(),
 ): Move[] {
   const moves: Move[] = [];
   const direction = colour === "white" ? 1 : -1;

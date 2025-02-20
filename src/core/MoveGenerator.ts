@@ -209,25 +209,24 @@ export function getMoves(
 
   switch (piece.type) {
     case "P":
-      moves = getPawnMoves(board, position, piece.colour);
+      moves = getPawnMoves(board, position);
       break;
     case "N":
-      moves = getKnightMoves(board, position, piece.colour);
+      moves = getKnightMoves(board, position);
       break;
     case "B":
-      moves = getBishopMoves(board, position, piece.colour);
+      moves = getBishopMoves(board, position);
       break;
     case "R":
-      moves = getRookMoves(board, position, piece.colour);
+      moves = getRookMoves(board, position);
       break;
     case "Q":
-      moves = getQueenMoves(board, position, piece.colour);
+      moves = getQueenMoves(board, position);
       break;
     case "K":
       moves = getKingMoves(
         board,
         position,
-        piece.colour,
         isRecursion,
       );
       break;
@@ -297,7 +296,7 @@ export function findKing(
 export function getOrthogonalMoves(
   board: Board,
   position: [number, number],
-  colour: "black" | "white",
+  colour = board.getActiveColour()
 ): Move[] {
   const boardData = board.getBoard();
   const moves: Move[] = [];
@@ -352,7 +351,7 @@ export function getOrthogonalMoves(
 export function getDiagonalMoves(
   board: Board,
   position: [number, number],
-  colour: "black" | "white",
+  colour = board.getActiveColour()
 ): Move[] {
   const boardData = board.getBoard();
   const moves: Move[] = [];

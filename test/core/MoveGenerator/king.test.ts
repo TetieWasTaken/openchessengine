@@ -40,7 +40,7 @@ describe("Move Generator | King", () => {
   });
 
   test("King with castling", () => {
-    const board = new Board("4k3/8/8/8/8/8/8/R3K2R b KQha - 0 1");
+    const board = new Board("4k3/8/8/8/8/8/8/R3K2R w KQha - 0 1");
     const moves = getMoves(board, [0, 4]);
 
     expect(moves.map((move) => move.to)).toContainEqual([0, 6]);
@@ -48,7 +48,7 @@ describe("Move Generator | King", () => {
   });
 
   test("King with castling and blocking piece", () => {
-    const board = new Board("4k3/8/8/8/8/8/8/R2QK2R b KQ - 0 1");
+    const board = new Board("4k3/8/8/8/8/8/8/R2QK2R w KQ - 0 1");
     const moves = getMoves(board, [0, 4]);
 
     expect(moves.map((move) => move.to)).toContainEqual([0, 6]);
@@ -56,7 +56,7 @@ describe("Move Generator | King", () => {
   });
 
   test("King with castling and check", () => {
-    const board = new Board("4k3/8/8/8/2b5/8/8/R3K2R b KQ - 0 1");
+    const board = new Board("4k3/8/8/8/2b5/8/8/R3K2R w KQ - 0 1");
     const moves = getMoves(board, [0, 4]);
 
     expect(moves.map((move) => move.to)).not.toContainEqual([0, 6]);
@@ -74,7 +74,7 @@ describe("Move Generator | King", () => {
   test("Castling flags", () => {
     const board = new Board("r3k2r/8/8/8/8/8/8/R3K2R b Qk - 0 1");
     const blackMoves = getMoves(board, [7, 4]);
-    const whiteMoves = getMoves(board, [0, 4]);
+    const whiteMoves = getMoves(board.setActiveColour("white"), [0, 4]);
 
     expect(blackMoves.map((move) => move.to)).toContainEqual([7, 6]);
     expect(blackMoves.map((move) => move.to)).not.toContainEqual([7, 2]);

@@ -66,7 +66,7 @@ describe("Move Generator | Pawn", () => {
 
   test("En passant square", () => {
     const board = new Board(
-      "K7/7p/8/8/8/8/P7/7k w - - 0 1",
+      "K7/7p/8/8/8/8/P7/7k b - - 0 1",
     );
 
     expect(board.getEnPassantSquare()).toBeNull();

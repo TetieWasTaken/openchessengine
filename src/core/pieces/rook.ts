@@ -10,7 +10,6 @@ import { getOrthogonalMoves } from "../moveGenerator";
 export function getRookMoves(
   board: Board,
   position: [number, number],
-  colour: "black" | "white",
 ): Move[] {
-  return getOrthogonalMoves(board, position, colour);
+  return getOrthogonalMoves(board, position);
 }

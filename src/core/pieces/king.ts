@@ -10,8 +10,8 @@ import { isKingInCheck, makeMove } from "../moveGenerator";
 export function getKingMoves(
   board: Board,
   position: [number, number],
-  colour: "black" | "white",
   isRecursion = false,
+  colour = board.getActiveColour(),
 ): Move[] {
   const moves: Move[] = [];
   const directions = [

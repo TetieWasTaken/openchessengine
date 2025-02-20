@@ -10,7 +10,6 @@ import { getDiagonalMoves } from "../moveGenerator";
 export function getBishopMoves(
   board: Board,
   position: [number, number],
-  colour: "black" | "white",
 ): Move[] {
-  return getDiagonalMoves(board, position, colour);
+  return getDiagonalMoves(board, position);
 }

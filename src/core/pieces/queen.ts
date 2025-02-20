@@ -10,10 +10,9 @@ import { getDiagonalMoves, getOrthogonalMoves } from "../moveGenerator";
 export function getQueenMoves(
   board: Board,
   position: [number, number],
-  colour: "black" | "white",
 ): Move[] {
   return [
-    ...getOrthogonalMoves(board, position, colour),
-    ...getDiagonalMoves(board, position, colour),
+    ...getOrthogonalMoves(board, position),
+    ...getDiagonalMoves(board, position),
   ];
 }

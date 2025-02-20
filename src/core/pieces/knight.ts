@@ -9,7 +9,7 @@ import type { Board } from "../board";
 export function getKnightMoves(
   board: Board,
   position: [number, number],
-  colour: "black" | "white",
+  colour = board.getActiveColour(),
 ): Move[] {
   const boardData = board.getBoard();
   const moves: Move[] = [];
