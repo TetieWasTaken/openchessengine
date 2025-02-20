@@ -4,6 +4,8 @@ import type { Move } from '../../types/core';
 import { Piece } from '../../types/enums';
 import type { Board } from '../board';
 
+const isPromotionRow = (row: number) => row === 7 || row === 0;
+
 /**
  * Returns all {@link https://www.chessprogramming.org/Move_Generation#Pseudo-legal | pseudo-legal} moves for a pawn.
  *
@@ -28,8 +30,6 @@ export function getPawnMoves(board: Board, position: [number, number], colour = 
 		moves.push({ from: position, to, promotion: Piece.Bishop });
 		moves.push({ from: position, to, promotion: Piece.Knight });
 	};
-
-	const isPromotionRow = (row: number) => row === 7 || row === 0;
 
 	// Move forward one square
 	if (boardData[x + direction][y] === null) {
