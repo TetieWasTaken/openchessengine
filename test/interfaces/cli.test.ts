@@ -3,7 +3,9 @@ import { promisify } from "node:util";
 
 const execPromise = promisify(exec);
 
-async function runCommand(command: string): Promise<{ stderr: string; stdout: string }> {
+async function runCommand(
+  command: string,
+): Promise<{ stderr: string; stdout: string }> {
   return execPromise(command);
 }
 

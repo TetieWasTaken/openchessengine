@@ -111,8 +111,9 @@ function _toBoardString(board: Board): string {
 
 function _toCastlingString(castling: FENOptions["castling"]): string {
   if ("white" in castling) {
-    return `${castling.white.king ? "K" : ""}${castling.white.queen ? "Q" : ""
-      }${castling.black.king ? "k" : ""}${castling.black.queen ? "q" : ""}`;
+    return `${castling.white.king ? "K" : ""}${
+      castling.white.queen ? "Q" : ""
+    }${castling.black.king ? "k" : ""}${castling.black.queen ? "q" : ""}`;
   }
 
   return `${castling.king ? "K" : ""}${castling.queen ? "Q" : ""}`;

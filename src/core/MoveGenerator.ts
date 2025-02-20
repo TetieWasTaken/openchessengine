@@ -10,10 +10,7 @@ import { getRookMoves } from "./pieces/rook";
 /**
  * Returns all possible moves for a given board and colour.
  */
-export function getAllMoves(
-  board: Board,
-  isRecursion = false,
-): Move[] {
+export function getAllMoves(board: Board, isRecursion = false): Move[] {
   const moves: Move[] = [];
   const boardData = board.getBoard();
 
@@ -183,11 +180,10 @@ export function makeMove(board: Board, move: Move): Board {
     activeColour: board.getActiveColour() === "white" ? "black" : "white",
     castlingRights: newCastlingRights,
     enPassant: enPassantSquare,
-    halfmove: piece?.type === "P" || capturedPiece
-      ? 0
-      : board.getHalfmove() + 1,
-    fullmove: board.getFullmove() +
-      (board.getActiveColour() === "black" ? 1 : 0),
+    halfmove:
+      piece?.type === "P" || capturedPiece ? 0 : board.getHalfmove() + 1,
+    fullmove:
+      board.getFullmove() + (board.getActiveColour() === "black" ? 1 : 0),
   });
 }
 
@@ -224,11 +220,7 @@ export function getMoves(
       moves = getQueenMoves(board, position);
       break;
     case "K":
-      moves = getKingMoves(
-        board,
-        position,
-        isRecursion,
-      );
+      moves = getKingMoves(board, position, isRecursion);
       break;
   }
 
@@ -263,8 +255,8 @@ export function isKingInCheck(
     true,
   );
 
-  return opponentMoves.some((move) =>
-    move.to[0] === kingPosition[0] && move.to[1] === kingPosition[1]
+  return opponentMoves.some(
+    (move) => move.to[0] === kingPosition[0] && move.to[1] === kingPosition[1],
   );
 }
 
@@ -296,7 +288,7 @@ export function findKing(
 export function getOrthogonalMoves(
   board: Board,
   position: [number, number],
-  colour = board.getActiveColour()
+  colour = board.getActiveColour(),
 ): Move[] {
   const boardData = board.getBoard();
   const moves: Move[] = [];
@@ -351,7 +343,7 @@ export function getOrthogonalMoves(
 export function getDiagonalMoves(
   board: Board,
   position: [number, number],
-  colour = board.getActiveColour()
+  colour = board.getActiveColour(),
 ): Move[] {
   const boardData = board.getBoard();
   const moves: Move[] = [];

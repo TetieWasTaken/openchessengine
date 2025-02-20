@@ -3,7 +3,7 @@ import type { Board } from "../board";
 
 /**
  * Returns all {@link https://www.chessprogramming.org/Move_Generation#Pseudo-legal | pseudo-legal} moves for a pawn.
- * 
+ *
  * @param board - The board to get the moves from
  * @param position - The position of the pawn
  * @param colour - The colour of the pawn
@@ -69,11 +69,11 @@ export function getPawnMoves(
   // En passant
   const enPassantSquare = board.getEnPassantSquare();
 
-  if (enPassantSquare &&
-    enPassantSquare[0] === position[0] + direction && (
-      enPassantSquare[1] === position[1] - 1 ||
-      enPassantSquare[1] === position[1] + 1
-    )
+  if (
+    enPassantSquare &&
+    enPassantSquare[0] === position[0] + direction &&
+    (enPassantSquare[1] === position[1] - 1 ||
+      enPassantSquare[1] === position[1] + 1)
   ) {
     moves.push({
       from: position,

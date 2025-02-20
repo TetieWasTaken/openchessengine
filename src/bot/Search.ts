@@ -9,10 +9,7 @@ import { minimax } from "./minimax";
  * @param depth - How many moves ahead to search
  * @returns The best move found
  */
-export function search(
-  board: Board,
-  depth: number,
-): Move | undefined {
+export function search(board: Board, depth: number): Move | undefined {
   const { move } = minimax(board, depth);
   return move;
 }

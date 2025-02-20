@@ -4,7 +4,7 @@ import { getDiagonalMoves } from "../moveGenerator";
 
 /**
  * Returns all {@link https://www.chessprogramming.org/Move_Generation#Pseudo-legal | pseudo-legal} moves for a bishop.
- * 
+ *
  * @param board - The board to get the moves from
  * @param position - The position of the bishop
  * @example

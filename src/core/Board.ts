@@ -50,8 +50,8 @@ export class Board {
       fenString = DEFAULT_FEN;
     }
 
-    const [board, activeColour, castling, enPassant, halfmove, fullmove] = fenString
-      .split(" ");
+    const [board, activeColour, castling, enPassant, halfmove, fullmove] =
+      fenString.split(" ");
     this.board = this.createBoard(board);
     this.activeColour = activeColour === "w" ? "white" : "black";
     this.castlingRights = this.parseCastlingRights(castling);
@@ -138,10 +138,7 @@ export class Board {
    * @param colour -
    * @param mutate - Whether to mutate the board or return a new one
    */
-  public setActiveColour(
-    colour: "black" | "white",
-    mutate = true,
-  ): this {
+  public setActiveColour(colour: "black" | "white", mutate = true): this {
     if (mutate) {
       this.activeColour = colour;
       return this;

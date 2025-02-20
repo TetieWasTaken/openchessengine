@@ -4,7 +4,7 @@ import { getOrthogonalMoves } from "../moveGenerator";
 
 /**
  * Returns all {@link https://www.chessprogramming.org/Move_Generation#Pseudo-legal | pseudo-legal} moves for a rook.
- * 
+ *
  * @param board - The board to get the moves from
  * @param position - The position of the rook
  * @example
@@ -13,9 +13,6 @@ import { getOrthogonalMoves } from "../moveGenerator";
  * ```
  * @returns An array of pseudo-legal moves
  */
-export function getRookMoves(
-  board: Board,
-  position: [number, number],
-): Move[] {
+export function getRookMoves(board: Board, position: [number, number]): Move[] {
   return getOrthogonalMoves(board, position);
 }

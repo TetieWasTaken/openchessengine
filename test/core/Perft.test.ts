@@ -9,27 +9,21 @@ describe("Perft p4", () => {
     "r3k2r/Pppp1ppp/1b3nbN/nP6/BBP1P3/q4N2/Pp1P2PP/R2Q1RK1 w kq - 0 1";
 
   test("Depth 1", () => {
-    const board = new Board(
-      position,
-    );
+    const board = new Board(position);
 
     const perft = _perft(board, 1);
     expect(perft).toBe(6);
   });
 
   test("Depth 2", () => {
-    const board = new Board(
-      position,
-    );
+    const board = new Board(position);
 
     const perft = _perft(board, 2);
     expect(perft).toBe(264);
   });
 
   test("Depth 3", () => {
-    const board = new Board(
-      position,
-    );
+    const board = new Board(position);
 
     const perft = _perft(board, 3);
     expect(perft).toBe(9_467);
@@ -61,27 +55,21 @@ describe("Perft p5", () => {
   const position = "rnbq1k1r/pp1Pbppp/2p5/8/2B5/8/PPP1NnPP/RNBQK2R w KQ - 1 8";
 
   test("Depth 1", () => {
-    const board = new Board(
-      position,
-    );
+    const board = new Board(position);
 
     const perft = _perft(board, 1);
     expect(perft).toBe(44);
   });
 
   test("Depth 2", () => {
-    const board = new Board(
-      position,
-    );
+    const board = new Board(position);
 
     const perft = _perft(board, 2);
     expect(perft).toBe(1_486);
   });
 
   test("Depth 3", () => {
-    const board = new Board(
-      position,
-    );
+    const board = new Board(position);
 
     const perft = _perft(board, 3);
     expect(perft).toBe(62_379);

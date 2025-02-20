@@ -65,9 +65,7 @@ describe("Move Generator | Pawn", () => {
   });
 
   test("En passant square", () => {
-    const board = new Board(
-      "K7/7p/8/8/8/8/P7/7k b - - 0 1",
-    );
+    const board = new Board("K7/7p/8/8/8/8/P7/7k b - - 0 1");
 
     expect(board.getEnPassantSquare()).toBeNull();
     const moves = getMoves(board, [6, 7]);
@@ -75,8 +73,7 @@ describe("Move Generator | Pawn", () => {
     expect(
       moves.find((move) => move.to[0] === 4 && move.to[1] === 7)
         ?.isDoublePawnMove,
-    )
-      .toBe(true);
+    ).toBe(true);
 
     const blackBoard = makeMove(board, {
       from: [6, 7],
@@ -96,9 +93,7 @@ describe("Move Generator | Pawn", () => {
   });
 
   test("En passant capture", () => {
-    const board = new Board(
-      "7k/p7/8/1P6/1p6/8/P7/7K w - - 0 1",
-    );
+    const board = new Board("7k/p7/8/1P6/1p6/8/P7/7K w - - 0 1");
 
     const newBoard = makeMove(board, {
       from: [1, 0],

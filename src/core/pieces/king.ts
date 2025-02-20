@@ -4,10 +4,10 @@ import { isKingInCheck, makeMove } from "../moveGenerator";
 
 /**
  * Returns all {@link https://www.chessprogramming.org/Move_Generation#Pseudo-legal | pseudo-legal} moves for a king.
- * 
+ *
  * @param board - The board to get the moves from
  * @param position - The position of the king
- * @param isRecursion - Whether the function is being called recursively 
+ * @param isRecursion - Whether the function is being called recursively
  * @example
  * ```
  * getKingMoves(board, [0, 4]);
@@ -60,17 +60,15 @@ export function getKingMoves(
 
       if (castlingRights.king) {
         const kingSide = colour === "white" ? 0 : 7;
-        const kingSideEmpty = board.getBoard()[kingSide][5] === null &&
+        const kingSideEmpty =
+          board.getBoard()[kingSide][5] === null &&
           board.getBoard()[kingSide][6] === null;
 
         if (kingSideEmpty) {
-          const newBoard = makeMove(
-            board,
-            {
-              from: position,
-              to: [kingSide, 5],
-            },
-          );
+          const newBoard = makeMove(board, {
+            from: position,
+            to: [kingSide, 5],
+          });
 
           if (!isKingInCheck(newBoard, colour)) {
             const finalBoard = makeMove(newBoard, {
@@ -91,17 +89,15 @@ export function getKingMoves(
 
       if (castlingRights.queen) {
         const queenSide = colour === "white" ? 0 : 7;
-        const queenSideEmpty = board.getBoard()[queenSide][1] === null &&
+        const queenSideEmpty =
+          board.getBoard()[queenSide][1] === null &&
           board.getBoard()[queenSide][2] === null &&
           board.getBoard()[queenSide][3] === null;
         if (queenSideEmpty) {
-          const newBoard = makeMove(
-            board,
-            {
-              from: position,
-              to: [queenSide, 3],
-            },
-          );
+          const newBoard = makeMove(board, {
+            from: position,
+            to: [queenSide, 3],
+          });
 
           if (!isKingInCheck(newBoard, colour)) {
             const finalBoard = makeMove(newBoard, {
