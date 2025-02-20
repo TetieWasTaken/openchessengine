@@ -9,7 +9,7 @@
 		"format": "prettier . --write",
 		"check": "prettier . --check && npm run lint && npm run test",
 		"fix": "npm run format && npm run lint -- --fix",
-		"docs": "typedoc --entryPointStrategy Expand src"
+		"docs": "typedoc --options typedoc.json"
 	},
 	"keywords": [],
 	"author": "",
