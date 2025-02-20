@@ -25,7 +25,7 @@ export class Board {
 
 	public constructor(data?: BoardData | string) {
 		if (data === undefined || typeof data === 'string') {
-			this.fromFEN(data);
+			this.fromFEN(data as string | undefined);
 		} else {
 			this.board = data.board;
 			this.activeColour = data.activeColour;
