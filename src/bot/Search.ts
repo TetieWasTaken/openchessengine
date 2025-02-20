@@ -3,7 +3,7 @@ import type { Move } from "../types/Core";
 import { minimax } from "./Minimax";
 
 /**
- * Search for the best move using the minimaxRoot function.
+ * Search for the best move for the current player
  *
  * @param board - Current board position
  * @param depth - How many moves ahead to search
