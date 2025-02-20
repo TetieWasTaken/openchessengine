@@ -52,64 +52,87 @@ export function getKingMoves(
 	}
 
 	if (!isRecursion) {
-		const kingInCheck = isKingInCheck(board, colour);
+		moves.push(...getCastlingMoves(board, position, colour));
+	}
 
-		if (!kingInCheck) {
-			// eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion
-			const castlingRights = board.getCastlingRights(colour) as SingleCastlingRights;
+	return moves;
+}
 
-			if (castlingRights.king) {
-				const kingSide = colour === 'white' ? 0 : 7;
-				const kingSideEmpty = board.getBoard()[kingSide][5] === null && board.getBoard()[kingSide][6] === null;
+/**
+ * Returns all possible castling moves for a king.
+ * 
+ * @param board - The board to get the moves from
+ * @param position - The position of the king
+ * @param colour - The colour of the king
+ * @example
+ * ```
+ * getCastlingMoves(board, [0, 4], 'white');
+ * ```
+ * @alpha
+ */
+function getCastlingMoves(
+	board: Board,
+	position: [number, number],
+	colour: 'white' | 'black',
+): Move[] {
+	let moves: Move[] = [];
+	const kingInCheck = isKingInCheck(board, colour);
 
-				if (kingSideEmpty) {
-					const newBoard = makeMove(board, {
-						from: position,
-						to: [kingSide, 5],
+	if (!kingInCheck) {
+		// eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion
+		const castlingRights = board.getCastlingRights(colour) as SingleCastlingRights;
+
+		if (castlingRights.king) {
+			const kingSide = colour === 'white' ? 0 : 7;
+			const kingSideEmpty = board.getBoard()[kingSide][5] === null && board.getBoard()[kingSide][6] === null;
+
+			if (kingSideEmpty) {
+				const newBoard = makeMove(board, {
+					from: position,
+					to: [kingSide, 5],
+				});
+
+				if (!isKingInCheck(newBoard, colour)) {
+					const finalBoard = makeMove(newBoard, {
+						from: [kingSide, 5],
+						to: [kingSide, 6],
 					});
 
-					if (!isKingInCheck(newBoard, colour)) {
-						const finalBoard = makeMove(newBoard, {
-							from: [kingSide, 5],
+					if (!isKingInCheck(finalBoard, colour)) {
+						moves.push({
+							from: position,
 							to: [kingSide, 6],
+							castle: 'K',
 						});
-
-						if (!isKingInCheck(finalBoard, colour)) {
-							moves.push({
-								from: position,
-								to: [kingSide, 6],
-								castle: 'K',
-							});
-						}
 					}
 				}
 			}
+		}
 
-			if (castlingRights.queen) {
-				const queenSide = colour === 'white' ? 0 : 7;
-				const queenSideEmpty =
-					board.getBoard()[queenSide][1] === null &&
-					board.getBoard()[queenSide][2] === null &&
-					board.getBoard()[queenSide][3] === null;
-				if (queenSideEmpty) {
-					const newBoard = makeMove(board, {
-						from: position,
-						to: [queenSide, 3],
+		if (castlingRights.queen) {
+			const queenSide = colour === 'white' ? 0 : 7;
+			const queenSideEmpty =
+				board.getBoard()[queenSide][1] === null &&
+				board.getBoard()[queenSide][2] === null &&
+				board.getBoard()[queenSide][3] === null;
+			if (queenSideEmpty) {
+				const newBoard = makeMove(board, {
+					from: position,
+					to: [queenSide, 3],
+				});
+
+				if (!isKingInCheck(newBoard, colour)) {
+					const finalBoard = makeMove(newBoard, {
+						from: [queenSide, 3],
+						to: [queenSide, 2],
 					});
 
-					if (!isKingInCheck(newBoard, colour)) {
-						const finalBoard = makeMove(newBoard, {
-							from: [queenSide, 3],
+					if (!isKingInCheck(finalBoard, colour)) {
+						moves.push({
+							from: position,
 							to: [queenSide, 2],
+							castle: 'Q',
 						});
-
-						if (!isKingInCheck(finalBoard, colour)) {
-							moves.push({
-								from: position,
-								to: [queenSide, 2],
-								castle: 'Q',
-							});
-						}
 					}
 				}
 			}
