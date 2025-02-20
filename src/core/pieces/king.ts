@@ -39,7 +39,7 @@ export function getKingMoves(
 		const [x, y] = position;
 
 		// Check if the move is on the board
-		if (x + dx >= 0 && x + dx < 8 && y + dy >= 0 && y + dy < 8) {
+		if (board.isWithinBounds(x + dx, y + dy)) {
 			const piece = board.getBoard()[x + dx][y + dy];
 
 			if (piece === null || piece.colour !== colour) {

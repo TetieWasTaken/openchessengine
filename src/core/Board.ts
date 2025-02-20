@@ -242,4 +242,20 @@ export class Board {
 
 		return [Number.parseInt(rank, 10) - 1, fileCode - 97];
 	}
+
+	/**
+	 * Check if a position is within the bounds of the board.
+	 * 
+	 * @param x The x coordinate of the position
+	 * @param y The y coordinate of the position
+	 * @example
+	 * ```
+	 * isWithinBounds(6, 3); // true
+	 * isWithinBounds(5, 8); // false
+	 * ```
+	 * @returns Whether the position is within the bounds of the board
+	 */
+	public isWithinBounds(x: number, y: number): boolean {
+		return x >= 0 && x < 8 && y >= 0 && y < 8;
+	}
 }
