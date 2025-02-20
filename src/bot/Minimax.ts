@@ -5,28 +5,31 @@ import type { Move } from "../types/Core";
 import { evaluate } from "./Eval";
 
 /**
- * Minimax algorithm (see https://chessprogramming.org/Minimax)
+ * {@link https://en.wikipedia.org/wiki/Minimax | Minimax} algorithm with
+ * {@link https://en.wikipedia.org/wiki/Alpha%E2%80%93beta_pruning | Alpha-Beta pruning}
+ * to find the best move in a given position.
  *
- * @param board -
- * @param depth -
- * @param initialAlpha -
- * @param initialBeta -
- * @param isMaximising -
+ * @param board - The board to evaluate
+ * @param depth - How many moves ahead to search
+ * @param isMaximising - Whether to maximise or minimise the score
+ * @returns The best move and its score
  */
 export function minimax(
   board: Board,
   depth: number,
+  isMaximising: boolean = board.getActiveColour() === "white",
   initialAlpha = -Infinity,
   initialBeta = Infinity,
-  isMaximising: boolean = board.getActiveColour() === "white",
 ): { move?: Move; score: number } {
   if (depth === 0) {
+    // Reached the end of the search tree, evaluate the position
     return { score: evaluate(board) };
   }
 
   board.setActiveColour(isMaximising ? "white" : "black");
   const moves = getAllMoves(board);
   let best: MinimaxResult = {
+    // Assume the worst possible score for the active player
     score: isMaximising ? -Infinity : Infinity,
     move: moves[0],
   };
@@ -35,8 +38,10 @@ export function minimax(
   let beta = initialBeta;
 
   for (const move of moves) {
+    // Make the move and evaluate the resulting position
     const newBoard = makeMove(board, move);
-    const result = minimax(newBoard, depth - 1, alpha, beta, !isMaximising);
+    const result = minimax(newBoard, depth - 1, !isMaximising, alpha, beta);
+
     if (isMaximising) {
       if (result.score > best.score) {
         best = { score: result.score, move };
@@ -51,9 +56,7 @@ export function minimax(
       beta = Math.min(beta, result.score);
     }
 
-    if (beta <= alpha) {
-      break;
-    }
+    if (beta <= alpha) break; // This branch is worse than another already searched branch, so ignore it
   }
 
   return best;
