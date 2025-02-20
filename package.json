@@ -7,7 +7,7 @@
 		"test": "jest -i test/**/*.test.ts",
 		"lint": "npx eslint",
 		"format": "prettier . --write",
-		"check": "prettier . --check && npm run lint && npm run test",
+		"check": "tsc --noEmit && npm run test && npm run lint && prettier . --check",
 		"fix": "npm run format && npm run lint -- --fix",
 		"docs": "typedoc --options typedoc.json",
 		"benchmark": "npm run build && node dist/src/benchmark.js"
