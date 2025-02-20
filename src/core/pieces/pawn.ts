@@ -2,7 +2,7 @@ import type { Move } from "../../types/Core";
 import type { Board } from "../Board";
 
 /**
- * Returns all possible moves for a pawn
+ * Returns all possible moves for a pawn.
  *
  * @internal
  */
@@ -62,18 +62,18 @@ export function getPawnMoves(
   // En passant
   const enPassantSquare = board.getEnPassantSquare();
 
-  if (enPassantSquare && 
-      enPassantSquare[0] === position[0] + direction && (
-        enPassantSquare[1] === position[1] - 1 ||
-        enPassantSquare[1] === position[1] + 1
-      )
-    ) {
-      moves.push({
-        from: position,
-        to: [enPassantSquare[0], enPassantSquare[1]],
-        isEnPassantCapture: true,
-      });
-    }
+  if (enPassantSquare &&
+    enPassantSquare[0] === position[0] + direction && (
+      enPassantSquare[1] === position[1] - 1 ||
+      enPassantSquare[1] === position[1] + 1
+    )
+  ) {
+    moves.push({
+      from: position,
+      to: [enPassantSquare[0], enPassantSquare[1]],
+      isEnPassantCapture: true,
+    });
+  }
 
   // Capture diagonally to the left
   if (

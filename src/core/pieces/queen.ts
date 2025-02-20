@@ -3,7 +3,7 @@ import type { Board } from "../Board";
 import { getDiagonalMoves, getOrthogonalMoves } from "../MoveGenerator";
 
 /**
- * Returns all possible moves for a queen
+ * Returns all possible moves for a queen.
  *
  * @internal
  */

@@ -1,4 +1,4 @@
-// see https://www.chessprogramming.org/Perft_Results
+// See https://www.chessprogramming.org/Perft_Results
 
 import { Board } from "../../src/core/Board";
 import { _perft } from "../../src/core/MoveGenerator";

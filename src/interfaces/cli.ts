@@ -5,7 +5,7 @@ import type { Move } from "../types/Core";
 import { toFEN } from "../utils/FEN";
 
 /**
- * cli for interacting with the bot
+ * CLI for interacting with the bot.
  */
 class FENCLI {
   public run(): void {
@@ -72,7 +72,7 @@ class FENCLI {
   }
 
   /**
-   * Parse the arguments and return the FEN, depth, and autoplay flag
+   * Parse the arguments and return the FEN, depth, and autoplay flag.
    *
    * @internal
    */
@@ -105,7 +105,7 @@ class FENCLI {
   }
 
   /**
-   * Convert a move to algebraic notation
+   * Convert a move to algebraic notation.
    *
    * @param move -
    * @internal

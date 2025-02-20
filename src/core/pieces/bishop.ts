@@ -3,7 +3,7 @@ import type { Board } from "../Board";
 import { getDiagonalMoves } from "../MoveGenerator";
 
 /**
- * Returns all possible moves for a bishop
+ * Returns all possible moves for a bishop.
  *
  * @internal
  */

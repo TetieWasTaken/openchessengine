@@ -40,7 +40,7 @@ export class Board {
   }
 
   /**
-   * Create a board from a FEN string
+   * Create a board from a FEN string.
    *
    * @param fen - The FEN string
    */
@@ -62,9 +62,9 @@ export class Board {
   }
 
   /**
-   * Get a piece from the board
+   * Get a piece from the board.
    *
-   * @param coords - The coordinates of the piece.
+   * @param coords - The coordinates of the piece
    */
   public getPiece(coords: [number, number]): BoardType[number][number] | null {
     const [x, y] = coords;
@@ -72,14 +72,14 @@ export class Board {
   }
 
   /**
-   * Getter for the board
+   * Getter for the board.
    */
   public getBoard(): BoardType {
     return this.board;
   }
 
   /**
-   * Getter for the castling rights
+   * Getter for the castling rights.
    *
    * @param side -
    * @returns
@@ -95,28 +95,28 @@ export class Board {
   }
 
   /**
-   * Get the halfmove clock
+   * Get the halfmove clock.
    */
   public getHalfmove(): number {
     return this.halfmove;
   }
 
   /**
-   * Get the fullmove number
+   * Get the fullmove number.
    */
   public getFullmove(): number {
     return this.fullmove;
   }
 
   /**
-   * Get the active colour
+   * Get the active colour.
    */
   public getActiveColour(): "black" | "white" {
     return this.activeColour;
   }
 
   /**
-   * Clone the board
+   * Clone the board.
    */
   public clone(): Board {
     return new Board({
@@ -133,7 +133,7 @@ export class Board {
   }
 
   /**
-   * Set the active colour
+   * Set the active colour.
    *
    * @param colour -
    * @param mutate - Whether to mutate the board or return a new one
@@ -169,7 +169,7 @@ export class Board {
   }
 
   /**
-   * Convert the board to a string
+   * Convert the board to a string.
    */
   public toString(): string {
     let boardStr = "\n";
@@ -197,7 +197,7 @@ export class Board {
   }
 
   /**
-   * Create a board from a FEN string
+   * Create a board from a FEN string.
    *
    * @param fen - The FEN string
    * @internal
@@ -209,7 +209,7 @@ export class Board {
   }
 
   /**
-   * Parse castling rights from a FEN string
+   * Parse castling rights from a FEN string.
    *
    * @param castling - The FEN string
    * @internal
@@ -228,14 +228,14 @@ export class Board {
   }
 
   /**
-   * Get the en passant square
+   * Get the en passant square.
    */
   public getEnPassantSquare(): [number, number] | null {
     return this.enPassantSquare;
   }
 
   /**
-   * Parse the en passant square from a FEN string
+   * Parse the en passant square from a FEN string.
    *
    * @param data -
    */

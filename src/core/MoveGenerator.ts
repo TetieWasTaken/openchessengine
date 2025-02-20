@@ -8,7 +8,7 @@ import { getQueenMoves } from "./pieces/queen";
 import { getRookMoves } from "./pieces/rook";
 
 /**
- * Returns all possible moves for a given board and colour
+ * Returns all possible moves for a given board and colour.
  */
 export function getAllMoves(
   board: Board,
@@ -32,7 +32,7 @@ export function getAllMoves(
 }
 
 /**
- * Returns the number of nodes at a given depth, see https://www.chessprogramming.org/Perft
+ * Returns the number of nodes at a given depth, see {@link https://www.chessprogramming.org/Perft | chessprogramming/Perft}.
  *
  * @param board -
  * @param depth -
@@ -55,7 +55,7 @@ export function _perft(board: Board, depth: number): number {
 }
 
 /**
- * Makes a move on the board and returns the new board
+ * Makes a move on the board and returns the new board.
  */
 export function makeMove(board: Board, move: Move): Board {
   const boardData = board.getBoard();
@@ -192,7 +192,7 @@ export function makeMove(board: Board, move: Move): Board {
 }
 
 /**
- * Returns all possible moves for a piece at a given position
+ * Returns all possible moves for a piece at a given position.
  */
 export function getMoves(
   board: Board,
@@ -245,7 +245,7 @@ export function getMoves(
 }
 
 /**
- * Checks if the king of the given colour is in check
+ * Checks if the king of the given colour is in check.
  *
  * @internal
  */
@@ -270,7 +270,7 @@ export function isKingInCheck(
 }
 
 /**
- * Finds the position of the king of the given colour
+ * Finds the position of the king of the given colour.
  *
  * @internal
  */
@@ -290,7 +290,7 @@ export function findKing(
 }
 
 /**
- * Returns all possible orthogonal moves for a piece
+ * Returns all possible orthogonal moves for a piece.
  *
  * @internal
  */
@@ -345,7 +345,7 @@ export function getOrthogonalMoves(
 }
 
 /**
- * Returns all possible diagonal moves for a piece
+ * Returns all possible diagonal moves for a piece.
  *
  * @internal
  */

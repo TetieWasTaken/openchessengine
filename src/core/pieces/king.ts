@@ -3,7 +3,7 @@ import type { Board } from "../Board";
 import { isKingInCheck, makeMove } from "../MoveGenerator";
 
 /**
- * Returns all possible moves for a king
+ * Returns all possible moves for a king.
  *
  * @internal
  */

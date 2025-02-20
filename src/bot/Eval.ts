@@ -4,8 +4,8 @@ import type { PieceType } from "../types/Core";
 /**
  * Evaluates the board and returns a score.
  *
- * @param board - The position to evaluate.
- * @returns The evaluation score.
+ * @param board - The position to evaluate
+ * @returns The evaluation score
  */
 export function evaluate(board: Board): number {
   const boardData = board.getBoard();
@@ -13,7 +13,7 @@ export function evaluate(board: Board): number {
   let whiteKing = false;
   let blackKing = false;
 
-  // Loop through the board and add the value of each piece to the score.
+  // Loop through the board and add the value of each piece to the score
   for (const row of boardData) {
     for (const piece of row) {
       if (piece === null) continue; // No piece on this square
@@ -42,8 +42,8 @@ export function evaluate(board: Board): number {
 /**
  * Returns the value of a chess piece.
  *
- * @param piece - The piece whose value is to be determined.
- * @returns The value assigned to the piece.
+ * @param piece - The piece whose value is to be determined
+ * @returns The value assigned to the piece
  */
 function getPieceValue(piece: PieceType): number {
   switch (piece.type) {

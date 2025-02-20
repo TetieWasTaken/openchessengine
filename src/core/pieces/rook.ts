@@ -3,7 +3,7 @@ import type { Board } from "../Board";
 import { getOrthogonalMoves } from "../MoveGenerator";
 
 /**
- * Returns all possible moves for a rook
+ * Returns all possible moves for a rook.
  *
  * @internal
  */

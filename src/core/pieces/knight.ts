@@ -2,7 +2,7 @@ import type { Move } from "../../types/Core";
 import type { Board } from "../Board";
 
 /**
- * Returns all possible moves for a knight
+ * Returns all possible moves for a knight.
  *
  * @internal
  */

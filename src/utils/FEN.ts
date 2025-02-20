@@ -8,7 +8,7 @@ import type {
 } from "../types/Core";
 
 /**
- * Converts a FEN string to a Board
+ * Converts a FEN string to a Board.
  *
  * @param fen - A FEN string
  * @returns A Board
@@ -58,7 +58,7 @@ type FENOptions = {
 };
 
 /**
- * Converts a Board to a FEN string
+ * Converts a Board to a FEN string.
  *
  * @param board -
  */
@@ -119,7 +119,7 @@ function _toCastlingString(castling: FENOptions["castling"]): string {
 }
 
 /**
- * Converts a piece to its FEN representation
+ * Converts a piece to its FEN representation.
  *
  * @param piece -
  */
@@ -150,7 +150,7 @@ type FENParts = {
 };
 
 /**
- * Checks if a character is a valid piece type
+ * Checks if a character is a valid piece type.
  *
  * @param char -
  */
@@ -159,7 +159,7 @@ function isPieceType(char: string): char is PieceType["type"] {
 }
 
 /**
- * Parses a FEN string into its parts
+ * Parses a FEN string into its parts.
  *
  * @param fen -
  */

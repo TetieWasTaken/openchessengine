@@ -5,9 +5,9 @@ import { minimax } from "./Minimax";
 /**
  * Search for the best move using the minimaxRoot function.
  *
- * @param board - Current board position.
- * @param depth - How many moves ahead to search.
- * @returns The best move found.
+ * @param board - Current board position
+ * @param depth - How many moves ahead to search
+ * @returns The best move found
  */
 export function search(
   board: Board,
