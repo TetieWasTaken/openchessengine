@@ -70,8 +70,8 @@ export function getKingMoves(
  * ```
  * @alpha
  */
-function getCastlingMoves(board: Board, position: [number, number], colour: 'white' | 'black'): Move[] {
-	let moves: Move[] = [];
+function getCastlingMoves(board: Board, position: [number, number], colour: 'black' | 'white'): Move[] {
+	const moves: Move[] = [];
 	const kingInCheck = isKingInCheck(board, colour);
 
 	if (!kingInCheck) {
