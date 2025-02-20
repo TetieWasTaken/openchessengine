@@ -9,7 +9,7 @@ import { common, typescript, prettier } from 'eslint-config-neon';
 
 export default [
 	{
-		ignores: ['node_modules/', 'dist/', 'babel.config.js', 'eslint.config.mjs'],
+		ignores: ['node_modules/', 'dist/', 'babel.config.js', 'eslint.config.mjs', 'docs/'],
 	},
 	{
 		plugins: {
