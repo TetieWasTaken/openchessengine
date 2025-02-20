@@ -1,6 +1,6 @@
-import type { Board } from "../core/Board";
-import type { Move } from "../types/Core";
-import { minimax } from "./Minimax";
+import type { Board } from "../core/board";
+import type { Move } from "../types/core";
+import { minimax } from "./minimax";
 
 /**
  * Search for the best move for the current player

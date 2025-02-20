@@ -1,8 +1,8 @@
-import { search } from "../bot/Search";
-import { Board } from "../core/Board";
-import { makeMove } from "../core/MoveGenerator";
-import type { Move } from "../types/Core";
-import { toFEN } from "../utils/FEN";
+import { search } from "../bot/search";
+import { Board } from "../core/board";
+import { makeMove } from "../core/moveGenerator";
+import type { Move } from "../types/core";
+import { toFEN } from "../utils/fen";
 
 /**
  * CLI for interacting with the bot.

@@ -1,6 +1,6 @@
-import type { Move } from "../../types/Core";
-import type { Board } from "../Board";
-import { getOrthogonalMoves } from "../MoveGenerator";
+import type { Move } from "../../types/core";
+import type { Board } from "../board";
+import { getOrthogonalMoves } from "../moveGenerator";
 
 /**
  * Returns all possible moves for a rook.

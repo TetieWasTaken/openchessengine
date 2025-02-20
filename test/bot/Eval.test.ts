@@ -1,5 +1,5 @@
-import { evaluate } from "../../src/bot/Eval";
-import { Board } from "../../src/core/Board";
+import { evaluate } from "../../src/bot/eval";
+import { Board } from "../../src/core/board";
 
 describe("Eval", () => {
   test("White pawn", () => {

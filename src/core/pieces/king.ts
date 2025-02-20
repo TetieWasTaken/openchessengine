@@ -1,6 +1,6 @@
-import type { Move, SingleCastlingRights } from "../../types/Core";
-import type { Board } from "../Board";
-import { isKingInCheck, makeMove } from "../MoveGenerator";
+import type { Move, SingleCastlingRights } from "../../types/core";
+import type { Board } from "../board";
+import { isKingInCheck, makeMove } from "../moveGenerator";
 
 /**
  * Returns all possible moves for a king.

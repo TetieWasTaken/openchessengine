@@ -1,5 +1,5 @@
-import { Board } from "../../src/core/Board";
-import { makeMove } from "../../src/core/MoveGenerator";
+import { Board } from "../../src/core/board";
+import { makeMove } from "../../src/core/moveGenerator";
 
 describe("Half/Full moves", () => {
   it("Should set half & full moves with custom FEN", () => {

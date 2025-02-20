@@ -1,5 +1,5 @@
-import type { Board } from "../core/Board";
-import type { PieceType } from "../types/Core";
+import type { Board } from "../core/board";
+import type { PieceType } from "../types/core";
 
 /**
  * Evaluates the board and returns a score.
@@ -46,6 +46,7 @@ export function evaluate(board: Board): number {
  * @returns The value assigned to the piece
  */
 function getPieceValue(piece: PieceType): number {
+  // eslint-disable-next-line @typescript-eslint/switch-exhaustiveness-check -- King is not included
   switch (piece.type) {
     case "P":
       return 1;

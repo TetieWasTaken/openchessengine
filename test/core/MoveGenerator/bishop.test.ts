@@ -1,5 +1,5 @@
-import { Board } from "../../../src/core/Board";
-import { getMoves } from "../../../src/core/MoveGenerator";
+import { Board } from "../../../src/core/board";
+import { getMoves } from "../../../src/core/moveGenerator";
 
 describe("Move Generator | Bishop", () => {
   test("White bishop at [1, 1]", () => {

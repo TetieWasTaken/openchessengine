@@ -1,11 +1,11 @@
-import type { Board } from "../core/Board";
+import type { Board } from "../core/board";
 import type {
   BoardType,
   CastlingRights,
   PieceType,
   SingleCastlingRights,
   SquareType,
-} from "../types/Core";
+} from "../types/core";
 
 /**
  * Converts a FEN string to a Board.

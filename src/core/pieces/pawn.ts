@@ -1,5 +1,5 @@
-import type { Move } from "../../types/Core";
-import type { Board } from "../Board";
+import type { Move } from "../../types/core";
+import type { Board } from "../board";
 
 /**
  * Returns all possible moves for a pawn.

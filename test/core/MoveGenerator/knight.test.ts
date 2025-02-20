@@ -1,5 +1,5 @@
-import { Board } from "../../../src/core/Board";
-import { getMoves } from "../../../src/core/MoveGenerator";
+import { Board } from "../../../src/core/board";
+import { getMoves } from "../../../src/core/moveGenerator";
 
 describe("Move Generator | Knight", () => {
   test("White knight at [1, 1]", () => {

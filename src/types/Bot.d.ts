@@ -1,4 +1,4 @@
-import type { Move } from "./Core";
+import type { Move } from "./core";
 
 export type MinimaxResult = {
   move: Move;

@@ -1,5 +1,5 @@
-import { search } from "../../src/bot/Search";
-import { Board } from "../../src/core/Board";
+import { search } from "../../src/bot/search";
+import { Board } from "../../src/core/board";
 
 // See https://lichess.org/editor/ for position setup
 

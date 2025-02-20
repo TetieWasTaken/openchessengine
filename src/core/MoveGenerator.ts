@@ -1,5 +1,5 @@
-import type { BoardType, CastlingRights, Move } from "../types/Core";
-import { Board } from "./Board";
+import type { BoardType, CastlingRights, Move } from "../types/core";
+import { Board } from "./board";
 import { getBishopMoves } from "./pieces/bishop";
 import { getKingMoves } from "./pieces/king";
 import { getKnightMoves } from "./pieces/knight";

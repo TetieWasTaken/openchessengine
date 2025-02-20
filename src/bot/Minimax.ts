@@ -1,8 +1,8 @@
-import type { Board } from "../core/Board";
-import { getAllMoves, makeMove } from "../core/MoveGenerator";
-import type { MinimaxResult } from "../types/Bot";
-import type { Move } from "../types/Core";
-import { evaluate } from "./Eval";
+import type { Board } from "../core/board";
+import { getAllMoves, makeMove } from "../core/moveGenerator";
+import type { MinimaxResult } from "../types/bot";
+import type { Move } from "../types/core";
+import { evaluate } from "./eval";
 
 /**
  * {@link https://en.wikipedia.org/wiki/Minimax | Minimax} algorithm with

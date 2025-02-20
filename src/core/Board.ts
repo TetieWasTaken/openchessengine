@@ -3,9 +3,9 @@ import type {
   BoardType,
   CastlingRights,
   SingleCastlingRights,
-} from "../types/Core";
-import { fenToBoard } from "../utils/FEN";
+} from "../types/core";
 import { DEFAULT_FEN } from "../utils/constants";
+import { fenToBoard } from "../utils/fen";
 
 /**
  * Represents a chess board
