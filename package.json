@@ -9,7 +9,8 @@
 		"format": "prettier . --write",
 		"check": "prettier . --check && npm run lint && npm run test",
 		"fix": "npm run format && npm run lint -- --fix",
-		"docs": "typedoc --options typedoc.json"
+		"docs": "typedoc --options typedoc.json",
+		"benchmark": "npm run build && node dist/src/benchmark.js"
 	},
 	"keywords": [],
 	"author": "",
