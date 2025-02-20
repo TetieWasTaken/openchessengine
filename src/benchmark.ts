@@ -28,6 +28,7 @@ for (const position of positions) {
 			Depth: depth,
 			Nodes: nodes,
 			'Time (ms)': (end - start).toFixed(2),
+			'Time per node (ms)': ((end - start) / nodes).toFixed(2),
 		});
 	}
 }
