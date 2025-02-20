@@ -20,58 +20,46 @@ export function getPawnMoves(board: Board, position: [number, number], colour = 
 	const moves: Move[] = [];
 	const direction = colour === 'white' ? 1 : -1;
 	const boardData = board.getBoard();
+	const [x, y] = position;
+
+	const addPromotionMoves = (to: [number, number]) => {
+		moves.push({ from: position, to, promotion: Piece.Queen });
+		moves.push({ from: position, to, promotion: Piece.Rook });
+		moves.push({ from: position, to, promotion: Piece.Bishop });
+		moves.push({ from: position, to, promotion: Piece.Knight });
+	};
+
+	const isPromotionRow = (row: number) => row === 7 || row === 0;
 
 	// Move forward one square
-	if (boardData[position[0] + direction][position[1]] === null) {
-		if (position[0] + direction === 7 || position[0] + direction === 0) {
-			moves.push({
-				from: position,
-				to: [position[0] + direction, position[1]],
-				promotion: Piece.Queen,
-			});
-			moves.push({
-				from: position,
-				to: [position[0] + direction, position[1]],
-				promotion: Piece.Rook,
-			});
-			moves.push({
-				from: position,
-				to: [position[0] + direction, position[1]],
-				promotion: Piece.Bishop,
-			});
-			moves.push({
-				from: position,
-				to: [position[0] + direction, position[1]],
-				promotion: Piece.Knight,
-			});
+	if (boardData[x + direction][y] === null) {
+		const to = [x + direction, y] as [number, number];
+		if (isPromotionRow(x + direction)) {
+			addPromotionMoves(to);
 		} else {
-			moves.push({
-				from: position,
-				to: [position[0] + direction, position[1]],
-			});
+			moves.push({ from: position, to });
 		}
 	}
 
 	// Move forward two squares
 	if (
-		position[0] === (colour === 'white' ? 1 : 6) &&
-		boardData[position[0] + direction][position[1]] === null &&
-		boardData[position[0] + 2 * direction][position[1]] === null
+		x === (colour === 'white' ? 1 : 6) &&
+		boardData[x + direction][y] === null &&
+		boardData[x + 2 * direction][y] === null
 	) {
 		moves.push({
 			from: position,
-			to: [position[0] + 2 * direction, position[1]],
+			to: [x + 2 * direction, y],
 			isDoublePawnMove: true,
 		});
 	}
 
 	// En passant
 	const enPassantSquare = board.getEnPassantSquare();
-
 	if (
 		enPassantSquare &&
-		enPassantSquare[0] === position[0] + direction &&
-		(enPassantSquare[1] === position[1] - 1 || enPassantSquare[1] === position[1] + 1)
+		enPassantSquare[0] === x + direction &&
+		(enPassantSquare[1] === y - 1 || enPassantSquare[1] === y + 1)
 	) {
 		moves.push({
 			from: position,
@@ -81,72 +69,22 @@ export function getPawnMoves(board: Board, position: [number, number], colour = 
 	}
 
 	// Capture diagonally to the left
-	if (
-		position[1] - 1 >= 0 &&
-		boardData[position[0] + direction][position[1] - 1] !== null &&
-		boardData[position[0] + direction][position[1] - 1]?.colour !== colour
-	) {
-		if (position[0] + direction === 7 || position[0] + direction === 0) {
-			moves.push({
-				from: position,
-				to: [position[0] + direction, position[1] - 1],
-				promotion: Piece.Queen,
-			});
-			moves.push({
-				from: position,
-				to: [position[0] + direction, position[1] - 1],
-				promotion: Piece.Rook,
-			});
-			moves.push({
-				from: position,
-				to: [position[0] + direction, position[1] - 1],
-				promotion: Piece.Bishop,
-			});
-			moves.push({
-				from: position,
-				to: [position[0] + direction, position[1] - 1],
-				promotion: Piece.Knight,
-			});
+	if (y - 1 >= 0 && boardData[x + direction][y - 1] !== null && boardData[x + direction][y - 1]?.colour !== colour) {
+		const to = [x + direction, y - 1] as [number, number];
+		if (isPromotionRow(x + direction)) {
+			addPromotionMoves(to);
 		} else {
-			moves.push({
-				from: position,
-				to: [position[0] + direction, position[1] - 1],
-			});
+			moves.push({ from: position, to });
 		}
 	}
 
 	// Capture diagonally to the right
-	if (
-		position[1] + 1 < 8 &&
-		boardData[position[0] + direction][position[1] + 1] !== null &&
-		boardData[position[0] + direction][position[1] + 1]?.colour !== colour
-	) {
-		if (position[0] + direction === 7 || position[0] + direction === 0) {
-			moves.push({
-				from: position,
-				to: [position[0] + direction, position[1] + 1],
-				promotion: Piece.Queen,
-			});
-			moves.push({
-				from: position,
-				to: [position[0] + direction, position[1] + 1],
-				promotion: Piece.Rook,
-			});
-			moves.push({
-				from: position,
-				to: [position[0] + direction, position[1] + 1],
-				promotion: Piece.Bishop,
-			});
-			moves.push({
-				from: position,
-				to: [position[0] + direction, position[1] + 1],
-				promotion: Piece.Knight,
-			});
+	if (y + 1 < 8 && boardData[x + direction][y + 1] !== null && boardData[x + direction][y + 1]?.colour !== colour) {
+		const to = [x + direction, y + 1] as [number, number];
+		if (isPromotionRow(x + direction)) {
+			addPromotionMoves(to);
 		} else {
-			moves.push({
-				from: position,
-				to: [position[0] + direction, position[1] + 1],
-			});
+			moves.push({ from: position, to });
 		}
 	}
 
