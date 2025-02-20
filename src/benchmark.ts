@@ -1,9 +1,10 @@
 /** @format */
 
+import { existsSync, appendFileSync } from 'node:fs';
+import { performance } from 'perf_hooks';
 import { Board } from './core/board';
 import { _perft } from './core/moveGenerator';
 
-// Positions 1 through 6 from https://www.chessprogramming.org/Perft_Results
 const positions = [
 	'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
 	'r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1',
@@ -14,8 +15,12 @@ const positions = [
 ];
 
 const maxDepth = 4;
-
 const results = [];
+const csvFile = './benchmark.csv';
+
+if (!existsSync(csvFile)) {
+	appendFileSync(csvFile, 'Version,Depth,Average time (ms),Average time per node (ms)\n');
+}
 
 for (const position of positions) {
 	for (let depth = 1; depth <= maxDepth; depth++) {
@@ -23,14 +28,46 @@ for (const position of positions) {
 		const start = performance.now();
 		const nodes = _perft(board, depth);
 		const end = performance.now();
-		results.push({
+		const timeMs = (end - start).toFixed(2);
+		const timePerNode = ((end - start) / nodes).toFixed(3);
+
+		const result = {
 			Position: position,
 			Depth: depth,
 			Nodes: nodes,
-			'Time (ms)': (end - start).toFixed(2),
-			'Time per node (ms)': ((end - start) / nodes).toFixed(3),
-		});
+			'Time (ms)': timeMs,
+			'Time per node (ms)': timePerNode,
+		};
+		results.push(result);
 	}
+}
+
+// Average every result per depth
+const averageResults = [];
+
+for (let depth = 1; depth <= maxDepth; depth++) {
+	const filteredResults = results.filter((result) => result.Depth === depth);
+	const averageTime = (
+		filteredResults.reduce((acc, curr) => acc + Number.parseFloat(curr['Time (ms)']), 0) / filteredResults.length
+	).toFixed(2);
+	const averageTimePerNode = (
+		filteredResults.reduce((acc, curr) => acc + Number.parseFloat(curr['Time per node (ms)']), 0) /
+		filteredResults.length
+	).toFixed(3);
+
+	const averageResult = {
+		Depth: depth,
+		'Average time (ms)': averageTime,
+		'Average time per node (ms)': averageTimePerNode,
+	};
+	averageResults.push(averageResult);
+}
+
+for (const result of averageResults) {
+	appendFileSync(
+		csvFile,
+		`V_{n},${result.Depth},${result['Average time (ms)']},${result['Average time per node (ms)']}\n`,
+	);
 }
 
 console.table(results);
