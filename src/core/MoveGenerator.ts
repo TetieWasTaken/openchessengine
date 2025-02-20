@@ -1,6 +1,7 @@
 /** @format */
 
 import type { BoardType, CastlingRights, Move } from '../types/core';
+import { Piece } from '../types/enums';
 import { Board } from './board';
 import { getBishopMoves } from './pieces/bishop';
 import { getKingMoves } from './pieces/king';
@@ -63,7 +64,7 @@ export function makeMove(board: Board, move: Move): Board {
 	newBoard[move.from[0]][move.from[1]] = null;
 
 	// Checking for pawn should be superfluous, but good for robustness
-	if (move.promotion !== undefined && piece?.type === 'P') {
+	if (move.promotion !== undefined && piece?.type === Piece.Pawn) {
 		newBoard[move.to[0]][move.to[1]] = {
 			type: move.promotion,
 			colour: piece.colour,
@@ -80,7 +81,7 @@ export function makeMove(board: Board, move: Move): Board {
 	const castlingRights = board.getCastlingRights();
 	newCastlingRights = { ...newCastlingRights, ...castlingRights };
 
-	if (capturedPiece && capturedPiece.type === 'R') {
+	if (capturedPiece && capturedPiece.type === Piece.Rook) {
 		if (capturedPiece.colour === 'white') {
 			if (move.to[0] === 0 && move.to[1] === 0) {
 				newCastlingRights = {
@@ -115,7 +116,7 @@ export function makeMove(board: Board, move: Move): Board {
 		newBoard[rookFrom[0]][rookFrom[1]] = null;
 	}
 
-	if (piece?.type === 'K') {
+	if (piece?.type === Piece.King) {
 		newCastlingRights = {
 			...newCastlingRights,
 			[piece.colour]: {
@@ -123,7 +124,7 @@ export function makeMove(board: Board, move: Move): Board {
 				queen: false,
 			},
 		};
-	} else if (piece?.type === 'R') {
+	} else if (piece?.type === Piece.Rook) {
 		if (piece.colour === 'white') {
 			if (move.from[0] === 0 && move.from[1] === 0) {
 				newCastlingRights = {
@@ -179,7 +180,7 @@ export function makeMove(board: Board, move: Move): Board {
 		activeColour: board.getActiveColour() === 'white' ? 'black' : 'white',
 		castlingRights: newCastlingRights,
 		enPassant: enPassantSquare,
-		halfmove: piece?.type === 'P' || capturedPiece ? 0 : board.getHalfmove() + 1,
+		halfmove: piece?.type === Piece.Pawn || capturedPiece ? 0 : board.getHalfmove() + 1,
 		fullmove: board.getFullmove() + (board.getActiveColour() === 'black' ? 1 : 0),
 	});
 }
@@ -197,22 +198,22 @@ export function getMoves(board: Board, position: [number, number], isRecursion =
 	let moves: Move[] = [];
 
 	switch (piece.type) {
-		case 'P':
+		case Piece.Pawn:
 			moves = getPawnMoves(board, position);
 			break;
-		case 'N':
+		case Piece.Knight:
 			moves = getKnightMoves(board, position);
 			break;
-		case 'B':
+		case Piece.Bishop:
 			moves = getBishopMoves(board, position);
 			break;
-		case 'R':
+		case Piece.Rook:
 			moves = getRookMoves(board, position);
 			break;
-		case 'Q':
+		case Piece.Queen:
 			moves = getQueenMoves(board, position);
 			break;
-		case 'K':
+		case Piece.King:
 			moves = getKingMoves(board, position, isRecursion);
 			break;
 	}
@@ -253,7 +254,7 @@ export function isKingInCheck(board: Board, colour: 'black' | 'white'): boolean 
 export function findKing(board: BoardType, colour: 'black' | 'white'): [number, number] | null {
 	for (let i = 0; i < 8; i++) {
 		for (let j = 0; j < 8; j++) {
-			if (board[i][j]?.type === 'K' && board[i][j]?.colour === colour) {
+			if (board[i][j]?.type === Piece.King && board[i][j]?.colour === colour) {
 				return [i, j];
 			}
 		}

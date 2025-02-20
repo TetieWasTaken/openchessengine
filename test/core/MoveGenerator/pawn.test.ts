@@ -2,6 +2,7 @@
 
 import { Board } from '../../../src/core/board';
 import { getMoves, makeMove } from '../../../src/core/moveGenerator';
+import { Piece } from '../../../src/types/enums';
 
 describe('Move Generator | Pawn', () => {
 	test('White pawn at [1, 1] with blocking piece', () => {
@@ -51,7 +52,7 @@ describe('Move Generator | Pawn', () => {
 		const newBoard = makeMove(board, {
 			from: [6, 4],
 			to: [7, 4],
-			promotion: 'R',
+			promotion: Piece.Rook,
 		});
 
 		expect(newBoard.getPiece([7, 4])).toEqual({

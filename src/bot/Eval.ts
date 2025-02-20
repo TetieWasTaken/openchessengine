@@ -2,6 +2,7 @@
 
 import type { Board } from '../core/board';
 import type { PieceType } from '../types/core';
+import { Piece } from '../types/enums';
 
 /**
  * Evaluates the board and returns a score.
@@ -20,7 +21,7 @@ export function evaluate(board: Board): number {
 		for (const piece of row) {
 			if (piece === null) continue; // No piece on this square
 
-			if (piece.type === 'K') {
+			if (piece.type === Piece.King) {
 				if (piece.colour === 'white') whiteKing = true;
 				if (piece.colour === 'black') blackKing = true;
 			} else {
@@ -50,15 +51,15 @@ export function evaluate(board: Board): number {
 function getPieceValue(piece: PieceType): number {
 	// eslint-disable-next-line @typescript-eslint/switch-exhaustiveness-check -- King is not included
 	switch (piece.type) {
-		case 'P':
+		case Piece.Pawn:
 			return 1;
-		case 'N':
+		case Piece.Knight:
 			return 3.28;
-		case 'B':
+		case Piece.Bishop:
 			return 3.42;
-		case 'R':
+		case Piece.Rook:
 			return 5.44;
-		case 'Q':
+		case Piece.Queen:
 			return 9.75;
 		default:
 			return 0;

@@ -1,6 +1,7 @@
 /** @format */
 
 import type { Move } from '../../types/core';
+import { Piece } from '../../types/enums';
 import type { Board } from '../board';
 
 /**
@@ -26,22 +27,22 @@ export function getPawnMoves(board: Board, position: [number, number], colour = 
 			moves.push({
 				from: position,
 				to: [position[0] + direction, position[1]],
-				promotion: 'Q',
+				promotion: Piece.Queen,
 			});
 			moves.push({
 				from: position,
 				to: [position[0] + direction, position[1]],
-				promotion: 'R',
+				promotion: Piece.Rook,
 			});
 			moves.push({
 				from: position,
 				to: [position[0] + direction, position[1]],
-				promotion: 'B',
+				promotion: Piece.Bishop,
 			});
 			moves.push({
 				from: position,
 				to: [position[0] + direction, position[1]],
-				promotion: 'N',
+				promotion: Piece.Knight,
 			});
 		} else {
 			moves.push({
@@ -89,22 +90,22 @@ export function getPawnMoves(board: Board, position: [number, number], colour = 
 			moves.push({
 				from: position,
 				to: [position[0] + direction, position[1] - 1],
-				promotion: 'Q',
+				promotion: Piece.Queen,
 			});
 			moves.push({
 				from: position,
 				to: [position[0] + direction, position[1] - 1],
-				promotion: 'R',
+				promotion: Piece.Rook,
 			});
 			moves.push({
 				from: position,
 				to: [position[0] + direction, position[1] - 1],
-				promotion: 'B',
+				promotion: Piece.Bishop,
 			});
 			moves.push({
 				from: position,
 				to: [position[0] + direction, position[1] - 1],
-				promotion: 'N',
+				promotion: Piece.Knight,
 			});
 		} else {
 			moves.push({
@@ -124,22 +125,22 @@ export function getPawnMoves(board: Board, position: [number, number], colour = 
 			moves.push({
 				from: position,
 				to: [position[0] + direction, position[1] + 1],
-				promotion: 'Q',
+				promotion: Piece.Queen,
 			});
 			moves.push({
 				from: position,
 				to: [position[0] + direction, position[1] + 1],
-				promotion: 'R',
+				promotion: Piece.Rook,
 			});
 			moves.push({
 				from: position,
 				to: [position[0] + direction, position[1] + 1],
-				promotion: 'B',
+				promotion: Piece.Bishop,
 			});
 			moves.push({
 				from: position,
 				to: [position[0] + direction, position[1] + 1],
-				promotion: 'N',
+				promotion: Piece.Knight,
 			});
 		} else {
 			moves.push({

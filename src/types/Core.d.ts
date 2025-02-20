@@ -1,8 +1,10 @@
 /** @format */
 
+import type { Piece } from './enums';
+
 export type PieceType = {
 	colour: 'black' | 'white';
-	type: 'B' | 'K' | 'N' | 'P' | 'Q' | 'R';
+	type: Piece;
 };
 export type SquareType = PieceType | null;
 export type BoardType = SquareType[][];
@@ -12,7 +14,7 @@ export type Move = {
 	from: [number, number];
 	isDoublePawnMove?: boolean;
 	isEnPassantCapture?: boolean;
-	promotion?: 'B' | 'N' | 'Q' | 'R';
+	promotion?: Piece;
 	to: [number, number];
 };
 
