@@ -1,6 +1,8 @@
-import type { Move } from "./core";
+/** @format */
+
+import type { Move } from './core';
 
 export type MinimaxResult = {
-  move: Move;
-  score: number;
+	move: Move;
+	score: number;
 };

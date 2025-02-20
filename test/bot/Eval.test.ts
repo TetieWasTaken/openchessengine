@@ -1,29 +1,31 @@
-import { evaluate } from "../../src/bot/eval";
-import { Board } from "../../src/core/board";
+/** @format */
 
-describe("Eval", () => {
-  test("White pawn", () => {
-    const board = new Board("k6K/8/8/8/8/8/8/P7 w - - 0 1");
-    expect(evaluate(board)).toBe(1);
-  });
+import { evaluate } from '../../src/bot/eval';
+import { Board } from '../../src/core/board';
 
-  test("White bishop", () => {
-    const board = new Board("k6K/8/8/8/8/8/8/B7 w - - 0 1");
-    expect(evaluate(board)).toBe(3.42);
-  });
+describe('Eval', () => {
+	test('White pawn', () => {
+		const board = new Board('k6K/8/8/8/8/8/8/P7 w - - 0 1');
+		expect(evaluate(board)).toBe(1);
+	});
 
-  test("Black pawn", () => {
-    const board = new Board("k6K/8/8/8/8/8/8/p7 w - - 0 1");
-    expect(evaluate(board)).toBe(-1);
-  });
+	test('White bishop', () => {
+		const board = new Board('k6K/8/8/8/8/8/8/B7 w - - 0 1');
+		expect(evaluate(board)).toBe(3.42);
+	});
 
-  test("Combination", () => {
-    const board = new Board("k6K/8/8/8/8/8/8/pR6 w - - 0 1");
-    expect(evaluate(board)).toBe(4.44);
-  });
+	test('Black pawn', () => {
+		const board = new Board('k6K/8/8/8/8/8/8/p7 w - - 0 1');
+		expect(evaluate(board)).toBe(-1);
+	});
 
-  test("White king", () => {
-    const board = new Board("8/8/8/8/8/8/8/K7 w - - 0 1");
-    expect(evaluate(board)).toBe(Infinity);
-  });
+	test('Combination', () => {
+		const board = new Board('k6K/8/8/8/8/8/8/pR6 w - - 0 1');
+		expect(evaluate(board)).toBe(4.44);
+	});
+
+	test('White king', () => {
+		const board = new Board('8/8/8/8/8/8/8/K7 w - - 0 1');
+		expect(evaluate(board)).toBe(Infinity);
+	});
 });

@@ -1,6 +1,8 @@
-import type { Board } from "../core/board";
-import type { Move } from "../types/core";
-import { minimax } from "./minimax";
+/** @format */
+
+import type { Board } from '../core/board';
+import type { Move } from '../types/core';
+import { minimax } from './minimax';
 
 /**
  * Search for the best move for the current player
@@ -10,6 +12,6 @@ import { minimax } from "./minimax";
  * @returns The best move found
  */
 export function search(board: Board, depth: number): Move | undefined {
-  const { move } = minimax(board, depth);
-  return move;
+	const { move } = minimax(board, depth);
+	return move;
 }

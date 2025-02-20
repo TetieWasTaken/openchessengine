@@ -1,3 +1,5 @@
+<!-- @format -->
+
 # openchessengine
 
 Work in progress! The engine & interface is functional but lacks optimisations and features.
