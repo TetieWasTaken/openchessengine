@@ -2,7 +2,7 @@
 	"name": "openchessengine",
 	"version": "1.0.0",
 	"scripts": {
-		"build": "tsc src/**/*.ts --outDir dist",
+		"build": "tsc",
 		"start": "ts-node src/interfaces/CLI.ts",
 		"test": "jest",
 		"lint": "npx eslint",
