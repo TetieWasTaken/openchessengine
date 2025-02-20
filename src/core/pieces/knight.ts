@@ -2,9 +2,16 @@ import type { Move } from "../../types/core";
 import type { Board } from "../board";
 
 /**
- * Returns all possible moves for a knight.
+ * Returns all {@link https://www.chessprogramming.org/Move_Generation#Pseudo-legal | pseudo-legal} moves for a knight.
  *
- * @internal
+ * @param board - The board to get the moves from
+ * @param position - The position of the knight
+ * @param colour - The colour of the knight
+ * @example
+ * ```
+ * getKnightMoves(board, [0, 1]);
+ * ```
+ * @returns An array of pseudo-legal moves
  */
 export function getKnightMoves(
   board: Board,

@@ -3,9 +3,16 @@ import type { Board } from "../board";
 import { isKingInCheck, makeMove } from "../moveGenerator";
 
 /**
- * Returns all possible moves for a king.
- *
- * @internal
+ * Returns all {@link https://www.chessprogramming.org/Move_Generation#Pseudo-legal | pseudo-legal} moves for a king.
+ * 
+ * @param board - The board to get the moves from
+ * @param position - The position of the king
+ * @param isRecursion - Whether the function is being called recursively 
+ * @example
+ * ```
+ * getKingMoves(board, [0, 4]);
+ * ```
+ * @returns An array of pseudo-legal moves
  */
 export function getKingMoves(
   board: Board,

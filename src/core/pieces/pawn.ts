@@ -2,9 +2,16 @@ import type { Move } from "../../types/core";
 import type { Board } from "../board";
 
 /**
- * Returns all possible moves for a pawn.
- *
- * @internal
+ * Returns all {@link https://www.chessprogramming.org/Move_Generation#Pseudo-legal | pseudo-legal} moves for a pawn.
+ * 
+ * @param board - The board to get the moves from
+ * @param position - The position of the pawn
+ * @param colour - The colour of the pawn
+ * @example
+ * ```
+ * getPawnMoves(board, [1, 0]);
+ * ```
+ * @returns An array of pseudo-legal moves
  */
 export function getPawnMoves(
   board: Board,
