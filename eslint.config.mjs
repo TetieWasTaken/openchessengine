@@ -103,6 +103,7 @@ export default [
 					exceptions: ['_', 'i', 'j', 'k', 'x', 'y', 'z'],
 				},
 			],
+			'jsdoc/multiline-blocks': 'off',
 		},
 	},
 	...prettier,
