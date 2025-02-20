@@ -4,7 +4,7 @@
 	"scripts": {
 		"build": "tsc",
 		"start": "ts-node src/interfaces/CLI.ts",
-		"test": "jest",
+		"test": "jest -i test/**/*.test.ts",
 		"lint": "npx eslint",
 		"format": "prettier . --write",
 		"check": "prettier . --check && npm run lint && npm run test",
