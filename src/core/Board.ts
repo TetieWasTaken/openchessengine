@@ -245,7 +245,7 @@ export class Board {
 
 	/**
 	 * Check if a position is within the bounds of the board.
-	 * 
+	 *
 	 * @param x The x coordinate of the position
 	 * @param y The y coordinate of the position
 	 * @example

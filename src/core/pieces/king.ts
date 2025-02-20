@@ -60,7 +60,7 @@ export function getKingMoves(
 
 /**
  * Returns all possible castling moves for a king.
- * 
+ *
  * @param board - The board to get the moves from
  * @param position - The position of the king
  * @param colour - The colour of the king
@@ -70,11 +70,7 @@ export function getKingMoves(
  * ```
  * @alpha
  */
-function getCastlingMoves(
-	board: Board,
-	position: [number, number],
-	colour: 'white' | 'black',
-): Move[] {
+function getCastlingMoves(board: Board, position: [number, number], colour: 'white' | 'black'): Move[] {
 	let moves: Move[] = [];
 	const kingInCheck = isKingInCheck(board, colour);
 
