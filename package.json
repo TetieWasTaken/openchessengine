@@ -7,7 +7,8 @@
 		"test": "jest",
 		"lint": "npx eslint",
 		"format": "prettier . --write",
-		"check": "prettier . --check && npm run lint && npm run test"
+		"check": "prettier . --check && npm run lint && npm run test",
+		"fix": "npm run format && npm run lint -- --fix"
 	},
 	"keywords": [],
 	"author": "",
