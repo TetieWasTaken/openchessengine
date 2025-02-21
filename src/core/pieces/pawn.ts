@@ -71,24 +71,24 @@ export function getPawnMoves(board: Board, position: [number, number], colour = 
 	}
 
 	// Capture diagonally to the left
-	if (y - 1 >= 0 && board.getPieceAt(x + direction, y - 1) !== null && board.getPieceAt(x + direction, y - 1)?.[1] !== colour) {
-		const to = [x + direction, y - 1] as [number, number];
+	if (y - 1 >= 0 && board.getPieceAt(x - 1, y + direction) !== null && board.getPieceAt(x - 1, y + direction)?.[1] !== colour) {
+		const to = [x - 1, y + direction] as [number, number];
 		if (isPromotionRow(x + direction)) {
 			addPromotionMoves(to);
 		} else {
 			moves.push({
-				from: position, to, piece: { type: Piece.Pawn, colour }
+				from: position, to, piece: { type: Piece.Pawn, colour }, isCapture: true
 			});
 		}
 	}
 
 	// Capture diagonally to the right
-	if (y + 1 < 8 && board.getPieceAt(x + direction, y + 1) !== null && board.getPieceAt(x + direction, y + 1)?.[1] !== colour) {
-		const to = [x + direction, y + 1] as [number, number];
+	if (y + 1 < 8 && board.getPieceAt(x + 1, y + direction) !== null && board.getPieceAt(x + 1, y + direction)?.[1] !== colour) {
+		const to = [x + 1, y + direction] as [number, number];
 		if (isPromotionRow(x + direction)) {
 			addPromotionMoves(to);
 		} else {
-			moves.push({ from: position, to, piece: { type: Piece.Pawn, colour } });
+			moves.push({ from: position, to, piece: { type: Piece.Pawn, colour }, isCapture: true });
 		}
 	}
 
