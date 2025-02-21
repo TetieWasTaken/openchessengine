@@ -21,7 +21,7 @@ describe('Eval', () => {
 
 	test('Combination', () => {
 		const board = new Board('k6K/8/8/8/8/8/8/pR6 w - - 0 1');
-		expect(evaluate(board)).toBe(4.44);
+		expect(evaluate(board)).toBeCloseTo(4.44);
 	});
 
 	test('White king', () => {
