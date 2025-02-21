@@ -104,7 +104,7 @@ export class Board {
 	 * @param side -
 	 * @returns
 	 */
-	public getCastlingRights(side?: 'black' | 'white'): CastlingRights | SingleCastlingRights {
+	public getCastlingRights(side?: Colour): CastlingRights | SingleCastlingRights {
 		if (side !== undefined) {
 			return this.castlingRights[side];
 		}
