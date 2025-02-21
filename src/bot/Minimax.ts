@@ -4,6 +4,7 @@ import type { Board } from '../core/board';
 import { getAllMoves, makeMove } from '../core/moveGenerator';
 import type { MinimaxResult } from '../types/bot';
 import type { Move } from '../types/core';
+import { Colour } from '../types/enums';
 import { evaluate } from './eval';
 
 /**
@@ -19,7 +20,7 @@ import { evaluate } from './eval';
 export function minimax(
 	board: Board,
 	depth: number,
-	isMaximising: boolean = board.getActiveColour() === 'white',
+	isMaximising: boolean = board.getActiveColour() === Colour.White,
 	initialAlpha = -Infinity,
 	initialBeta = Infinity,
 ): { move?: Move; score: number } {
@@ -28,7 +29,7 @@ export function minimax(
 		return { score: evaluate(board) };
 	}
 
-	board.setActiveColour(isMaximising ? 'white' : 'black');
+	board.setActiveColour(isMaximising ? Colour.White : Colour.Black);
 	const moves = getAllMoves(board);
 	let best: MinimaxResult = {
 		// Assume the worst possible score for the active player
