@@ -30,9 +30,25 @@ export type CastlingRights = {
 
 export type BoardData = {
 	activeColour: 'black' | 'white';
-	board: BoardType;
+	board: BitBoards;
 	castlingRights: CastlingRights;
 	enPassant: [number, number] | null;
 	fullmove: number;
 	halfmove: number;
 };
+
+export type Bitboard = bigint;
+export interface BitBoards {
+	whitePawns: Bitboard;
+	whiteKnights: Bitboard;
+	whiteBishops: Bitboard;
+	whiteRooks: Bitboard;
+	whiteQueens: Bitboard;
+	whiteKing: Bitboard;
+	blackPawns: Bitboard;
+	blackKnights: Bitboard;
+	blackBishops: Bitboard;
+	blackRooks: Bitboard;
+	blackQueens: Bitboard;
+	blackKing: Bitboard;
+}
