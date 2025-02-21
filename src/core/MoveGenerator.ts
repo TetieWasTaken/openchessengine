@@ -23,27 +23,26 @@ function bitScanForward(bb: bigint): number {
 /**
  * Returns all possible moves for a given board and colour.
  */
-export function getAllMoves(board: Board, isRecursion = false): Move[] {
+export function getAllMoves(board: Board, isRecursion = false, colour = board.getActiveColour()): Move[] {
 	const moves: Move[] = [];
 	const bitboards = board.getBitboards();
 
-	for (const colour of Object.values(Colour)) {
-		for (const pieceType of Object.values(Piece)) {
-			let pieceBitboard = bitboards[colour][pieceType];
+	for (const pieceType of Object.values(Piece)) {
+		let pieceBitboard = bitboards[colour][pieceType];
 
-			while (pieceBitboard !== 0n) {
-				const lsb = pieceBitboard & -pieceBitboard;
-				const position = bitScanForward(lsb);
-				const row = Math.floor(position / 8);
-				const col = position % 8;
+		while (pieceBitboard !== 0n) {
+			const lsb = pieceBitboard & -pieceBitboard;
+			const position = bitScanForward(lsb);
+			const row = Math.floor(position / 8);
+			const col = position % 8;
 
-				const pieceMoves = getMoves(board, [col, row], isRecursion);
-				moves.push(...pieceMoves);
+			const pieceMoves = getMoves(board, [col, row], isRecursion);
+			moves.push(...pieceMoves);
 
-				pieceBitboard &= pieceBitboard - 1n;
-			}
+			pieceBitboard &= pieceBitboard - 1n;
 		}
 	}
+
 
 	return moves;
 }
@@ -146,6 +145,7 @@ export function makeMove(initBoard: Board, move: Move): Board {
 	if (move.piece.colour === Colour.Black) {
 		board.setFullmove(board.getFullmove() + 1);
 	}
+
 	return board.setActiveColour(move.piece.colour === Colour.White ? Colour.Black : Colour.White);
 }
 
