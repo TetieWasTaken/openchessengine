@@ -9,6 +9,20 @@ export enum Piece {
 	Rook = 'R',
 }
 
+export const pieceMap: { [key: string]: Piece } = {
+	'b': Piece.Bishop,
+	'k': Piece.King,
+	'n': Piece.Knight,
+	'p': Piece.Pawn,
+	'q': Piece.Queen,
+	'r': Piece.Rook,
+	'B': Piece.Bishop,
+	'K': Piece.King,
+	'N': Piece.Knight,
+	'P': Piece.Pawn,
+	'Q': Piece.Queen,
+	'R': Piece.Rook,
+};
 
 export enum Colour {
 	White = 'w',

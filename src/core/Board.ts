@@ -1,7 +1,7 @@
 /** @format */
 
 import type { Bitboards, BoardData, CastlingRights, SingleCastlingRights } from '../types/core';
-import { Piece, Colour } from '../types/enums';
+import { Piece, Colour, pieceMap } from '../types/enums';
 import { DEFAULT_FEN } from '../utils/constants';
 
 /**
@@ -61,13 +61,11 @@ export class Board {
 			let file = 0;
 			for (const char of ranks[rank]) {
 				if (Number.isNaN(Number.parseInt(char, 10))) {
-					const piece = char as Piece;
-					const bitboard = 1n << BigInt(rank * 8) + BigInt(file);
-					if (piece === piece.toUpperCase()) {
-						bitboards[Colour.White][piece.toLowerCase() as keyof Bitboards[Colour.White]] |= bitboard;
-					} else {
-						bitboards[Colour.Black][piece as keyof Bitboards[Colour.Black]] |= bitboard;
-					}
+					const colour = char === char.toUpperCase() ? Colour.White : Colour.Black;
+					const piece = pieceMap[char.toLowerCase()];
+					const bitboard = 1n << (BigInt(rank * 8) + BigInt(file));
+
+					bitboards[colour][piece] |= bitboard;
 
 					file++;
 				} else {
