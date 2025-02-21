@@ -19,7 +19,7 @@ export function evaluate(board: Board): number {
 		const bitboard = BigInt(bitboards[Colour.White][piece]);
 		if (bitboard === 0n) continue;
 		const pieceValue = getPieceValue(piece);
-		score += pieceValue * bitboard.toString(2).split('1').length;
+		score += pieceValue * (bitboard.toString(2).split('1').length - 1);
 		if (piece === Piece.King) whiteKing = true;
 	}
 
@@ -32,7 +32,7 @@ export function evaluate(board: Board): number {
 		const bitboard = BigInt(bitboards[Colour.Black][piece]);
 		if (bitboard === 0n) continue;
 		const pieceValue = getPieceValue(piece);
-		score -= pieceValue * bitboard.toString(2).split('1').length;
+		score -= pieceValue * (bitboard.toString(2).split('1').length - 1)
 		if (piece === Piece.King) blackKing = true;
 	}
 
