@@ -2,7 +2,7 @@
 
 import { Board } from '../../../src/core/board';
 import { getMoves, makeMove } from '../../../src/core/moveGenerator';
-import { Piece } from '../../../src/types/enums';
+import { Colour, Piece } from '../../../src/types/enums';
 
 describe('Move Generator | Pawn', () => {
 	test('White pawn at [1, 1] with blocking piece', () => {
@@ -50,15 +50,16 @@ describe('Move Generator | Pawn', () => {
 	test('Rook promotion', () => {
 		const board = new Board('k7/4P3/8/8/8/8/8/7K w - - 0 1');
 		const newBoard = makeMove(board, {
-			from: [6, 4],
-			to: [7, 4],
+			from: [4, 1],
+			to: [4, 0],
 			promotion: Piece.Rook,
+			piece: {
+				type: Piece.Pawn,
+				colour: Colour.White,
+			},
 		});
 
-		expect(newBoard.getPiece([7, 4])).toEqual({
-			type: 'R',
-			colour: 'white',
-		});
+		expect(newBoard.getPieceAt(4, 0)?.[0]).toBe(Piece.Rook);
 	});
 
 	test('En passant', () => {
@@ -72,65 +73,82 @@ describe('Move Generator | Pawn', () => {
 		const board = new Board('K7/7p/8/8/8/8/P7/7k b - - 0 1');
 
 		expect(board.getEnPassantSquare()).toBeNull();
-		const moves = getMoves(board, [6, 7]);
-		expect(moves.map((move) => move.to)).toContainEqual([4, 7]);
-		expect(moves.find((move) => move.to[0] === 4 && move.to[1] === 7)?.isDoublePawnMove).toBe(true);
+		const moves = getMoves(board, [7, 1]);
+		expect(moves.map((move) => move.to)).toContainEqual([7, 3]);
+		expect(moves.find((move) => move.to[0] === 7 && move.to[1] === 3)?.isDoublePawnMove).toBe(true);
 
 		const blackBoard = makeMove(board, {
-			from: [6, 7],
-			to: [4, 7],
+			from: [7, 1],
+			to: [7, 3],
 			isDoublePawnMove: true,
+			piece: {
+				type: Piece.Pawn,
+				colour: Colour.Black,
+			}
 		});
 
-		expect(blackBoard.getEnPassantSquare()).toEqual([5, 7]);
+		expect(blackBoard.getEnPassantSquare()).toEqual([7, 2]);
 
 		const whiteBoard = makeMove(blackBoard, {
-			from: [1, 0],
-			to: [3, 0],
-			isDoublePawnMove: true,
+			from: [0, 6],
+			to: [0, 4],
+			isEnPassantCapture: true,
+			piece: {
+				type: Piece.Pawn,
+				colour: Colour.White
+			}
 		});
 
-		expect(whiteBoard.getEnPassantSquare()).toEqual([2, 0]);
+		expect(whiteBoard.getEnPassantSquare()).toEqual([0, 5]);
 	});
 
 	test('En passant capture', () => {
 		const board = new Board('7k/p7/8/1P6/1p6/8/P7/7K w - - 0 1');
 
 		const newBoard = makeMove(board, {
-			from: [1, 0],
-			to: [3, 0],
+			from: [0, 6],
+			to: [0, 4],
 			isDoublePawnMove: true,
+			piece: {
+				type: Piece.Pawn,
+				colour: Colour.White,
+			},
 		});
 
 		const afterEnPassant = makeMove(newBoard, {
-			from: [3, 1],
-			to: [2, 0],
+			from: [1, 4],
+			to: [0, 5],
 			isEnPassantCapture: true,
+			piece: {
+				type: Piece.Pawn,
+				colour: Colour.Black,
+			},
 		});
 
-		expect(afterEnPassant.getPiece([2, 0])).toEqual({
-			type: 'P',
-			colour: 'black',
-		});
-		expect(afterEnPassant.getPiece([3, 0])).toBeNull();
+		expect(afterEnPassant.getPieceAt(0, 5)).toEqual([Piece.Pawn, Colour.Black]);
+		expect(afterEnPassant.getPieceAt(1, 4)).toBeNull();
 
 		const otherSide = makeMove(afterEnPassant, {
-			from: [6, 0],
-			to: [4, 0],
+			from: [0, 1],
+			to: [0, 3],
 			isDoublePawnMove: true,
+			piece: {
+				type: Piece.Pawn,
+				colour: Colour.Black,
+			},
 		});
 
 		const afterOtherSide = makeMove(otherSide, {
-			from: [4, 1],
-			to: [5, 0],
+			from: [1, 3],
+			to: [0, 2],
 			isEnPassantCapture: true,
+			piece: {
+				type: Piece.Pawn,
+				colour: Colour.White,
+			},
 		});
 
-		expect(afterOtherSide.getPiece([5, 0])).toEqual({
-			type: 'P',
-			colour: 'white',
-		});
-
-		expect(afterOtherSide.getPiece([4, 0])).toBeNull();
+		expect(afterOtherSide.getPieceAt(0, 2)).toEqual([Piece.Pawn, Colour.White]);
+		expect(afterOtherSide.getPieceAt(1, 3)).toBeNull();
 	});
 });
