@@ -9,7 +9,7 @@ describe('Search', () => {
 	test('Checkmate in 1', () => {
 		const board = new Board('kr6/pp6/8/3N4/8/8/8/4K3 w - - 0 1');
 		const move = search(board, 3);
-		expect(move).toEqual({ from: [4, 3], to: [6, 2] });
+		expect(move).toEqual({ from: [3, 3], to: [2, 1] });
 	});
 
 	test('Four pieces', () => {
