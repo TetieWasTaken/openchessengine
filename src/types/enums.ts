@@ -8,3 +8,9 @@ export enum Piece {
 	Queen = 'Q',
 	Rook = 'R',
 }
+
+
+export enum Colour {
+	White = 'w',
+	Black = 'b',
+}

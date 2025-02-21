@@ -1,13 +1,6 @@
 /** @format */
 
-import type { Piece } from './enums';
-
-export type PieceType = {
-	colour: 'black' | 'white';
-	type: Piece;
-};
-export type SquareType = PieceType | null;
-export type BoardType = SquareType[][];
+import type { Colour, Piece } from './enums';
 
 export type Move = {
 	castle?: 'K' | 'Q';
@@ -38,17 +31,9 @@ export type BoardData = {
 };
 
 export type Bitboard = bigint;
-export interface BitBoards {
-	whitePawns: Bitboard;
-	whiteKnights: Bitboard;
-	whiteBishops: Bitboard;
-	whiteRooks: Bitboard;
-	whiteQueens: Bitboard;
-	whiteKing: Bitboard;
-	blackPawns: Bitboard;
-	blackKnights: Bitboard;
-	blackBishops: Bitboard;
-	blackRooks: Bitboard;
-	blackQueens: Bitboard;
-	blackKing: Bitboard;
-}
+
+export type BitBoards = {
+	[colour in Colour]: {
+		[piece in Piece]: Bitboard;
+	};
+};
