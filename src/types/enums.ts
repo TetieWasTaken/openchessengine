@@ -28,3 +28,8 @@ export enum Colour {
 	White = 'w',
 	Black = 'b',
 }
+
+export enum BoardSide {
+	Queen = 'q',
+	King = 'k',
+}

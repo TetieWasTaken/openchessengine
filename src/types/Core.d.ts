@@ -1,9 +1,9 @@
 /** @format */
 
-import type { Colour, Piece } from './enums';
+import type { BoardSide, Colour, Piece } from './enums';
 
 export type Move = {
-	castle?: 'K' | 'Q';
+	castle?: BoardSide;
 	from: [number, number];
 	isDoublePawnMove?: boolean;
 	isCapture?: boolean;
@@ -16,14 +16,10 @@ export type Move = {
 	};
 };
 
-export type SingleCastlingRights = {
-	king: boolean;
-	queen: boolean;
-};
-
 export type CastlingRights = {
-	black: SingleCastlingRights;
-	white: SingleCastlingRights;
+	[colour in Colour]: {
+		[side in BoardSide]: boolean;
+	}
 };
 
 export type BoardData = {
