@@ -16,10 +16,11 @@ export function evaluate(board: Board): number {
 
 	for (const char in bitboards[Colour.White]) {
 		const piece = pieceMap[char.toLowerCase()];
-		const pieceValue = getPieceValue(piece);
 		const bitboard = BigInt(bitboards[Colour.White][piece]);
+		if (bitboard === 0n) continue;
+		const pieceValue = getPieceValue(piece);
 		score += pieceValue * bitboard.toString(2).split('1').length;
-		if (piece === Piece.King && bitboard !== 0n) whiteKing = true;
+		if (piece === Piece.King) whiteKing = true;
 	}
 
 	if (!whiteKing) return -Infinity;
@@ -28,10 +29,11 @@ export function evaluate(board: Board): number {
 
 	for (const char in bitboards[Colour.Black]) {
 		const piece = pieceMap[char.toLowerCase()];
-		const pieceValue = getPieceValue(piece);
 		const bitboard = BigInt(bitboards[Colour.Black][piece]);
+		if (bitboard === 0n) continue;
+		const pieceValue = getPieceValue(piece);
 		score -= pieceValue * bitboard.toString(2).split('1').length;
-		if (piece === Piece.King && bitboard !== 0n) blackKing = true;
+		if (piece === Piece.King) blackKing = true;
 	}
 
 	if (!blackKing) return Infinity;
