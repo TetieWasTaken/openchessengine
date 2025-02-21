@@ -343,4 +343,9 @@ export class Board {
 		this.castlingRights = rights;
 		return this;
 	}
+
+	public setHalfmove(halfmove: number): this {
+		this.halfmove = halfmove;
+		return this;
+	}
 }
