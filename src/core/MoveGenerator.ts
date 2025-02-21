@@ -1,7 +1,7 @@
 /** @format */
 
 import type { CastlingRights, Move } from '../types/core';
-import { Colour, Piece } from '../types/enums';
+import { BoardSide, Colour, Piece } from '../types/enums';
 import { Board } from './board';
 import { getBishopMoves } from './pieces/bishop';
 import { getKingMoves } from './pieces/king';
@@ -89,6 +89,50 @@ export function makeMove(board: Board, move: Move): Board {
 		board.setEnPassantSquare(null);
 	}
 
+	if (move.castle !== undefined) {
+		const row = move.piece.colour === Colour.White ? 7 : 0;
+		const kingCol = move.to[1];
+		const rookCol = move.castle === BoardSide.King ? 7 : 0;
+
+		board.removePieceAt(row, kingCol, Piece.King, move.piece.colour);
+		board.removePieceAt(row, rookCol, Piece.Rook, move.piece.colour);
+
+		const newKingCol = move.castle === BoardSide.King ? 6 : 2;
+		const newRookCol = move.castle === BoardSide.King ? 5 : 3;
+
+		board.addPieceAt(row, newKingCol, Piece.King, move.piece.colour);
+		board.addPieceAt(row, newRookCol, Piece.Rook, move.piece.colour);
+	}
+
+	const castlingRights = board.getCastlingRights();
+
+	if (move.piece.type === Piece.King) {
+		castlingRights[move.piece.colour] = {
+			queenside: false,
+			kingside: false,
+		};
+	}
+
+	if (move.piece.type === Piece.Rook) {
+		const side = move.from[1] === 0 ? 'queenside' : 'kingside';
+		castlingRights[move.piece.colour][side] = false;
+	}
+
+	if (move.castle !== undefined) {
+		castlingRights[move.piece.colour][move.castle] = false;
+	}
+
+	board.setCastlingRights(castlingRights);
+
+	if (move.isCapture || piece === Piece.Pawn) {
+		board.setHalfmove(0);
+	} else {
+		board.setHalfmove(board.getHalfmove() + 1);
+	}
+
+	if (move.piece.colour === Colour.Black) {
+		board.setFullmove(board.getFullmove() + 1);
+	}
 	return board.setActiveColour(move.piece.colour === Colour.White ? Colour.Black : Colour.White);
 }
 
