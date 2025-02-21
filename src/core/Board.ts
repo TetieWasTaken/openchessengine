@@ -208,33 +208,22 @@ export class Board {
 	 */
 	public toString(): string {
 		let boardStr = '\n';
-		/* eslint-disable id-length */
-		const pieces = {
-			black: { P: '♙', N: '♘', B: '♗', R: '♖', Q: '♕', K: '♔' },
-			white: { P: '♟', N: '♞', B: '♝', R: '♜', Q: '♛', K: '♚' },
-		};
-		/* eslint-enable id-length */
 
-		for (let rank = 7; rank >= 0; rank--) {
-			boardStr += `${rank + 1} `;
-			for (let file = 0; file < 8; file++) {
-				const piece = Object.keys(pieces).find((colour): colour is keyof typeof pieces => {
-					const bitboard = this.bitboards[colour as Colour][Piece.Pawn];
-					const square = 1n << BigInt(rank * 8 + file);
-					return (bitboard & square) === square;
-				});
-
-				if (piece === undefined) {
-					boardStr += '  ';
+		for (let y = 7; y >= 0; y--) {
+			boardStr += `${y + 1} `;
+			for (let x = 0; x < 8; x++) {
+				const piece = this.getPieceAt(x, y);
+				if (piece === null) {
+					boardStr += '.';
 				} else {
-					boardStr += `${pieces[piece as keyof typeof pieces][Piece.Pawn]} `;
+					const [type, colour] = piece;
+					boardStr += colour === Colour.White ? type.toUpperCase() : type.toLowerCase();
 				}
+				boardStr += ' ';
 			}
-
-			boardStr += `${rank + 1}\n`;
+			boardStr += '\n';
 		}
 
-		boardStr += '  a b c d e f g h\n';
 		return boardStr;
 	}
 
