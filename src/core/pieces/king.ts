@@ -1,6 +1,7 @@
 /** @format */
 
-import type { Move, SingleCastlingRights } from '../../types/core';
+import type { Move } from '../../types/core';
+import { BoardSide, Colour, Piece } from '../../types/enums';
 import type { Board } from '../board';
 import { isKingInCheck, makeMove } from '../moveGenerator';
 
@@ -22,6 +23,7 @@ export function getKingMoves(
 	isRecursion = false,
 	colour = board.getActiveColour(),
 ): Move[] {
+	const bitboards = board.getBitboards();
 	const moves: Move[] = [];
 	const directions = [
 		[-1, -1],
@@ -40,12 +42,18 @@ export function getKingMoves(
 
 		// Check if the move is on the board
 		if (board.isWithinBounds(x + dx, y + dy)) {
-			const piece = board.getBoard()[x + dx][y + dy];
+			const [targetPiece, targetColour] = board.getPieceAt(x + dx, y + dy) || [null, null];
 
-			if (piece === null || piece.colour !== colour) {
+			// If the square is empty or has an enemy piece
+			if (targetPiece === null || targetColour !== colour) {
 				moves.push({
 					from: position,
 					to: [x + dx, y + dy],
+					piece: {
+						type: Piece.King,
+						colour,
+					},
+					isCapture: !!targetPiece,
 				});
 			}
 		}
@@ -70,64 +78,84 @@ export function getKingMoves(
  * ```
  * @alpha
  */
-function getCastlingMoves(board: Board, position: [number, number], colour: 'black' | 'white'): Move[] {
+function getCastlingMoves(board: Board, position: [number, number], colour: Colour): Move[] {
 	const moves: Move[] = [];
 	const kingInCheck = isKingInCheck(board, colour);
 
 	if (!kingInCheck) {
 		// eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion
-		const castlingRights = board.getCastlingRights(colour) as SingleCastlingRights;
+		const castlingRights = board.getCastlingRights();
 
-		if (castlingRights.king) {
-			const kingSide = colour === 'white' ? 0 : 7;
-			const kingSideEmpty = board.getBoard()[kingSide][5] === null && board.getBoard()[kingSide][6] === null;
+		if (castlingRights[colour][BoardSide.King]) {
+			const kingSideEmpty = board.getPieceAt(position[0] + 1, position[1]) === null && board.getPieceAt(position[0] + 2, position[1]) === null;
 
 			if (kingSideEmpty) {
 				const newBoard = makeMove(board, {
 					from: position,
-					to: [kingSide, 5],
+					to: [position[0] + 1, position[1]],
+					piece: {
+						type: Piece.King,
+						colour: colour,
+					}
 				});
 
 				if (!isKingInCheck(newBoard, colour)) {
 					const finalBoard = makeMove(newBoard, {
-						from: [kingSide, 5],
-						to: [kingSide, 6],
+						from: [position[0] + 1, position[1]],
+						to: [position[0] + 2, position[1]],
+						piece: {
+							type: Piece.King,
+							colour: colour,
+						}
 					});
 
 					if (!isKingInCheck(finalBoard, colour)) {
 						moves.push({
 							from: position,
-							to: [kingSide, 6],
-							castle: 'K',
+							to: [position[0] + 2, position[1]],
+							castle: BoardSide.King,
+							piece: {
+								type: Piece.King,
+								colour: colour,
+							}
 						});
 					}
 				}
 			}
 		}
 
-		if (castlingRights.queen) {
-			const queenSide = colour === 'white' ? 0 : 7;
-			const queenSideEmpty =
-				board.getBoard()[queenSide][1] === null &&
-				board.getBoard()[queenSide][2] === null &&
-				board.getBoard()[queenSide][3] === null;
+		if (castlingRights[colour][BoardSide.Queen]) {
+			const queenSideEmpty = board.getPieceAt(position[0] - 1, position[1]) === null && board.getPieceAt(position[0] - 2, position[1]) === null && board.getPieceAt(position[0] - 3, position[1]) === null;
+
 			if (queenSideEmpty) {
 				const newBoard = makeMove(board, {
 					from: position,
-					to: [queenSide, 3],
+					to: [position[0] - 1, position[1]],
+					piece: {
+						type: Piece.King,
+						colour: colour,
+					}
 				});
 
 				if (!isKingInCheck(newBoard, colour)) {
 					const finalBoard = makeMove(newBoard, {
-						from: [queenSide, 3],
-						to: [queenSide, 2],
+						from: [position[0] - 1, position[1]],
+						to: [position[0] - 2, position[1]],
+						piece: {
+							type: Piece.King,
+							colour: colour,
+						}
 					});
 
 					if (!isKingInCheck(finalBoard, colour)) {
 						moves.push({
 							from: position,
-							to: [queenSide, 2],
-							castle: 'Q',
+							to: [position[0] - 2, position[1]],
+							castle: BoardSide.Queen,
+							piece: {
+								type: Piece.King,
+								colour: colour,
+							}
 						});
 					}
 				}
