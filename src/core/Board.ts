@@ -251,17 +251,18 @@ export class Board {
 			return null;
 		}
 
-		const [file, rank] = data;
-		if (!file.codePointAt(0)) {
-			throw new Error('Invalid FEN string');
-		}
+		const file = data.charAt(0);
+		const rank = data.charAt(1);
 
 		const fileCode = file.codePointAt(0);
 		if (fileCode === undefined) {
 			throw new Error('Invalid FEN string');
 		}
 
-		return [Number.parseInt(rank, 10) - 1, fileCode - 97];
+		const x = fileCode - 97;
+		const y = 8 - Number.parseInt(rank, 10);
+
+		return [x, y];
 	}
 
 	/**
