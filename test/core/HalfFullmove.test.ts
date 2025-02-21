@@ -14,14 +14,14 @@ describe('Half/Full moves', () => {
 
 	it('Should increment halfmove on knight move', () => {
 		const board = new Board();
-		const newBoard = makeMove(board, { from: [0, 1], to: [2, 0], piece: { type: Piece.Knight, colour: Colour.White } });
+		const newBoard = makeMove(board, { from: [1, 0], to: [2, 2], piece: { type: Piece.Knight, colour: Colour.White } });
 
 		expect(newBoard.getHalfmove()).toBe(1);
 	});
 
 	it('Should reset halfmove on pawn move', () => {
 		const board = new Board('5k2/8/8/8/3PK3/8/8/8 w - - 3 9');
-		const newBoard = makeMove(board, { from: [3, 3], to: [4, 3], piece: { type: Piece.Pawn, colour: Colour.White } });
+		const newBoard = makeMove(board, { from: [3, 4], to: [3, 3], piece: { type: Piece.Pawn, colour: Colour.White } });
 
 		expect(newBoard.getHalfmove()).toBe(0);
 	});
