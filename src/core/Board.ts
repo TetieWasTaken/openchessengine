@@ -348,4 +348,9 @@ export class Board {
 		this.halfmove = halfmove;
 		return this;
 	}
+
+	public setFullmove(fullmove: number): this {
+		this.fullmove = fullmove;
+		return this;
+	}
 }
