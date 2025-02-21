@@ -62,7 +62,7 @@ export class Board {
 			for (const char of ranks[rank]) {
 				if (Number.isNaN(Number.parseInt(char, 10))) {
 					const piece = char as Piece;
-					const bitboard = 1n << BigInt(rank * 8 + file);
+					const bitboard = 1n << BigInt(rank * 8) + BigInt(file);
 					if (piece === piece.toUpperCase()) {
 						bitboards[Colour.White][piece.toLowerCase() as keyof Bitboards[Colour.White]] |= bitboard;
 					} else {
