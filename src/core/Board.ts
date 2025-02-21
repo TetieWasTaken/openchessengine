@@ -139,8 +139,27 @@ export class Board {
 	 * Clone the board.
 	 */
 	public clone(): Board {
+		const clonedBitboards: Bitboards = {
+			[Colour.White]: {
+				[Piece.Pawn]: this.bitboards[Colour.White][Piece.Pawn],
+				[Piece.Rook]: this.bitboards[Colour.White][Piece.Rook],
+				[Piece.Knight]: this.bitboards[Colour.White][Piece.Knight],
+				[Piece.Bishop]: this.bitboards[Colour.White][Piece.Bishop],
+				[Piece.Queen]: this.bitboards[Colour.White][Piece.Queen],
+				[Piece.King]: this.bitboards[Colour.White][Piece.King],
+			},
+			[Colour.Black]: {
+				[Piece.Pawn]: this.bitboards[Colour.Black][Piece.Pawn],
+				[Piece.Rook]: this.bitboards[Colour.Black][Piece.Rook],
+				[Piece.Knight]: this.bitboards[Colour.Black][Piece.Knight],
+				[Piece.Bishop]: this.bitboards[Colour.Black][Piece.Bishop],
+				[Piece.Queen]: this.bitboards[Colour.Black][Piece.Queen],
+				[Piece.King]: this.bitboards[Colour.Black][Piece.King],
+			},
+		};
+
 		return new Board({
-			board: this.bitboards,
+			board: clonedBitboards,
 			activeColour: this.activeColour,
 			castlingRights: {
 				[Colour.White]: { ...this.castlingRights[Colour.White] },

@@ -37,7 +37,6 @@ export function getAllMoves(board: Board, isRecursion = false): Move[] {
 				const row = Math.floor(position / 8);
 				const col = position % 8;
 
-
 				const pieceMoves = getMoves(board, [col, row], isRecursion);
 				moves.push(...pieceMoves);
 
@@ -76,7 +75,8 @@ export function _perft(board: Board, depth: number): number {
 /**
  * Makes a move on the board and returns the new board.
  */
-export function makeMove(board: Board, move: Move): Board {
+export function makeMove(initBoard: Board, move: Move): Board {
+	const board = initBoard.clone();
 	const Bitboards = board.getBitboards();
 
 	const capturedPiece = move.isCapture ? board.getPieceAt(move.to[0], move.to[1]) : null;
