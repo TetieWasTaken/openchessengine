@@ -22,7 +22,7 @@ export type CastlingRights = {
 };
 
 export type BoardData = {
-	activeColour: 'black' | 'white';
+	activeColour: Colour;
 	board: BitBoards;
 	castlingRights: CastlingRights;
 	enPassant: [number, number] | null;

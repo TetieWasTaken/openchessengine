@@ -1,49 +1,7 @@
 /** @format */
 
 import type { Board } from '../core/board';
-import type { BoardType, CastlingRights, PieceType, SingleCastlingRights, SquareType } from '../types/core';
-
-/**
- * Converts a FEN string to a Board.
- *
- * @param fen - A FEN string
- * @returns A Board
- */
-export function fenToBoard(fen: string): BoardType {
-	const board: BoardType = [];
-	const rows = fen.split(' ')[0].split('/');
-
-	for (let i = rows.length - 1; i >= 0; i--) {
-		const row = rows[i];
-		const boardRow: SquareType[] = [];
-
-		for (const char of row) {
-			// If the character is a number, add that many empty squares
-			if (/[1-8]/.test(char)) {
-				const num = Number.parseInt(char, 10);
-
-				for (let k = 0; k < num; k++) {
-					boardRow.push(null);
-				}
-			} else if (isPieceType(char.toUpperCase())) {
-				// The character is a piece, add it to the board
-				const piece: PieceType = {
-					// eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion -- Not sure why eslint is complaining
-					type: char.toUpperCase() as PieceType['type'],
-					colour: char === char.toUpperCase() ? 'white' : 'black',
-				};
-
-				boardRow.push(piece);
-			} else {
-				throw new Error(`Invalid piece type: ${char}`);
-			}
-		}
-
-		board.push(boardRow);
-	}
-
-	return board;
-}
+import type { CastlingRights, PieceType, SingleCastlingRights, SquareType } from '../types/core';
 
 type FENOptions = {
 	activeColour: string;
@@ -105,9 +63,8 @@ function _toBoardString(board: Board): string {
 
 function _toCastlingString(castling: FENOptions['castling']): string {
 	if ('white' in castling) {
-		return `${castling.white.king ? 'K' : ''}${
-			castling.white.queen ? 'Q' : ''
-		}${castling.black.king ? 'k' : ''}${castling.black.queen ? 'q' : ''}`;
+		return `${castling.white.king ? 'K' : ''}${castling.white.queen ? 'Q' : ''
+			}${castling.black.king ? 'k' : ''}${castling.black.queen ? 'q' : ''}`;
 	}
 
 	return `${castling.king ? 'K' : ''}${castling.queen ? 'Q' : ''}`;

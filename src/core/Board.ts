@@ -1,15 +1,13 @@
 /** @format */
 
-import type { BoardData, BoardType, CastlingRights, SingleCastlingRights } from '../types/core';
+import type { BitBoards, BoardData, CastlingRights, SingleCastlingRights } from '../types/core';
+import { Piece, Colour } from '../types/enums';
 import { DEFAULT_FEN } from '../utils/constants';
-import { fenToBoard } from '../utils/fen';
 
 /**
  * Represents a chess board
  */
 export class Board {
-	private board: BoardType = [];
-
 	private castlingRights: CastlingRights = {
 		white: { king: true, queen: true },
 		black: { king: true, queen: true },
@@ -17,23 +15,68 @@ export class Board {
 
 	private enPassantSquare: [number, number] | null = null;
 
-	private activeColour: 'black' | 'white' = 'white';
+	private activeColour: Colour = Colour.White;
 
 	private halfmove = 0;
 
 	private fullmove = 1;
 
+	private bitboards: BitBoards = {
+		[Colour.White]: {
+			[Piece.Pawn]: 0n,
+			[Piece.Rook]: 0n,
+			[Piece.Knight]: 0n,
+			[Piece.Bishop]: 0n,
+			[Piece.Queen]: 0n,
+			[Piece.King]: 0n,
+		},
+		[Colour.Black]: {
+			[Piece.Pawn]: 0n,
+			[Piece.Rook]: 0n,
+			[Piece.Knight]: 0n,
+			[Piece.Bishop]: 0n,
+			[Piece.Queen]: 0n,
+			[Piece.King]: 0n,
+		},
+	};
+
 	public constructor(data?: BoardData | string) {
 		if (data === undefined || typeof data === 'string') {
 			this.fromFEN(data as string | undefined);
 		} else {
-			this.board = data.board;
+			this.bitboards = data.board;
 			this.activeColour = data.activeColour;
 			this.castlingRights = data.castlingRights;
 			this.enPassantSquare = data.enPassant;
 			this.halfmove = data.halfmove;
 			this.fullmove = data.fullmove;
 		}
+	}
+
+	public fenToBitboards(placement: string): BitBoards {
+		const bitboards: BitBoards = this.bitboards;
+
+		const ranks = placement.split('/');
+		for (let rank = 0; rank < 8; rank++) {
+			let file = 0;
+			for (const char of ranks[rank]) {
+				if (Number.isNaN(Number.parseInt(char, 10))) {
+					const piece = char as Piece;
+					const bitboard = 1n << BigInt(rank * 8 + file);
+					if (piece === piece.toUpperCase()) {
+						bitboards[Colour.White][piece.toLowerCase() as keyof BitBoards[Colour.White]] |= bitboard;
+					} else {
+						bitboards[Colour.Black][piece as keyof BitBoards[Colour.Black]] |= bitboard;
+					}
+
+					file++;
+				} else {
+					file += Number.parseInt(char, 10);
+				}
+			}
+		}
+
+		return bitboards;
 	}
 
 	/**
@@ -48,30 +91,13 @@ export class Board {
 		}
 
 		const [board, activeColour, castling, enPassant, halfmove, fullmove] = fenString.split(' ');
-		this.board = this.createBoard(board);
-		this.activeColour = activeColour === 'w' ? 'white' : 'black';
+		this.bitboards = this.fenToBitboards(board);
+		this.activeColour = activeColour === 'w' ? Colour.White : Colour.Black;
 		this.castlingRights = this.parseCastlingRights(castling);
 		this.enPassantSquare = this.parseEnPassantSquare(enPassant);
 		this.halfmove = Number.parseInt(halfmove, 10);
 		this.fullmove = Number.parseInt(fullmove, 10);
 		return this;
-	}
-
-	/**
-	 * Get a piece from the board.
-	 *
-	 * @param coords - The coordinates of the piece
-	 */
-	public getPiece(coords: [number, number]): BoardType[number][number] | null {
-		const [x, y] = coords;
-		return this.board[x][y];
-	}
-
-	/**
-	 * Getter for the board.
-	 */
-	public getBoard(): BoardType {
-		return this.board;
 	}
 
 	/**
@@ -105,7 +131,7 @@ export class Board {
 	/**
 	 * Get the active colour.
 	 */
-	public getActiveColour(): 'black' | 'white' {
+	public getActiveColour(): Colour {
 		return this.activeColour;
 	}
 
@@ -114,7 +140,7 @@ export class Board {
 	 */
 	public clone(): Board {
 		return new Board({
-			board: this.board.map((row) => [...row]),
+			board: this.bitboards,
 			activeColour: this.activeColour,
 			castlingRights: {
 				white: { ...this.castlingRights.white },
@@ -132,7 +158,7 @@ export class Board {
 	 * @param colour -
 	 * @param mutate - Whether to mutate the board or return a new one
 	 */
-	public setActiveColour(colour: 'black' | 'white', mutate = true): this {
+	public setActiveColour(colour: Colour, mutate = true): this {
 		if (mutate) {
 			this.activeColour = colour;
 			return this;
@@ -168,30 +194,27 @@ export class Board {
 		};
 		/* eslint-enable id-length */
 
-		for (let row = 7; row >= 0; row--) {
-			boardStr += `${(row + 1).toString()} `;
-			for (let col = 0; col < 8; col++) {
-				const piece = this.board[row][col];
-				const square = (row + col) % 2 === 0 ? '◼' : '◻';
-				boardStr += piece ? pieces[piece.colour][piece.type] : square;
-				boardStr += ' ';
+		for (let rank = 7; rank >= 0; rank--) {
+			boardStr += `${rank + 1} `;
+			for (let file = 0; file < 8; file++) {
+				const piece = Object.keys(pieces).find((colour): colour is keyof typeof pieces => {
+					const bitboard = this.bitboards[colour as Colour][Piece.Pawn];
+					const square = 1n << BigInt(rank * 8 + file);
+					return (bitboard & square) === square;
+				});
+
+				if (piece === undefined) {
+					boardStr += '  ';
+				} else {
+					boardStr += `${pieces[piece as keyof typeof pieces][Piece.Pawn]} `;
+				}
 			}
 
-			boardStr += '\n';
+			boardStr += `${rank + 1}\n`;
 		}
 
 		boardStr += '  a b c d e f g h\n';
 		return boardStr;
-	}
-
-	/**
-	 * Create a board from a FEN string.
-	 *
-	 * @param fen - The FEN string
-	 * @internal
-	 */
-	private createBoard(fen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR'): BoardType {
-		return fenToBoard(fen);
 	}
 
 	/**
