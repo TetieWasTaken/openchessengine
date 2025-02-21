@@ -289,6 +289,7 @@ export function getOrthogonalMoves(board: Board, position: [number, number], col
 						type: selectedPiece,
 						colour: selectedColour
 					},
+					isCapture: true,
 				});
 
 				break;
@@ -356,6 +357,7 @@ export function getDiagonalMoves(board: Board, position: [number, number], colou
 						type: selectedPiece,
 						colour: selectedColour
 					},
+					isCapture: true,
 				});
 
 				break;
