@@ -1,7 +1,7 @@
 /** @format */
 
-import type { Bitboards, BoardData, CastlingRights, SingleCastlingRights } from '../types/core';
-import { Piece, Colour, pieceMap } from '../types/enums';
+import type { Bitboards, BoardData, CastlingRights } from '../types/core';
+import { Piece, Colour, pieceMap, BoardSide } from '../types/enums';
 import { DEFAULT_FEN } from '../utils/constants';
 
 /**
@@ -9,8 +9,14 @@ import { DEFAULT_FEN } from '../utils/constants';
  */
 export class Board {
 	private castlingRights: CastlingRights = {
-		white: { king: true, queen: true },
-		black: { king: true, queen: true },
+		[Colour.White]: {
+			[BoardSide.King]: true,
+			[BoardSide.Queen]: true,
+		},
+		[Colour.Black]: {
+			[BoardSide.King]: true,
+			[BoardSide.Queen]: true,
+		},
 	};
 
 	private enPassantSquare: [number, number] | null = null;
@@ -104,11 +110,7 @@ export class Board {
 	 * @param side -
 	 * @returns
 	 */
-	public getCastlingRights(side?: Colour): CastlingRights | SingleCastlingRights {
-		if (side !== undefined) {
-			return this.castlingRights[side];
-		}
-
+	public getCastlingRights(): CastlingRights {
 		return this.castlingRights;
 	}
 
@@ -141,8 +143,10 @@ export class Board {
 			board: this.bitboards,
 			activeColour: this.activeColour,
 			castlingRights: {
-				white: { ...this.castlingRights.white },
-				black: { ...this.castlingRights.black },
+				[Colour.White]: { ...this.castlingRights[Colour.White] },
+				[Colour.Black]: {
+					...this.castlingRights[Colour.Black]
+				},
 			},
 			enPassant: this.enPassantSquare,
 			halfmove: this.halfmove,
@@ -169,10 +173,10 @@ export class Board {
 		return newBoard as this;
 	}
 
-	public removeCastlingRights(side: 'black' | 'white', type?: 'king' | 'queen'): this {
+	public removeCastlingRights(side: Colour, type?: BoardSide): this {
 		if (type === undefined) {
-			this.castlingRights[side].king = false;
-			this.castlingRights[side].queen = false;
+			this.castlingRights[side][BoardSide.King] = false;
+			this.castlingRights[side][BoardSide.Queen] = false;
 		} else {
 			this.castlingRights[side][type] = false;
 		}
@@ -223,16 +227,16 @@ export class Board {
 	 */
 	private parseCastlingRights(castling = ''): CastlingRights {
 		return {
-			white: {
-				king: castling.includes('K'),
-				queen: castling.includes('Q'),
+			[Colour.White]: {
+				[BoardSide.King]: castling.includes('K'),
+				[BoardSide.Queen]: castling.includes('Q'),
 			},
-			black: {
-				king: castling.includes('k'),
-				queen: castling.includes('q'),
+			[Colour.Black]: {
+				[BoardSide.King]: castling.includes('k'),
+				[BoardSide.Queen]: castling.includes('q'),
 			},
 		};
-	}
+	};
 
 	/**
 	 * Get the en passant square.
