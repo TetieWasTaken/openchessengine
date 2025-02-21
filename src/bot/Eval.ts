@@ -1,7 +1,7 @@
 /** @format */
 
 import type { Board } from '../core/board';
-import { Colour, Piece } from '../types/enums';
+import { Colour, Piece, pieceMap } from '../types/enums';
 
 /**
  * Evaluates the board and returns a score.
@@ -14,20 +14,24 @@ export function evaluate(board: Board): number {
 	let score = 0;
 	let whiteKing = false;
 
-	for (const piece in bitboards[Colour.White]) {
-		const pieceValue = getPieceValue(piece as Piece);
-		score += pieceValue * BigInt(bitboards[Colour.White][piece as keyof typeof bitboards[Colour.White]]).toString(2).split('1').length;
-		if (piece === Piece.King) whiteKing = true;
+	for (const char in bitboards[Colour.White]) {
+		const piece = pieceMap[char.toLowerCase()];
+		const pieceValue = getPieceValue(piece);
+		const bitboard = BigInt(bitboards[Colour.White][piece]);
+		score += pieceValue * bitboard.toString(2).split('1').length;
+		if (piece === Piece.King && bitboard !== 0n) whiteKing = true;
 	}
 
 	if (!whiteKing) return -Infinity;
 
 	let blackKing = false;
 
-	for (const piece in bitboards[Colour.Black]) {
-		const pieceValue = getPieceValue(piece as Piece);
-		score -= pieceValue * BigInt(bitboards[Colour.Black][piece as keyof typeof bitboards[Colour.Black]]).toString(2).split('1').length;
-		if (piece === Piece.King) blackKing = true;
+	for (const char in bitboards[Colour.Black]) {
+		const piece = pieceMap[char.toLowerCase()];
+		const pieceValue = getPieceValue(piece);
+		const bitboard = BigInt(bitboards[Colour.Black][piece]);
+		score -= pieceValue * bitboard.toString(2).split('1').length;
+		if (piece === Piece.King && bitboard !== 0n) blackKing = true;
 	}
 
 	if (!blackKing) return Infinity;
