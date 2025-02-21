@@ -108,13 +108,13 @@ export function makeMove(board: Board, move: Move): Board {
 
 	if (move.piece.type === Piece.King) {
 		castlingRights[move.piece.colour] = {
-			queenside: false,
-			kingside: false,
+			[BoardSide.King]: false,
+			[BoardSide.Queen]: false,
 		};
 	}
 
 	if (move.piece.type === Piece.Rook) {
-		const side = move.from[1] === 0 ? 'queenside' : 'kingside';
+		const side = move.from[1] === 0 ? BoardSide.Queen : BoardSide.King;
 		castlingRights[move.piece.colour][side] = false;
 	}
 
