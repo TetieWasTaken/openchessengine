@@ -1,11 +1,12 @@
 /** @format */
 
 import type { Board } from '../core/board';
-import type { CastlingRights, PieceType, SingleCastlingRights, SquareType } from '../types/core';
+import type { CastlingRights } from '../types/core';
+import { BoardSide, Colour, Piece } from '../types/enums';
 
 type FENOptions = {
 	activeColour: string;
-	castling: CastlingRights | SingleCastlingRights;
+	castling: CastlingRights;
 	enPassant: string;
 	fullmove: number;
 	halfmove: number;
@@ -19,7 +20,7 @@ type FENOptions = {
 export function toFEN(board: Board): string {
 	const fenParts = [
 		_toBoardString(board),
-		board.getActiveColour() === 'white' ? 'w' : 'b',
+		board.getActiveColour(),
 		_toCastlingString(board.getCastlingRights()) === '' ? '-' : _toCastlingString(board.getCastlingRights()),
 		board.getEnPassantSquare() ? board.getEnPassantSquare() : '-',
 		board.getHalfmove().toString(),
@@ -30,30 +31,32 @@ export function toFEN(board: Board): string {
 }
 
 function _toBoardString(board: Board): string {
+	const bitboards = board.getBitboards();
 	let fen = '';
 
-	for (let i = board.getBoard().length - 1; i >= 0; i--) {
-		const row = board.getBoard()[i];
+	for (let row = 7; row >= 0; row--) {
 		let empty = 0;
 
-		for (const square of row) {
-			if (square === null) {
-				empty++;
-			} else {
-				if (empty !== 0) {
-					fen += empty.toString();
+		for (let col = 0; col < 8; col++) {
+			const piece = board.getPieceAt(row, col);
+
+			if (piece) {
+				if (empty > 0) {
+					fen += empty;
 					empty = 0;
 				}
 
-				fen += pieceToFen(square);
+				fen += pieceToFen(piece);
+			} else {
+				empty++;
 			}
 		}
 
-		if (empty !== 0) {
-			fen += empty.toString();
+		if (empty > 0) {
+			fen += empty;
 		}
 
-		if (i !== 0) {
+		if (row > 0) {
 			fen += '/';
 		}
 	}
@@ -62,12 +65,14 @@ function _toBoardString(board: Board): string {
 }
 
 function _toCastlingString(castling: FENOptions['castling']): string {
-	if ('white' in castling) {
-		return `${castling.white.king ? 'K' : ''}${castling.white.queen ? 'Q' : ''
-			}${castling.black.king ? 'k' : ''}${castling.black.queen ? 'q' : ''}`;
-	}
+	let castlingString = '';
 
-	return `${castling.king ? 'K' : ''}${castling.queen ? 'Q' : ''}`;
+	if (castling[Colour.White][BoardSide.Queen]) castlingString += 'Q';
+	if (castling[Colour.White][BoardSide.King]) castlingString += 'K';
+	if (castling[Colour.Black][BoardSide.Queen]) castlingString += 'q';
+	if (castling[Colour.Black][BoardSide.King]) castlingString += 'k';
+
+	return castlingString;
 }
 
 /**
@@ -75,19 +80,14 @@ function _toCastlingString(castling: FENOptions['castling']): string {
  *
  * @param piece -
  */
-function pieceToFen(piece: PieceType): string {
-	/* eslint-disable id-length */
-	const map: Record<string, string> = {
-		P: 'P',
-		N: 'N',
-		B: 'B',
-		R: 'R',
-		Q: 'Q',
-		K: 'K',
-	};
-	/* eslint-enable id-length */
+function pieceToFen(piece: [Piece, Colour]): string {
+	const [type, colour] = piece;
 
-	return piece.colour === 'white' ? map[piece.type] : map[piece.type].toLowerCase();
+	if (colour === Colour.Black) {
+		return type.toLowerCase();
+	}
+
+	return type;
 }
 
 type FENParts = {
@@ -98,15 +98,6 @@ type FENParts = {
 	fullmove: string;
 	halfmove: string;
 };
-
-/**
- * Checks if a character is a valid piece type.
- *
- * @param char -
- */
-function isPieceType(char: string): char is PieceType['type'] {
-	return ['P', 'N', 'B', 'R', 'Q', 'K'].includes(char);
-}
 
 /**
  * Parses a FEN string into its parts.
