@@ -15,6 +15,6 @@ describe('Search', () => {
 	test('Four pieces', () => {
 		const board = new Board('k7/3n4/8/1q1R1p2/3b4/8/8/7K w - - 0 1');
 		const move = search(board, 3);
-		expect(move).toContain({ from: [4, 3], to: [4, 1] });
+		expect(move).toContain({ from: [3, 3], to: [1, 3] });
 	});
 });
