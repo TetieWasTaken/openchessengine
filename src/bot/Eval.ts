@@ -1,8 +1,7 @@
 /** @format */
 
 import type { Board } from '../core/board';
-import type { PieceType } from '../types/core';
-import { Piece } from '../types/enums';
+import { Colour, Piece } from '../types/enums';
 
 /**
  * Evaluates the board and returns a score.
@@ -11,28 +10,27 @@ import { Piece } from '../types/enums';
  * @returns The evaluation score
  */
 export function evaluate(board: Board): number {
-	const boardData = board.getBoard();
+	const bitboards = board.getBitboards();
 	let score = 0;
 	let whiteKing = false;
-	let blackKing = false;
 
-	// Loop through the board and add the value of each piece to the score
-	for (const row of boardData) {
-		for (const piece of row) {
-			if (piece === null) continue; // No piece on this square
-
-			if (piece.type === Piece.King) {
-				if (piece.colour === 'white') whiteKing = true;
-				if (piece.colour === 'black') blackKing = true;
-			} else {
-				const value = getPieceValue(piece);
-				score += piece.colour === 'white' ? value : -value; // Deduct value for enemy pieces
-			}
-		}
+	for (const piece in bitboards[Colour.White]) {
+		const pieceValue = getPieceValue(piece as Piece);
+		score += pieceValue * BigInt(bitboards[Colour.White][piece as keyof typeof bitboards[Colour.White]]).toString(2).split('1').length;
+		if (piece === Piece.King) whiteKing = true;
 	}
 
 	if (!whiteKing) return -Infinity;
-	else if (!blackKing) return Infinity;
+
+	let blackKing = false;
+
+	for (const piece in bitboards[Colour.Black]) {
+		const pieceValue = getPieceValue(piece as Piece);
+		score -= pieceValue * BigInt(bitboards[Colour.Black][piece as keyof typeof bitboards[Colour.Black]]).toString(2).split('1').length;
+		if (piece === Piece.King) blackKing = true;
+	}
+
+	if (!blackKing) return Infinity;
 
 	return score;
 }
@@ -48,9 +46,9 @@ export function evaluate(board: Board): number {
  * @param piece - The piece whose value is to be determined
  * @returns The value assigned to the piece
  */
-function getPieceValue(piece: PieceType): number {
+function getPieceValue(piece: Piece): number {
 	// eslint-disable-next-line @typescript-eslint/switch-exhaustiveness-check -- King is not included
-	switch (piece.type) {
+	switch (piece) {
 		case Piece.Pawn:
 			return 1;
 		case Piece.Knight:
