@@ -6,9 +6,14 @@ export type Move = {
 	castle?: 'K' | 'Q';
 	from: [number, number];
 	isDoublePawnMove?: boolean;
+	isCapture?: boolean;
 	isEnPassantCapture?: boolean;
 	promotion?: Piece;
 	to: [number, number];
+	piece: {
+		type: Piece;
+		colour: Colour;
+	};
 };
 
 export type SingleCastlingRights = {

@@ -285,4 +285,58 @@ export class Board {
 	public getBitboards(): Bitboards {
 		return this.bitboards;
 	}
+
+	public getPieceAt(x: number, y: number): [Piece, Colour] | null {
+		const bitboards = this.bitboards;
+		const square = 1n << BigInt(y * 8 + x);
+
+		for (const colour of Object.keys(bitboards) as Colour[]) {
+			for (const piece of Object.keys(bitboards[colour]) as Piece[]) {
+				if ((bitboards[colour][piece] & square) === square) {
+					return [piece, colour];
+				}
+			}
+		}
+
+		return null;
+	}
+
+	public removePieceAt(x: number, y: number, piece?: Piece, colour?: Colour): this {
+		const bitboards = this.bitboards;
+		const square = 1n << BigInt(y * 8 + x);
+
+		if (colour !== undefined && piece !== undefined) bitboards[colour][piece] &= ~square;
+		else if (colour !== undefined) {
+			for (const pieceType of Object.keys(bitboards[colour]) as Piece[]) {
+				if (piece === undefined || piece === pieceType) {
+					bitboards[colour][pieceType] &= ~square;
+				}
+			}
+		}
+		else {
+			for (const col of Object.keys(bitboards) as Colour[]) {
+				for (const pieceType of Object.keys(bitboards[col]) as Piece[]) {
+					if ((piece === undefined || piece === pieceType) && (colour === undefined || colour === col)) {
+						bitboards[col][pieceType] &= ~square;
+					}
+				}
+			}
+		}
+
+		return this;
+	}
+
+	public addPieceAt(x: number, y: number, piece: Piece, colour: Colour): this {
+		const bitboards = this.bitboards;
+		const square = 1n << BigInt(y * 8 + x);
+
+		bitboards[colour][piece] |= square;
+
+		return this;
+	}
+
+	public setEnPassantSquare(square: [number, number] | null): this {
+		this.enPassantSquare = square;
+		return this;
+	}
 }

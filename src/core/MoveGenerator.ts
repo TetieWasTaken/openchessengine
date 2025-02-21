@@ -1,7 +1,7 @@
 /** @format */
 
-import type { BoardType, CastlingRights, Move } from '../types/core';
-import { Piece } from '../types/enums';
+import type { CastlingRights, Move } from '../types/core';
+import { Colour, Piece } from '../types/enums';
 import { Board } from './board';
 import { getBishopMoves } from './pieces/bishop';
 import { getKingMoves } from './pieces/king';
@@ -15,12 +15,21 @@ import { getRookMoves } from './pieces/rook';
  */
 export function getAllMoves(board: Board, isRecursion = false): Move[] {
 	const moves: Move[] = [];
-	const boardData = board.getBoard();
+	const bitboards = board.getBitboards();
 
-	for (let i = 0; i < 8; i++) {
-		for (let j = 0; j < 8; j++) {
-			if (boardData[i][j] !== null && boardData[i][j]?.colour === board.getActiveColour()) {
-				moves.push(...getMoves(board, [i, j], isRecursion));
+	for (const colour of Object.values(Colour)) {
+		for (const pieceType of Object.values(Piece)) {
+			let pieceBitboard = bitboards[colour][pieceType];
+
+			while (pieceBitboard !== 0n) {
+				const position = Math.clz32(Number(pieceBitboard & -pieceBitboard));
+				const row = Math.floor(position / 8);
+				const col = position % 8;
+
+				const pieceMoves = getMoves(board, [row, col], isRecursion);
+				moves.push(...pieceMoves);
+
+				pieceBitboard &= pieceBitboard - 1n;
 			}
 		}
 	}
@@ -55,149 +64,49 @@ export function _perft(board: Board, depth: number): number {
  * Makes a move on the board and returns the new board.
  */
 export function makeMove(board: Board, move: Move): Board {
-	const boardData = board.getBoard();
-	const newBoard = boardData.map((row) => row.slice());
+	const Bitboards = board.getBitboards();
 
-	const capturedPiece = newBoard[move.to[0]][move.to[1]];
+	const capturedPiece = move.isCapture ? board.getPieceAt(move.to[0], move.to[1]) : null;
+	if (capturedPiece) board.removePieceAt(move.to[0], move.to[1]);
 
-	const piece = newBoard[move.from[0]][move.from[1]];
-	newBoard[move.from[0]][move.from[1]] = null;
+	const pieceData = board.getPieceAt(move.from[0], move.from[1]);
+	if (pieceData == null) throw new Error('No piece found at the given position');
+	const [piece, colour] = pieceData;
 
-	// Checking for pawn should be superfluous, but good for robustness
-	if (move.promotion !== undefined && piece?.type === Piece.Pawn) {
-		newBoard[move.to[0]][move.to[1]] = {
-			type: move.promotion,
-			colour: piece.colour,
-		};
+	board.removePieceAt(move.from[0], move.from[1], piece, move.piece.colour);
+	if (move.promotion) board.addPieceAt(move.to[0], move.to[1], move.promotion, move.piece.colour);
+	else board.addPieceAt(move.to[0], move.to[1], piece, move.piece.colour);
+
+	if (move.isEnPassantCapture) {
+		const enPassantSquare = board.getEnPassantSquare();
+		if (enPassantSquare) board.removePieceAt(enPassantSquare[0], enPassantSquare[1]);
+	}
+
+	if (move.isDoublePawnMove) {
+		const enPassantSquare = move.piece.colour === Colour.White ? [move.to[0] - 1, move.to[1]] : [move.to[0] + 1, move.to[1]];
+		board.setEnPassantSquare(enPassantSquare as [number, number] | null);
 	} else {
-		newBoard[move.to[0]][move.to[1]] = piece;
+		board.setEnPassantSquare(null);
 	}
 
-	// Castling rights
-	let newCastlingRights: CastlingRights = {
-		white: { king: false, queen: false },
-		black: { king: false, queen: false },
-	};
-	const castlingRights = board.getCastlingRights();
-	newCastlingRights = { ...newCastlingRights, ...castlingRights };
-
-	if (capturedPiece && capturedPiece.type === Piece.Rook) {
-		if (capturedPiece.colour === 'white') {
-			if (move.to[0] === 0 && move.to[1] === 0) {
-				newCastlingRights = {
-					...newCastlingRights,
-					white: { ...newCastlingRights.white, queen: false },
-				};
-			} else if (move.to[0] === 0 && move.to[1] === 7) {
-				newCastlingRights = {
-					...newCastlingRights,
-					white: { ...newCastlingRights.white, king: false },
-				};
-			}
-		} else if (move.to[0] === 7 && move.to[1] === 0) {
-			newCastlingRights = {
-				...newCastlingRights,
-				black: { ...newCastlingRights.black, queen: false },
-			};
-		} else if (move.to[0] === 7 && move.to[1] === 7) {
-			newCastlingRights = {
-				...newCastlingRights,
-				black: { ...newCastlingRights.black, king: false },
-			};
-		}
-	}
-
-	if (move.castle !== undefined) {
-		const kingSide = move.castle === 'K';
-		const rookFrom = kingSide ? [move.to[0], 7] : [move.to[0], 0];
-		const rookTo = kingSide ? [move.to[0], 5] : [move.to[0], 3];
-
-		newBoard[rookTo[0]][rookTo[1]] = newBoard[rookFrom[0]][rookFrom[1]];
-		newBoard[rookFrom[0]][rookFrom[1]] = null;
-	}
-
-	if (piece?.type === Piece.King) {
-		newCastlingRights = {
-			...newCastlingRights,
-			[piece.colour]: {
-				king: false,
-				queen: false,
-			},
-		};
-	} else if (piece?.type === Piece.Rook) {
-		if (piece.colour === 'white') {
-			if (move.from[0] === 0 && move.from[1] === 0) {
-				newCastlingRights = {
-					...newCastlingRights,
-					white: {
-						...newCastlingRights.white,
-						queen: false,
-					},
-				};
-			} else if (move.from[0] === 0 && move.from[1] === 7) {
-				newCastlingRights = {
-					...newCastlingRights,
-					white: {
-						...newCastlingRights.white,
-						king: false,
-					},
-				};
-			}
-		} else if (move.from[0] === 7 && move.from[1] === 0) {
-			newCastlingRights = {
-				...newCastlingRights,
-				black: {
-					...newCastlingRights.black,
-					queen: false,
-				},
-			};
-		} else if (move.from[0] === 7 && move.from[1] === 7) {
-			newCastlingRights = {
-				...newCastlingRights,
-				black: {
-					...newCastlingRights.black,
-					king: false,
-				},
-			};
-		}
-	}
-
-	if (move.isEnPassantCapture === true) {
-		newBoard[move.from[0]][move.to[1]] = null;
-	}
-
-	let enPassantSquare: [number, number] | null = null;
-	if (move.isDoublePawnMove === true) {
-		if (piece?.colour === 'white') {
-			enPassantSquare = [move.to[0] - 1, move.to[1]];
-		} else {
-			enPassantSquare = [move.to[0] + 1, move.to[1]];
-		}
-	}
-
-	return new Board({
-		board: newBoard,
-		activeColour: board.getActiveColour() === 'white' ? 'black' : 'white',
-		castlingRights: newCastlingRights,
-		enPassant: enPassantSquare,
-		halfmove: piece?.type === Piece.Pawn || capturedPiece ? 0 : board.getHalfmove() + 1,
-		fullmove: board.getFullmove() + (board.getActiveColour() === 'black' ? 1 : 0),
-	});
+	return board.setActiveColour(move.piece.colour === Colour.White ? Colour.Black : Colour.White);
 }
 
 /**
  * Returns all possible moves for a piece at a given position.
  */
 export function getMoves(board: Board, position: [number, number], isRecursion = false): Move[] {
-	const boardData = board.getBoard();
-	const piece = boardData[position[0]][position[1]];
-	if (piece === null) {
+	const bitboards = board.getBitboards();
+	const pieceInfo = board.getPieceAt(position[0], position[1]);
+	if (pieceInfo === null) {
 		return [];
 	}
 
+	const [piece, colour] = pieceInfo;
+
 	let moves: Move[] = [];
 
-	switch (piece.type) {
+	switch (piece) {
 		case Piece.Pawn:
 			moves = getPawnMoves(board, position);
 			break;
@@ -223,7 +132,7 @@ export function getMoves(board: Board, position: [number, number], isRecursion =
 		if (isRecursion) return true;
 		else {
 			const newBoard = makeMove(board, move);
-			const inCheck = isKingInCheck(newBoard, piece.colour);
+			const inCheck = isKingInCheck(newBoard, colour);
 			return !inCheck;
 		}
 	});
@@ -234,13 +143,13 @@ export function getMoves(board: Board, position: [number, number], isRecursion =
  *
  * @internal
  */
-export function isKingInCheck(board: Board, colour: 'black' | 'white'): boolean {
-	const kingPosition = findKing(board.getBoard(), colour);
+export function isKingInCheck(board: Board, colour: Colour): boolean {
+	const kingPosition = findKing(board, colour);
 	if (!kingPosition) {
 		return false;
 	}
 
-	const opponentColour = colour === 'white' ? 'black' : 'white';
+	const opponentColour = colour === Colour.White ? Colour.Black : Colour.White;
 	const opponentMoves = getAllMoves(board.setActiveColour(opponentColour, false), true);
 
 	return opponentMoves.some((move) => move.to[0] === kingPosition[0] && move.to[1] === kingPosition[1]);
@@ -251,16 +160,19 @@ export function isKingInCheck(board: Board, colour: 'black' | 'white'): boolean 
  *
  * @internal
  */
-export function findKing(board: BoardType, colour: 'black' | 'white'): [number, number] | null {
-	for (let i = 0; i < 8; i++) {
-		for (let j = 0; j < 8; j++) {
-			if (board[i][j]?.type === Piece.King && board[i][j]?.colour === colour) {
-				return [i, j];
-			}
-		}
+export function findKing(board: Board, colour: Colour): [number, number] | null {
+	const bitboards = board.getBitboards();
+	const kingBitboard = bitboards[colour][Piece.King];
+
+	if (kingBitboard === 0n) {
+		return null;
 	}
 
-	return null;
+	const position = Math.clz32(Number(kingBitboard & -kingBitboard));
+	const row = Math.floor(position / 8);
+	const col = position % 8;
+
+	return [row, col];
 }
 
 /**
@@ -269,7 +181,7 @@ export function findKing(board: BoardType, colour: 'black' | 'white'): [number, 
  * @internal
  */
 export function getOrthogonalMoves(board: Board, position: [number, number], colour = board.getActiveColour()): Move[] {
-	const boardData = board.getBoard();
+	const bitboards = board.getBitboards();
 	const moves: Move[] = [];
 	const directions = [
 		[-1, 0],
@@ -291,19 +203,35 @@ export function getOrthogonalMoves(board: Board, position: [number, number], col
 				break;
 			}
 
-			const piece = boardData[x][y];
+			const targetPieceData = board.getPieceAt(x, y);
+			const [targetPiece, targetColour] = targetPieceData || [null, null];
 
-			if (piece === null) {
+			const selectedPieceData = board.getPieceAt(position[0], position[1]);
+			if (selectedPieceData === null) {
+				throw new Error('No piece found at the given position / getOrthogonalMoves / b');
+			}
+
+			const [selectedPiece, selectedColour] = selectedPieceData;
+
+			if (targetPiece === null) {
 				moves.push({
 					from: position,
 					to: [x, y],
+					piece: {
+						type: selectedPiece,
+						colour: selectedColour,
+					},
 				});
-			} else if (piece.colour === colour) {
+			} else if (targetColour === selectedColour) {
 				break;
 			} else {
 				moves.push({
 					from: position,
 					to: [x, y],
+					piece: {
+						type: selectedPiece,
+						colour: selectedColour
+					},
 				});
 
 				break;
@@ -320,7 +248,7 @@ export function getOrthogonalMoves(board: Board, position: [number, number], col
  * @internal
  */
 export function getDiagonalMoves(board: Board, position: [number, number], colour = board.getActiveColour()): Move[] {
-	const boardData = board.getBoard();
+	const bitboards = board.getBitboards();
 	const moves: Move[] = [];
 	const directions = [
 		[-1, -1],
@@ -342,19 +270,35 @@ export function getDiagonalMoves(board: Board, position: [number, number], colou
 				break;
 			}
 
-			const piece = boardData[x][y];
+			const targetPieceData = board.getPieceAt(x, y);
+			const [targetPiece, targetColour] = targetPieceData || [null, null];
 
-			if (piece === null) {
+			const selectedPieceData = board.getPieceAt(position[0], position[1]);
+			if (selectedPieceData === null) {
+				throw new Error('No piece found at the given position / getDiagonalMoves / b');
+			}
+
+			const [selectedPiece, selectedColour] = selectedPieceData;
+
+			if (targetPiece === null) {
 				moves.push({
 					from: position,
 					to: [x, y],
+					piece: {
+						type: selectedPiece,
+						colour: selectedColour,
+					},
 				});
-			} else if (piece.colour === colour) {
+			} else if (targetColour === selectedColour) {
 				break;
 			} else {
 				moves.push({
 					from: position,
 					to: [x, y],
+					piece: {
+						type: selectedPiece,
+						colour: selectedColour
+					},
 				});
 
 				break;
