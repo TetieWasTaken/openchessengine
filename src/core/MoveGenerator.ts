@@ -10,6 +10,16 @@ import { getPawnMoves } from './pieces/pawn';
 import { getQueenMoves } from './pieces/queen';
 import { getRookMoves } from './pieces/rook';
 
+function bitScanForward(bb: bigint): number {
+	if (bb === 0n) return -1;
+	let index = 0;
+	while ((bb & 1n) === 0n) {
+		bb >>= 1n;
+		index++;
+	}
+	return index;
+}
+
 /**
  * Returns all possible moves for a given board and colour.
  */
@@ -22,11 +32,13 @@ export function getAllMoves(board: Board, isRecursion = false): Move[] {
 			let pieceBitboard = bitboards[colour][pieceType];
 
 			while (pieceBitboard !== 0n) {
-				const position = Math.clz32(Number(pieceBitboard & -pieceBitboard));
+				const lsb = pieceBitboard & -pieceBitboard;
+				const position = bitScanForward(lsb);
 				const row = Math.floor(position / 8);
 				const col = position % 8;
 
-				const pieceMoves = getMoves(board, [row, col], isRecursion);
+
+				const pieceMoves = getMoves(board, [col, row], isRecursion);
 				moves.push(...pieceMoves);
 
 				pieceBitboard &= pieceBitboard - 1n;
@@ -36,6 +48,7 @@ export function getAllMoves(board: Board, isRecursion = false): Move[] {
 
 	return moves;
 }
+
 
 /**
  * Returns the number of nodes at a given depth, see {@link https://www.chessprogramming.org/Perft | chessprogramming/Perft}.
