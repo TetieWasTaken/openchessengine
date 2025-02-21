@@ -338,4 +338,9 @@ export class Board {
 		this.enPassantSquare = square;
 		return this;
 	}
+
+	public setCastlingRights(rights: CastlingRights): this {
+		this.castlingRights = rights;
+		return this;
+	}
 }
