@@ -2,6 +2,7 @@
 
 import { Board } from '../../../src/core/board';
 import { getMoves, makeMove } from '../../../src/core/moveGenerator';
+import { Colour, Piece } from '../../../src/types/enums';
 
 describe('Move Generator | King', () => {
 	test('White king at [1, 1]', () => {
@@ -76,7 +77,7 @@ describe('Move Generator | King', () => {
 	test('Castling flags', () => {
 		const board = new Board('r3k2r/8/8/8/8/8/8/R3K2R b Qk - 0 1');
 		const blackMoves = getMoves(board, [7, 4]);
-		const whiteMoves = getMoves(board.setActiveColour('white'), [0, 4]);
+		const whiteMoves = getMoves(board.setActiveColour(Colour.White), [0, 4]);
 
 		expect(blackMoves.map((move) => move.to)).toContainEqual([7, 6]);
 		expect(blackMoves.map((move) => move.to)).not.toContainEqual([7, 2]);
@@ -87,8 +88,9 @@ describe('Move Generator | King', () => {
 	test('Castling after rook taken', () => {
 		const board = new Board('r3k2r/8/8/8/8/6n1/8/R3K2R b KQkq - 0 1');
 		const newBoard = makeMove(board, {
-			from: [2, 6],
-			to: [0, 7],
+			from: [6, 5],
+			to: [7, 7],
+			piece: { type: Piece.Knight, colour: Colour.Black },
 		});
 
 		const moves = getMoves(newBoard, [0, 4]);
