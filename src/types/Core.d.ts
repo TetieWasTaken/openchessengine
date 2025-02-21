@@ -23,7 +23,7 @@ export type CastlingRights = {
 
 export type BoardData = {
 	activeColour: Colour;
-	board: BitBoards;
+	board: Bitboards;
 	castlingRights: CastlingRights;
 	enPassant: [number, number] | null;
 	fullmove: number;
@@ -32,7 +32,7 @@ export type BoardData = {
 
 export type Bitboard = bigint;
 
-export type BitBoards = {
+export type Bitboards = {
 	[colour in Colour]: {
 		[piece in Piece]: Bitboard;
 	};

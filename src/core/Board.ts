@@ -1,6 +1,6 @@
 /** @format */
 
-import type { BitBoards, BoardData, CastlingRights, SingleCastlingRights } from '../types/core';
+import type { Bitboards, BoardData, CastlingRights, SingleCastlingRights } from '../types/core';
 import { Piece, Colour } from '../types/enums';
 import { DEFAULT_FEN } from '../utils/constants';
 
@@ -21,7 +21,7 @@ export class Board {
 
 	private fullmove = 1;
 
-	private bitboards: BitBoards = {
+	private bitboards: Bitboards = {
 		[Colour.White]: {
 			[Piece.Pawn]: 0n,
 			[Piece.Rook]: 0n,
@@ -53,8 +53,8 @@ export class Board {
 		}
 	}
 
-	public fenToBitboards(placement: string): BitBoards {
-		const bitboards: BitBoards = this.bitboards;
+	public fenToBitboards(placement: string): Bitboards {
+		const bitboards: Bitboards = this.bitboards;
 
 		const ranks = placement.split('/');
 		for (let rank = 0; rank < 8; rank++) {
@@ -64,9 +64,9 @@ export class Board {
 					const piece = char as Piece;
 					const bitboard = 1n << BigInt(rank * 8 + file);
 					if (piece === piece.toUpperCase()) {
-						bitboards[Colour.White][piece.toLowerCase() as keyof BitBoards[Colour.White]] |= bitboard;
+						bitboards[Colour.White][piece.toLowerCase() as keyof Bitboards[Colour.White]] |= bitboard;
 					} else {
-						bitboards[Colour.Black][piece as keyof BitBoards[Colour.Black]] |= bitboard;
+						bitboards[Colour.Black][piece as keyof Bitboards[Colour.Black]] |= bitboard;
 					}
 
 					file++;
@@ -282,7 +282,7 @@ export class Board {
 		return x >= 0 && x < 8 && y >= 0 && y < 8;
 	}
 
-	public getBitboards(): BitBoards {
+	public getBitboards(): Bitboards {
 		return this.bitboards;
 	}
 }
