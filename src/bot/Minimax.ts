@@ -29,7 +29,6 @@ export function minimax(
 		return { score: evaluate(board) };
 	}
 
-	board.setActiveColour(isMaximising ? Colour.White : Colour.Black);
 	const moves = getAllMoves(board);
 	let best: MinimaxResult = {
 		// Assume the worst possible score for the active player
