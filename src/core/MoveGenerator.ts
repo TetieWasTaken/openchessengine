@@ -225,11 +225,11 @@ export function findKing(board: Board, colour: Colour): [number, number] | null 
 		return null;
 	}
 
-	const position = Math.clz32(Number(kingBitboard & -kingBitboard));
+	const position = bitScanForward(kingBitboard);
 	const row = Math.floor(position / 8);
 	const col = position % 8;
 
-	return [row, col];
+	return [col, row];
 }
 
 /**
