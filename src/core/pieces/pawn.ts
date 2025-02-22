@@ -43,7 +43,7 @@ export function getPawnMoves(board: Board, position: [number, number], colour = 
 
 	// Move forward two squares
 	if (
-		x === (colour === Colour.White ? 1 : 6) &&
+		y === (colour === Colour.White ? 6 : 1) &&
 		board.getPieceAt(x, y + direction) === null &&
 		board.getPieceAt(x, y + direction * 2) === null
 	) {
