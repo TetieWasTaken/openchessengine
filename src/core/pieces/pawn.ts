@@ -24,11 +24,11 @@ export function getPawnMoves(board: Board, position: [number, number], colour = 
 	const bitboards = board.getBitboards();
 	const [x, y] = position;
 
-	const addPromotionMoves = (to: [number, number]) => {
-		moves.push({ from: position, to, promotion: Piece.Queen, piece: { type: Piece.Pawn, colour } });
-		moves.push({ from: position, to, promotion: Piece.Rook, piece: { type: Piece.Pawn, colour } });
-		moves.push({ from: position, to, promotion: Piece.Bishop, piece: { type: Piece.Pawn, colour } });
-		moves.push({ from: position, to, promotion: Piece.Knight, piece: { type: Piece.Pawn, colour } });
+	const addPromotionMoves = (to: [number, number], isCapture = false) => {
+		moves.push({ from: position, to, promotion: Piece.Queen, piece: { type: Piece.Pawn, colour }, isCapture });
+		moves.push({ from: position, to, promotion: Piece.Rook, piece: { type: Piece.Pawn, colour }, isCapture });
+		moves.push({ from: position, to, promotion: Piece.Bishop, piece: { type: Piece.Pawn, colour }, isCapture });
+		moves.push({ from: position, to, promotion: Piece.Knight, piece: { type: Piece.Pawn, colour }, isCapture });
 	};
 
 	// Move forward one square
@@ -74,7 +74,7 @@ export function getPawnMoves(board: Board, position: [number, number], colour = 
 	if (y - 1 >= 0 && board.getPieceAt(x - 1, y + direction) !== null && board.getPieceAt(x - 1, y + direction)?.[1] !== colour) {
 		const to = [x - 1, y + direction] as [number, number];
 		if (isPromotionRow(y + direction)) {
-			addPromotionMoves(to);
+			addPromotionMoves(to, true);
 		} else {
 			moves.push({
 				from: position, to, piece: { type: Piece.Pawn, colour }, isCapture: true
@@ -86,7 +86,7 @@ export function getPawnMoves(board: Board, position: [number, number], colour = 
 	if (y + 1 < 8 && board.getPieceAt(x + 1, y + direction) !== null && board.getPieceAt(x + 1, y + direction)?.[1] !== colour) {
 		const to = [x + 1, y + direction] as [number, number];
 		if (isPromotionRow(y + direction)) {
-			addPromotionMoves(to);
+			addPromotionMoves(to, true);
 		} else {
 			moves.push({ from: position, to, piece: { type: Piece.Pawn, colour }, isCapture: true });
 		}
