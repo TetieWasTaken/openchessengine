@@ -209,9 +209,9 @@ export class Board {
 	public toString(): string {
 		let boardStr = '\n';
 
-		for (let y = 7; y >= 0; y--) {
-			boardStr += `${y + 1} `;
-			for (let x = 0; x < 8; x++) {
+		for (let x = 0; x < 8; x++) {
+			boardStr += `${String.fromCharCode(97 + x)} `;
+			for (let y = 7; y >= 0; y--) {
 				const piece = this.getPieceAt(x, y);
 				if (piece === null) {
 					boardStr += '.';
