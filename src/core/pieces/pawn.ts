@@ -32,9 +32,9 @@ export function getPawnMoves(board: Board, position: [number, number], colour = 
 	};
 
 	// Move forward one square
-	if (board.getPieceAt(x + direction, y) === null) {
-		const to = [x + direction, y] as [number, number];
-		if (isPromotionRow(x + direction)) {
+	if (board.getPieceAt(x, y + direction) === null) {
+		const to = [x, y + direction] as [number, number];
+		if (isPromotionRow(y + direction)) {
 			addPromotionMoves(to);
 		} else {
 			moves.push({ from: position, to, piece: { type: Piece.Pawn, colour } });
@@ -44,12 +44,12 @@ export function getPawnMoves(board: Board, position: [number, number], colour = 
 	// Move forward two squares
 	if (
 		x === (colour === Colour.White ? 1 : 6) &&
-		board.getPieceAt(x + direction, y) === null &&
-		board.getPieceAt(2 * direction + x, y) === null
+		board.getPieceAt(x, y + direction) === null &&
+		board.getPieceAt(x, y + direction * 2) === null
 	) {
 		moves.push({
 			from: position,
-			to: [x + 2 * direction, y],
+			to: [x, y + direction * 2],
 			isDoublePawnMove: true,
 			piece: { type: Piece.Pawn, colour }
 		});
@@ -59,8 +59,8 @@ export function getPawnMoves(board: Board, position: [number, number], colour = 
 	const enPassantSquare = board.getEnPassantSquare();
 	if (
 		enPassantSquare &&
-		enPassantSquare[0] === x + direction &&
-		(enPassantSquare[1] === y - 1 || enPassantSquare[1] === y + 1)
+		(enPassantSquare[0] === x - 1 || enPassantSquare[0] === x + 1) &&
+		enPassantSquare[1] === y + direction
 	) {
 		moves.push({
 			from: position,
