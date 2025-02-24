@@ -87,7 +87,9 @@ function getCastlingMoves(board: Board, position: [number, number], colour: Colo
 		const castlingRights = board.getCastlingRights();
 
 		if (castlingRights[colour][BoardSide.King]) {
-			const kingSideEmpty = board.getPieceAt(position[0] + 1, position[1]) === null && board.getPieceAt(position[0] + 2, position[1]) === null;
+			const kingSideEmpty =
+				board.getPieceAt(position[0] + 1, position[1]) === null &&
+				board.getPieceAt(position[0] + 2, position[1]) === null;
 
 			if (kingSideEmpty) {
 				const newBoard = makeMove(board, {
@@ -96,7 +98,7 @@ function getCastlingMoves(board: Board, position: [number, number], colour: Colo
 					piece: {
 						type: Piece.King,
 						colour: colour,
-					}
+					},
 				});
 
 				if (!isKingInCheck(newBoard, colour)) {
@@ -106,7 +108,7 @@ function getCastlingMoves(board: Board, position: [number, number], colour: Colo
 						piece: {
 							type: Piece.King,
 							colour: colour,
-						}
+						},
 					});
 
 					if (!isKingInCheck(finalBoard, colour)) {
@@ -117,7 +119,7 @@ function getCastlingMoves(board: Board, position: [number, number], colour: Colo
 							piece: {
 								type: Piece.King,
 								colour: colour,
-							}
+							},
 						});
 					}
 				}
@@ -125,7 +127,10 @@ function getCastlingMoves(board: Board, position: [number, number], colour: Colo
 		}
 
 		if (castlingRights[colour][BoardSide.Queen]) {
-			const queenSideEmpty = board.getPieceAt(position[0] - 1, position[1]) === null && board.getPieceAt(position[0] - 2, position[1]) === null && board.getPieceAt(position[0] - 3, position[1]) === null;
+			const queenSideEmpty =
+				board.getPieceAt(position[0] - 1, position[1]) === null &&
+				board.getPieceAt(position[0] - 2, position[1]) === null &&
+				board.getPieceAt(position[0] - 3, position[1]) === null;
 
 			if (queenSideEmpty) {
 				const newBoard = makeMove(board, {
@@ -134,7 +139,7 @@ function getCastlingMoves(board: Board, position: [number, number], colour: Colo
 					piece: {
 						type: Piece.King,
 						colour: colour,
-					}
+					},
 				});
 
 				if (!isKingInCheck(newBoard, colour)) {
@@ -144,7 +149,7 @@ function getCastlingMoves(board: Board, position: [number, number], colour: Colo
 						piece: {
 							type: Piece.King,
 							colour: colour,
-						}
+						},
 					});
 
 					if (!isKingInCheck(finalBoard, colour)) {
@@ -155,7 +160,7 @@ function getCastlingMoves(board: Board, position: [number, number], colour: Colo
 							piece: {
 								type: Piece.King,
 								colour: colour,
-							}
+							},
 						});
 					}
 				}

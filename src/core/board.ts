@@ -164,7 +164,7 @@ export class Board {
 			castlingRights: {
 				[Colour.White]: { ...this.castlingRights[Colour.White] },
 				[Colour.Black]: {
-					...this.castlingRights[Colour.Black]
+					...this.castlingRights[Colour.Black],
 				},
 			},
 			enPassant: this.enPassantSquare,
@@ -245,7 +245,7 @@ export class Board {
 				[BoardSide.Queen]: castling.includes('q'),
 			},
 		};
-	};
+	}
 
 	/**
 	 * Get the en passant square.
@@ -324,8 +324,7 @@ export class Board {
 					bitboards[colour][pieceType] &= ~square;
 				}
 			}
-		}
-		else {
+		} else {
 			for (const col of Object.keys(bitboards) as Colour[]) {
 				for (const pieceType of Object.keys(bitboards[col]) as Piece[]) {
 					if ((piece === undefined || piece === pieceType) && (colour === undefined || colour === col)) {

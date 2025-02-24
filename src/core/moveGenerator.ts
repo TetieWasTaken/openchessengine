@@ -43,10 +43,8 @@ export function getAllMoves(board: Board, isRecursion = false, colour = board.ge
 		}
 	}
 
-
 	return moves;
 }
-
 
 /**
  * Returns the number of nodes at a given depth, see {@link https://www.chessprogramming.org/Perft | chessprogramming/Perft}.
@@ -83,7 +81,8 @@ export function makeMove(initBoard: Board, move: Move): Board {
 		board.removePieceAt(move.to[0], move.to[1]);
 
 		if (capturedPiece[0] === Piece.Rook) {
-			const isOriginalRook = (capturedPiece[1] === Colour.White && (move.to[0] === 0 || move.to[0] === 7) && move.to[1] === 7) ||
+			const isOriginalRook =
+				(capturedPiece[1] === Colour.White && (move.to[0] === 0 || move.to[0] === 7) && move.to[1] === 7) ||
 				(capturedPiece[1] === Colour.Black && (move.to[0] === 0 || move.to[0] === 7) && move.to[1] === 0);
 
 			if (isOriginalRook) {
@@ -109,7 +108,8 @@ export function makeMove(initBoard: Board, move: Move): Board {
 	}
 
 	if (move.isDoublePawnMove) {
-		const enPassantSquare = move.piece.colour === Colour.White ? [move.to[0], move.to[1] + 1] : [move.to[0], move.to[1] - 1];
+		const enPassantSquare =
+			move.piece.colour === Colour.White ? [move.to[0], move.to[1] + 1] : [move.to[0], move.to[1] - 1];
 		board.setEnPassantSquare(enPassantSquare as [number, number] | null);
 	} else {
 		board.setEnPassantSquare(null);
@@ -301,7 +301,7 @@ export function getOrthogonalMoves(board: Board, position: [number, number], col
 					to: [x, y],
 					piece: {
 						type: selectedPiece,
-						colour: selectedColour
+						colour: selectedColour,
 					},
 					isCapture: true,
 				});
@@ -369,7 +369,7 @@ export function getDiagonalMoves(board: Board, position: [number, number], colou
 					to: [x, y],
 					piece: {
 						type: selectedPiece,
-						colour: selectedColour
+						colour: selectedColour,
 					},
 					isCapture: true,
 				});

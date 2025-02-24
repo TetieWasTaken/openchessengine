@@ -19,7 +19,7 @@ export type Move = {
 export type CastlingRights = {
 	[colour in Colour]: {
 		[side in BoardSide]: boolean;
-	}
+	};
 };
 
 export type BoardData = {
