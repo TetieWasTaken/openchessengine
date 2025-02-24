@@ -28,10 +28,10 @@ export const pieceMap: { [key: string]: Piece } = {
 
 export enum Colour {
 	Black = 'b',
-	White = 'w'
+	White = 'w',
 }
 
 export enum BoardSide {
 	King = 'k',
-	Queen = 'q'
+	Queen = 'q',
 }

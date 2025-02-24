@@ -84,7 +84,6 @@ function getCastlingMoves(board: Board, position: [number, number], colour: Colo
 	const kingInCheck = isKingInCheck(board, colour);
 
 	if (!kingInCheck) {
-
 		const castlingRights = board.getCastlingRights();
 
 		if (castlingRights[colour][BoardSide.King]) {
