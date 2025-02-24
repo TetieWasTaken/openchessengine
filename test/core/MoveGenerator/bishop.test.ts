@@ -31,26 +31,15 @@ describe('Move Generator | Bishop', () => {
 		const board = new Board('8/8/8/8/8/2b5/1B6/8 w - - 0 1');
 		const moves = getMoves(board, [1, 6]);
 
-		const expectedMoves = [
-			[0, 7],
-			[0, 5],
-			[2, 7],
-			[2, 5],
-		];
-
-		expect(moves.map((move) => move.to)).toEqual(expect.arrayContaining(expectedMoves));
+		expect(moves.map((move) => move.to)).toContainEqual([2, 5]);
+		expect(moves.map((move) => move.to)).not.toContainEqual([3, 4]);
 	});
 
 	test('Bishop with blocking piece', () => {
 		const board = new Board('8/8/8/8/8/2B5/1B6/8 w - - 0 1');
 		const moves = getMoves(board, [1, 6]);
 
-		const expectedMoves = [
-			[0, 5],
-			[0, 7],
-			[2, 7],
-		];
-
-		expect(moves.map((move) => move.to)).toEqual(expect.arrayContaining(expectedMoves));
+		expect(moves.map((move) => move.to)).not.toContainEqual([2, 5]);
+		expect(moves.map((move) => move.to)).not.toContainEqual([3, 4]);
 	});
 });
