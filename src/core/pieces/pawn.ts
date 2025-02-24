@@ -71,7 +71,7 @@ export function getPawnMoves(board: Board, position: [number, number], colour = 
 	}
 
 	// Capture diagonally to the left
-	if (y - 1 >= 0 && board.getPieceAt(x - 1, y + direction) !== null && board.getPieceAt(x - 1, y + direction)?.[1] !== colour) {
+	if (x - 1 >= 0 && board.getPieceAt(x - 1, y + direction) !== null && board.getPieceAt(x - 1, y + direction)?.[1] !== colour) {
 		const to = [x - 1, y + direction] as [number, number];
 		if (isPromotionRow(y + direction)) {
 			addPromotionMoves(to, true);
@@ -83,7 +83,7 @@ export function getPawnMoves(board: Board, position: [number, number], colour = 
 	}
 
 	// Capture diagonally to the right
-	if (y + 1 < 8 && board.getPieceAt(x + 1, y + direction) !== null && board.getPieceAt(x + 1, y + direction)?.[1] !== colour) {
+	if (x + 1 < 8 && board.getPieceAt(x + 1, y + direction) !== null && board.getPieceAt(x + 1, y + direction)?.[1] !== colour) {
 		const to = [x + 1, y + direction] as [number, number];
 		if (isPromotionRow(y + direction)) {
 			addPromotionMoves(to, true);
