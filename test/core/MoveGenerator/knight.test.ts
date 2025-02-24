@@ -33,6 +33,6 @@ describe('Move Generator | Knight', () => {
 		const board = new Board('1P6/8/2N5/8/8/8/8/8 w - - 0 1');
 		const moves = getMoves(board, [2, 2]);
 
-		expect(moves.map((move) => move.to)).not.toContainEqual([0, 1]);
+		expect(moves.map((move) => move.to)).not.toContainEqual([1, 0]);
 	});
 });
