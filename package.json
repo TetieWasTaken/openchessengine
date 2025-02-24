@@ -4,7 +4,7 @@
 	"scripts": {
 		"build": "tsc",
 		"start": "ts-node src/interfaces/CLI.ts",
-		"test": "jest -i test/**/*.test.ts",
+		"test": "jest --testPathIgnorePatterns=dist",
 		"test:custom": "jest",
 		"lint": "npx eslint",
 		"format": "prettier . --write",
