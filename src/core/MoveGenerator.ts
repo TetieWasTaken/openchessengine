@@ -102,18 +102,18 @@ export function makeMove(initBoard: Board, move: Move): Board {
 	}
 
 	if (move.castle !== undefined) {
-		const row = move.piece.colour === Colour.White ? 7 : 0;
-		const kingCol = move.to[1];
-		const rookCol = move.castle === BoardSide.King ? 7 : 0;
+		const rank = move.piece.colour === Colour.White ? 7 : 0;
+		const kingFile = move.to[1];
+		const rookFile = move.castle === BoardSide.King ? 7 : 0;
 
-		board.removePieceAt(row, kingCol, Piece.King, move.piece.colour);
-		board.removePieceAt(row, rookCol, Piece.Rook, move.piece.colour);
+		board.removePieceAt(kingFile, rank, Piece.King, move.piece.colour);
+		board.removePieceAt(rookFile, rank, Piece.Rook, move.piece.colour);
 
-		const newKingCol = move.castle === BoardSide.King ? 6 : 2;
-		const newRookCol = move.castle === BoardSide.King ? 5 : 3;
+		const newKingFile = move.castle === BoardSide.King ? 6 : 2;
+		const newRookFile = move.castle === BoardSide.King ? 5 : 3;
 
-		board.addPieceAt(row, newKingCol, Piece.King, move.piece.colour);
-		board.addPieceAt(row, newRookCol, Piece.Rook, move.piece.colour);
+		board.addPieceAt(newKingFile, rank, Piece.King, move.piece.colour);
+		board.addPieceAt(newRookFile, rank, Piece.Rook, move.piece.colour);
 	}
 
 	const castlingRights = board.getCastlingRights();
