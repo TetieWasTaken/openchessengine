@@ -5,7 +5,6 @@
 		"build": "tsc",
 		"start": "ts-node src/interfaces/CLI.ts",
 		"test": "jest --testPathIgnorePatterns=dist",
-		"test:custom": "jest",
 		"lint": "npx eslint",
 		"format": "prettier . --write",
 		"check": "tsc --noEmit && npm run test && npm run lint && prettier . --check",
