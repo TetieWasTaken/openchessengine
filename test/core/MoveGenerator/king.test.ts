@@ -78,6 +78,7 @@ describe('Move Generator | King', () => {
 			from: [6, 5],
 			to: [7, 7],
 			piece: { type: Piece.Knight, colour: Colour.Black },
+			isCapture: true,
 		});
 
 		const moves = getMoves(newBoard, [4, 7]);
