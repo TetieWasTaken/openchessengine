@@ -1,7 +1,8 @@
 /** @format */
 
 import type { Move } from '../../types/core';
-import { BoardSide, Colour, Piece } from '../../types/enums';
+import type { Colour} from '../../types/enums';
+import { BoardSide, Piece } from '../../types/enums';
 import type { Board } from '../board';
 import { isKingInCheck, makeMove } from '../moveGenerator';
 
@@ -53,7 +54,7 @@ export function getKingMoves(
 						type: Piece.King,
 						colour,
 					},
-					isCapture: !!targetPiece,
+					isCapture: Boolean(targetPiece),
 				});
 			}
 		}
@@ -83,7 +84,7 @@ function getCastlingMoves(board: Board, position: [number, number], colour: Colo
 	const kingInCheck = isKingInCheck(board, colour);
 
 	if (!kingInCheck) {
-		// eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion
+		 
 		const castlingRights = board.getCastlingRights();
 
 		if (castlingRights[colour][BoardSide.King]) {
@@ -97,7 +98,7 @@ function getCastlingMoves(board: Board, position: [number, number], colour: Colo
 					to: [position[0] + 1, position[1]],
 					piece: {
 						type: Piece.King,
-						colour: colour,
+						colour,
 					},
 				});
 
@@ -107,7 +108,7 @@ function getCastlingMoves(board: Board, position: [number, number], colour: Colo
 						to: [position[0] + 2, position[1]],
 						piece: {
 							type: Piece.King,
-							colour: colour,
+							colour,
 						},
 					});
 
@@ -118,7 +119,7 @@ function getCastlingMoves(board: Board, position: [number, number], colour: Colo
 							castle: BoardSide.King,
 							piece: {
 								type: Piece.King,
-								colour: colour,
+								colour,
 							},
 						});
 					}
@@ -138,7 +139,7 @@ function getCastlingMoves(board: Board, position: [number, number], colour: Colo
 					to: [position[0] - 1, position[1]],
 					piece: {
 						type: Piece.King,
-						colour: colour,
+						colour,
 					},
 				});
 
@@ -148,7 +149,7 @@ function getCastlingMoves(board: Board, position: [number, number], colour: Colo
 						to: [position[0] - 2, position[1]],
 						piece: {
 							type: Piece.King,
-							colour: colour,
+							colour,
 						},
 					});
 
@@ -159,7 +160,7 @@ function getCastlingMoves(board: Board, position: [number, number], colour: Colo
 							castle: BoardSide.Queen,
 							piece: {
 								type: Piece.King,
-								colour: colour,
+								colour,
 							},
 						});
 					}

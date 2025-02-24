@@ -5,15 +5,15 @@ import type { BoardSide, Colour, Piece } from './enums';
 export type Move = {
 	castle?: BoardSide;
 	from: [number, number];
-	isDoublePawnMove?: boolean;
 	isCapture?: boolean;
+	isDoublePawnMove?: boolean;
 	isEnPassantCapture?: boolean;
+	piece: {
+		colour: Colour;
+		type: Piece;
+	};
 	promotion?: Piece;
 	to: [number, number];
-	piece: {
-		type: Piece;
-		colour: Colour;
-	};
 };
 
 export type CastlingRights = {

@@ -2,7 +2,8 @@
 
 import type { Board } from '../core/board';
 import type { CastlingRights } from '../types/core';
-import { BoardSide, Colour, Piece } from '../types/enums';
+import type { Piece } from '../types/enums';
+import { BoardSide, Colour } from '../types/enums';
 
 type FENOptions = {
 	activeColour: string;

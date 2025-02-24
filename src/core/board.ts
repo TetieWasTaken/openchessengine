@@ -219,8 +219,10 @@ export class Board {
 					const [type, colour] = piece;
 					boardStr += colour === Colour.White ? type.toUpperCase() : type.toLowerCase();
 				}
+
 				boardStr += ' ';
 			}
+
 			boardStr += '\n';
 		}
 

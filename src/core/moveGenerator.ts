@@ -2,7 +2,7 @@
 
 import type { CastlingRights, Move } from '../types/core';
 import { BoardSide, Colour, Piece } from '../types/enums';
-import { Board } from './board';
+import type { Board } from './board';
 import { getBishopMoves } from './pieces/bishop';
 import { getKingMoves } from './pieces/king';
 import { getKnightMoves } from './pieces/knight';
@@ -17,6 +17,7 @@ function bitScanForward(bb: bigint): number {
 		bb >>= 1n;
 		index++;
 	}
+
 	return index;
 }
 

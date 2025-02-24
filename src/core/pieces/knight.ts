@@ -47,7 +47,7 @@ export function getKnightMoves(board: Board, position: [number, number], colour 
 						type: Piece.Knight,
 						colour,
 					},
-					isCapture: !!targetPiece,
+					isCapture: Boolean(targetPiece),
 				});
 			}
 		}
