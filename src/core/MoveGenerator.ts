@@ -95,7 +95,7 @@ export function makeMove(initBoard: Board, move: Move): Board {
 	}
 
 	if (move.isDoublePawnMove) {
-		const enPassantSquare = move.piece.colour === Colour.White ? [move.to[0] - 1, move.to[1]] : [move.to[0] + 1, move.to[1]];
+		const enPassantSquare = move.piece.colour === Colour.White ? [move.to[0], move.to[1] + 1] : [move.to[0], move.to[1] - 1];
 		board.setEnPassantSquare(enPassantSquare as [number, number] | null);
 	} else {
 		board.setEnPassantSquare(null);
