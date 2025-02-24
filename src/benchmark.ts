@@ -23,7 +23,9 @@ if (!existsSync(csvFile)) {
 }
 
 for (const position of positions) {
+	console.log(`Position: ${position}`);
 	for (let depth = 1; depth <= maxDepth; depth++) {
+		console.log(`Depth: ${depth}`);
 		const board = new Board(position);
 		const start = performance.now();
 		const nodes = _perft(board, depth);
@@ -39,6 +41,7 @@ for (const position of positions) {
 			'Time per node (ms)': timePerNode,
 		};
 		results.push(result);
+		console.log(`Nodes: ${nodes}, Time: ${timeMs} ms, Time per node: ${timePerNode} ms`);
 	}
 }
 
