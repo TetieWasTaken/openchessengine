@@ -79,7 +79,16 @@ export function makeMove(initBoard: Board, move: Move): Board {
 	const Bitboards = board.getBitboards();
 
 	const capturedPiece = move.isCapture ? board.getPieceAt(move.to[0], move.to[1]) : null;
-	if (capturedPiece) board.removePieceAt(move.to[0], move.to[1]);
+	if (capturedPiece) {
+		board.removePieceAt(move.to[0], move.to[1]);
+
+		if (capturedPiece[0] === Piece.Rook) {
+			const side = move.to[0] === 0 ? BoardSide.Queen : BoardSide.King;
+			const castlingRights = board.getCastlingRights();
+			castlingRights[capturedPiece[1]][side] = false;
+			board.setCastlingRights(castlingRights);
+		}
+	}
 
 	const pieceData = board.getPieceAt(move.from[0], move.from[1]);
 	if (pieceData == null) throw new Error('No piece found at the given position');
