@@ -1,38 +1,40 @@
 /** @format */
 
-import type { Piece } from './enums';
-
-export type PieceType = {
-	colour: 'black' | 'white';
-	type: Piece;
-};
-export type SquareType = PieceType | null;
-export type BoardType = SquareType[][];
+import type { BoardSide, Colour, Piece } from './enums';
 
 export type Move = {
-	castle?: 'K' | 'Q';
+	castle?: BoardSide;
 	from: [number, number];
 	isDoublePawnMove?: boolean;
+	isCapture?: boolean;
 	isEnPassantCapture?: boolean;
 	promotion?: Piece;
 	to: [number, number];
-};
-
-export type SingleCastlingRights = {
-	king: boolean;
-	queen: boolean;
+	piece: {
+		type: Piece;
+		colour: Colour;
+	};
 };
 
 export type CastlingRights = {
-	black: SingleCastlingRights;
-	white: SingleCastlingRights;
+	[colour in Colour]: {
+		[side in BoardSide]: boolean;
+	}
 };
 
 export type BoardData = {
-	activeColour: 'black' | 'white';
-	board: BoardType;
+	activeColour: Colour;
+	board: Bitboards;
 	castlingRights: CastlingRights;
 	enPassant: [number, number] | null;
 	fullmove: number;
 	halfmove: number;
+};
+
+export type Bitboard = bigint;
+
+export type Bitboards = {
+	[colour in Colour]: {
+		[piece in Piece]: Bitboard;
+	};
 };

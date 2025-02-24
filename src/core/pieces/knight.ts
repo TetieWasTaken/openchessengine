@@ -1,6 +1,7 @@
 /** @format */
 
 import type { Move } from '../../types/core';
+import { Piece } from '../../types/enums';
 import type { Board } from '../board';
 
 /**
@@ -16,7 +17,7 @@ import type { Board } from '../board';
  * @returns An array of pseudo-legal moves
  */
 export function getKnightMoves(board: Board, position: [number, number], colour = board.getActiveColour()): Move[] {
-	const boardData = board.getBoard();
+	const bitboards = board.getBitboards();
 	const moves: Move[] = [];
 	const directions = [
 		[-2, -1],
@@ -35,12 +36,18 @@ export function getKnightMoves(board: Board, position: [number, number], colour 
 
 		// Check if the move is on the board
 		if (board.isWithinBounds(x + dx, y + dy)) {
-			const piece = boardData[x + dx][y + dy];
+			const [targetPiece, targetColour] = board.getPieceAt(x + dx, y + dy) || [null, null];
 
-			if (piece === null || piece.colour !== colour) {
+			// If the square is empty or has an enemy piece
+			if (targetPiece === null || targetColour !== colour) {
 				moves.push({
 					from: position,
 					to: [x + dx, y + dy],
+					piece: {
+						type: Piece.Knight,
+						colour,
+					},
+					isCapture: !!targetPiece,
 				});
 			}
 		}

@@ -1,7 +1,7 @@
 /** @format */
 
 import type { Move } from '../../types/core';
-import { Piece } from '../../types/enums';
+import { Colour, Piece } from '../../types/enums';
 import type { Board } from '../board';
 
 const isPromotionRow = (row: number) => row === 7 || row === 0;
@@ -20,37 +20,38 @@ const isPromotionRow = (row: number) => row === 7 || row === 0;
  */
 export function getPawnMoves(board: Board, position: [number, number], colour = board.getActiveColour()): Move[] {
 	const moves: Move[] = [];
-	const direction = colour === 'white' ? 1 : -1;
-	const boardData = board.getBoard();
+	const direction = colour === Colour.White ? -1 : 1;
+	const bitboards = board.getBitboards();
 	const [x, y] = position;
 
-	const addPromotionMoves = (to: [number, number]) => {
-		moves.push({ from: position, to, promotion: Piece.Queen });
-		moves.push({ from: position, to, promotion: Piece.Rook });
-		moves.push({ from: position, to, promotion: Piece.Bishop });
-		moves.push({ from: position, to, promotion: Piece.Knight });
+	const addPromotionMoves = (to: [number, number], isCapture = false) => {
+		moves.push({ from: position, to, promotion: Piece.Queen, piece: { type: Piece.Pawn, colour }, isCapture });
+		moves.push({ from: position, to, promotion: Piece.Rook, piece: { type: Piece.Pawn, colour }, isCapture });
+		moves.push({ from: position, to, promotion: Piece.Bishop, piece: { type: Piece.Pawn, colour }, isCapture });
+		moves.push({ from: position, to, promotion: Piece.Knight, piece: { type: Piece.Pawn, colour }, isCapture });
 	};
 
 	// Move forward one square
-	if (boardData[x + direction][y] === null) {
-		const to = [x + direction, y] as [number, number];
-		if (isPromotionRow(x + direction)) {
+	if (board.getPieceAt(x, y + direction) === null) {
+		const to = [x, y + direction] as [number, number];
+		if (isPromotionRow(y + direction)) {
 			addPromotionMoves(to);
 		} else {
-			moves.push({ from: position, to });
+			moves.push({ from: position, to, piece: { type: Piece.Pawn, colour } });
 		}
 	}
 
 	// Move forward two squares
 	if (
-		x === (colour === 'white' ? 1 : 6) &&
-		boardData[x + direction][y] === null &&
-		boardData[x + 2 * direction][y] === null
+		y === (colour === Colour.White ? 6 : 1) &&
+		board.getPieceAt(x, y + direction) === null &&
+		board.getPieceAt(x, y + direction * 2) === null
 	) {
 		moves.push({
 			from: position,
-			to: [x + 2 * direction, y],
+			to: [x, y + direction * 2],
 			isDoublePawnMove: true,
+			piece: { type: Piece.Pawn, colour }
 		});
 	}
 
@@ -58,33 +59,36 @@ export function getPawnMoves(board: Board, position: [number, number], colour = 
 	const enPassantSquare = board.getEnPassantSquare();
 	if (
 		enPassantSquare &&
-		enPassantSquare[0] === x + direction &&
-		(enPassantSquare[1] === y - 1 || enPassantSquare[1] === y + 1)
+		(enPassantSquare[0] === x - 1 || enPassantSquare[0] === x + 1) &&
+		enPassantSquare[1] === y + direction
 	) {
 		moves.push({
 			from: position,
 			to: [enPassantSquare[0], enPassantSquare[1]],
 			isEnPassantCapture: true,
+			piece: { type: Piece.Pawn, colour }
 		});
 	}
 
 	// Capture diagonally to the left
-	if (y - 1 >= 0 && boardData[x + direction][y - 1] !== null && boardData[x + direction][y - 1]?.colour !== colour) {
-		const to = [x + direction, y - 1] as [number, number];
-		if (isPromotionRow(x + direction)) {
-			addPromotionMoves(to);
+	if (x - 1 >= 0 && board.getPieceAt(x - 1, y + direction) !== null && board.getPieceAt(x - 1, y + direction)?.[1] !== colour) {
+		const to = [x - 1, y + direction] as [number, number];
+		if (isPromotionRow(y + direction)) {
+			addPromotionMoves(to, true);
 		} else {
-			moves.push({ from: position, to });
+			moves.push({
+				from: position, to, piece: { type: Piece.Pawn, colour }, isCapture: true
+			});
 		}
 	}
 
 	// Capture diagonally to the right
-	if (y + 1 < 8 && boardData[x + direction][y + 1] !== null && boardData[x + direction][y + 1]?.colour !== colour) {
-		const to = [x + direction, y + 1] as [number, number];
-		if (isPromotionRow(x + direction)) {
-			addPromotionMoves(to);
+	if (x + 1 < 8 && board.getPieceAt(x + 1, y + direction) !== null && board.getPieceAt(x + 1, y + direction)?.[1] !== colour) {
+		const to = [x + 1, y + direction] as [number, number];
+		if (isPromotionRow(y + direction)) {
+			addPromotionMoves(to, true);
 		} else {
-			moves.push({ from: position, to });
+			moves.push({ from: position, to, piece: { type: Piece.Pawn, colour }, isCapture: true });
 		}
 	}
 
