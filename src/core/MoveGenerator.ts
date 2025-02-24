@@ -83,10 +83,15 @@ export function makeMove(initBoard: Board, move: Move): Board {
 		board.removePieceAt(move.to[0], move.to[1]);
 
 		if (capturedPiece[0] === Piece.Rook) {
-			const side = move.to[0] === 0 ? BoardSide.Queen : BoardSide.King;
-			const castlingRights = board.getCastlingRights();
-			castlingRights[capturedPiece[1]][side] = false;
-			board.setCastlingRights(castlingRights);
+			const isOriginalRook = (capturedPiece[1] === Colour.White && (move.to[0] === 0 || move.to[0] === 7) && move.to[1] === 7) ||
+				(capturedPiece[1] === Colour.Black && (move.to[0] === 0 || move.to[0] === 7) && move.to[1] === 0);
+
+			if (isOriginalRook) {
+				const side = move.to[0] === 0 ? BoardSide.Queen : BoardSide.King;
+				const castlingRights = board.getCastlingRights();
+				castlingRights[capturedPiece[1]][side] = false;
+				board.setCastlingRights(castlingRights);
+			}
 		}
 	}
 
