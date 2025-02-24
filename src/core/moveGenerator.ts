@@ -13,8 +13,9 @@ import { getRookMoves } from './pieces/rook';
 function bitScanForward(bb: bigint): number {
 	if (bb === 0n) return -1;
 	let index = 0;
-	while ((bb & 1n) === 0n) {
-		bb >>= 1n;
+	let tempBb = bb;
+	while ((tempBb & 1n) === 0n) {
+		tempBb >>= 1n;
 		index++;
 	}
 
@@ -96,7 +97,7 @@ export function makeMove(initBoard: Board, move: Move): Board {
 	}
 
 	const pieceData = board.getPieceAt(move.from[0], move.from[1]);
-	if (pieceData == null) throw new Error('No piece found at the given position');
+	if (pieceData === null) throw new Error('No piece found at the given position');
 	const [piece, colour] = pieceData;
 
 	board.removePieceAt(move.from[0], move.from[1], piece, move.piece.colour);
@@ -109,9 +110,9 @@ export function makeMove(initBoard: Board, move: Move): Board {
 	}
 
 	if (move.isDoublePawnMove) {
-		const enPassantSquare =
+		const enPassantSquare: [number, number] | null =
 			move.piece.colour === Colour.White ? [move.to[0], move.to[1] + 1] : [move.to[0], move.to[1] - 1];
-		board.setEnPassantSquare(enPassantSquare as [number, number] | null);
+		board.setEnPassantSquare(enPassantSquare);
 	} else {
 		board.setEnPassantSquare(null);
 	}
@@ -276,7 +277,7 @@ export function getOrthogonalMoves(board: Board, position: [number, number], col
 			}
 
 			const targetPieceData = board.getPieceAt(x, y);
-			const [targetPiece, targetColour] = targetPieceData || [null, null];
+			const [targetPiece, targetColour] = targetPieceData ?? [null, null];
 
 			const selectedPieceData = board.getPieceAt(position[0], position[1]);
 			if (selectedPieceData === null) {
@@ -344,7 +345,7 @@ export function getDiagonalMoves(board: Board, position: [number, number], colou
 			}
 
 			const targetPieceData = board.getPieceAt(x, y);
-			const [targetPiece, targetColour] = targetPieceData || [null, null];
+			const [targetPiece, targetColour] = targetPieceData ?? [null, null];
 
 			const selectedPieceData = board.getPieceAt(position[0], position[1]);
 			if (selectedPieceData === null) {

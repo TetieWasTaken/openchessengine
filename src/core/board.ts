@@ -107,7 +107,6 @@ export class Board {
 	/**
 	 * Getter for the castling rights.
 	 *
-	 * @param side -
 	 * @returns
 	 */
 	public getCastlingRights(): CastlingRights {
@@ -304,8 +303,8 @@ export class Board {
 		const bitboards = this.bitboards;
 		const square = 1n << BigInt(y * 8 + x);
 
-		for (const colour of Object.keys(bitboards) as Colour[]) {
-			for (const piece of Object.keys(bitboards[colour]) as Piece[]) {
+		for (const colour of [Colour.White, Colour.Black]) {
+			for (const piece of [Piece.Pawn, Piece.Rook, Piece.Knight, Piece.Bishop, Piece.Queen, Piece.King]) {
 				if ((bitboards[colour][piece] & square) === square) {
 					return [piece, colour];
 				}
@@ -319,21 +318,20 @@ export class Board {
 		const bitboards = this.bitboards;
 		const square = 1n << BigInt(y * 8 + x);
 
-		if (colour !== undefined && piece !== undefined) bitboards[colour][piece] &= ~square;
-		else if (colour !== undefined) {
-			for (const pieceType of Object.keys(bitboards[colour]) as Piece[]) {
-				if (piece === undefined || piece === pieceType) {
-					bitboards[colour][pieceType] &= ~square;
-				}
-			}
-		} else {
-			for (const col of Object.keys(bitboards) as Colour[]) {
-				for (const pieceType of Object.keys(bitboards[col]) as Piece[]) {
-					if ((piece === undefined || piece === pieceType) && (colour === undefined || colour === col)) {
+		if (colour === undefined) {
+			for (const col of [Colour.White, Colour.Black]) {
+				for (const pieceType of [Piece.Pawn, Piece.Rook, Piece.Knight, Piece.Bishop, Piece.Queen, Piece.King]) {
+					if (piece === undefined || piece === pieceType) {
 						bitboards[col][pieceType] &= ~square;
 					}
 				}
 			}
+		} else if (piece === undefined) {
+			for (const pieceType of [Piece.Pawn, Piece.Rook, Piece.Knight, Piece.Bishop, Piece.Queen, Piece.King]) {
+				bitboards[colour][pieceType] &= ~square;
+			}
+		} else {
+			bitboards[colour][piece] &= ~square;
 		}
 
 		return this;

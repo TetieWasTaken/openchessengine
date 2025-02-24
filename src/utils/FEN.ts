@@ -43,7 +43,7 @@ function _toBoardString(board: Board): string {
 
 			if (piece) {
 				if (empty > 0) {
-					fen += empty;
+					fen += String(empty);
 					empty = 0;
 				}
 
@@ -54,7 +54,7 @@ function _toBoardString(board: Board): string {
 		}
 
 		if (empty > 0) {
-			fen += empty;
+			fen += String(empty);
 		}
 
 		if (row > 0) {

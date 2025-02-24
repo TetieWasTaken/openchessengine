@@ -9,6 +9,7 @@ export enum Piece {
 	Rook = 'R',
 }
 
+/* eslint-disable id-length */
 export const pieceMap: { [key: string]: Piece } = {
 	b: Piece.Bishop,
 	k: Piece.King,
@@ -23,6 +24,7 @@ export const pieceMap: { [key: string]: Piece } = {
 	Q: Piece.Queen,
 	R: Piece.Rook,
 };
+/* eslint-enable id-length */
 
 export enum Colour {
 	Black = 'b',

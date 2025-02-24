@@ -15,12 +15,14 @@ export function evaluate(board: Board): number {
 	let whiteKing = false;
 
 	for (const char in bitboards[Colour.White]) {
-		const piece = pieceMap[char.toLowerCase()];
-		const bitboard = BigInt(bitboards[Colour.White][piece]);
-		if (bitboard === 0n) continue;
-		const pieceValue = getPieceValue(piece);
-		score += pieceValue * (bitboard.toString(2).split('1').length - 1);
-		if (piece === Piece.King) whiteKing = true;
+		if (Object.hasOwn(bitboards[Colour.White], char)) {
+			const piece = pieceMap[char.toLowerCase()];
+			const bitboard = BigInt(bitboards[Colour.White][piece]);
+			if (bitboard === 0n) continue;
+			const pieceValue = getPieceValue(piece);
+			score += pieceValue * (bitboard.toString(2).split('1').length - 1);
+			if (piece === Piece.King) whiteKing = true;
+		}
 	}
 
 	if (!whiteKing) return -Infinity;
@@ -28,12 +30,14 @@ export function evaluate(board: Board): number {
 	let blackKing = false;
 
 	for (const char in bitboards[Colour.Black]) {
-		const piece = pieceMap[char.toLowerCase()];
-		const bitboard = BigInt(bitboards[Colour.Black][piece]);
-		if (bitboard === 0n) continue;
-		const pieceValue = getPieceValue(piece);
-		score -= pieceValue * (bitboard.toString(2).split('1').length - 1);
-		if (piece === Piece.King) blackKing = true;
+		if (Object.hasOwn(bitboards[Colour.Black], char)) {
+			const piece = pieceMap[char.toLowerCase()];
+			const bitboard = BigInt(bitboards[Colour.Black][piece]);
+			if (bitboard === 0n) continue;
+			const pieceValue = getPieceValue(piece);
+			score -= pieceValue * (bitboard.toString(2).split('1').length - 1);
+			if (piece === Piece.King) blackKing = true;
+		}
 	}
 
 	if (!blackKing) return Infinity;
