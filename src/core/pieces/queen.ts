@@ -17,5 +17,8 @@ import { getDiagonalMoves, getOrthogonalMoves } from '../moveGenerator';
  * @returns An array of pseudo-legal moves
  */
 export function getQueenMoves(board: Board, position: [number, number]): Move[] {
-	return [...getOrthogonalMoves(board, position, Piece.Queen, board.getActiveColour()), ...getDiagonalMoves(board, position, Piece.Queen, board.getActiveColour())];
+	return [
+		...getOrthogonalMoves(board, position, Piece.Queen, board.getActiveColour()),
+		...getDiagonalMoves(board, position, Piece.Queen, board.getActiveColour()),
+	];
 }

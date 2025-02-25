@@ -41,10 +41,7 @@ export function getKingMoves(
 
 		// Check if the move is on the board
 		if (board.isWithinBounds(x + dx, y + dy)) {
-			const [targetPiece, targetColour] = board.getPieceAt(
-				x + dx,
-				y + dy,
-			) ?? [null, null];
+			const [targetPiece, targetColour] = board.getPieceAt(x + dx, y + dy) ?? [null, null];
 
 			// If the square is empty or has an enemy piece
 			if (targetPiece === null || targetColour !== colour) {
