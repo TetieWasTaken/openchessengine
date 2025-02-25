@@ -14,7 +14,7 @@ describe('Half/Full moves', () => {
 
 	it('Should increment halfmove on knight move', () => {
 		const board = new Board();
-		const newBoard = makeMove(board, { from: [1, 0], to: [2, 2], piece: { type: Piece.Knight, colour: Colour.White } });
+		const newBoard = makeMove(board, { from: [1, 0], to: [2, 2], piece: { type: Piece.Knight, colour: Colour.Black } });
 
 		expect(newBoard.getHalfmove()).toBe(1);
 	});

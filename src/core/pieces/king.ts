@@ -1,7 +1,7 @@
 /** @format */
 
 import type { Move } from '../../types/core';
-import type { Colour } from '../../types/enums';
+import { Colour } from '../../types/enums';
 import { BoardSide, Piece } from '../../types/enums';
 import type { Board } from '../board';
 import { isKingInCheck, makeMove } from '../moveGenerator';
@@ -43,7 +43,10 @@ export function getKingMoves(
 
 		// Check if the move is on the board
 		if (board.isWithinBounds(x + dx, y + dy)) {
-			const [targetPiece, targetColour] = board.getPieceAt(x + dx, y + dy) ?? [null, null];
+			const [targetPiece, targetColour] = board.getPieceAt(
+				x + dx,
+				y + dy,
+			) ?? [null, null];
 
 			// If the square is empty or has an enemy piece
 			if (targetPiece === null || targetColour !== colour) {

@@ -1,7 +1,7 @@
 /** @format */
 
 import type { Move } from '../../types/core';
-import { Piece } from '../../types/enums';
+import { Colour, Piece } from '../../types/enums';
 import type { Board } from '../board';
 
 /**
@@ -36,7 +36,10 @@ export function getKnightMoves(board: Board, position: [number, number], colour 
 
 		// Check if the move is on the board
 		if (board.isWithinBounds(x + dx, y + dy)) {
-			const [targetPiece, targetColour] = board.getPieceAt(x + dx, y + dy) ?? [null, null];
+			const [targetPiece, targetColour] = board.getPieceAt(
+				x + dx,
+				y + dy,
+			) ?? [null, null];
 
 			// If the square is empty or has an enemy piece
 			if (targetPiece === null || targetColour !== colour) {

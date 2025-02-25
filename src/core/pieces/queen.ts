@@ -1,6 +1,7 @@
 /** @format */
 
 import type { Move } from '../../types/core';
+import { Piece } from '../../types/enums';
 import type { Board } from '../board';
 import { getDiagonalMoves, getOrthogonalMoves } from '../moveGenerator';
 
@@ -16,5 +17,5 @@ import { getDiagonalMoves, getOrthogonalMoves } from '../moveGenerator';
  * @returns An array of pseudo-legal moves
  */
 export function getQueenMoves(board: Board, position: [number, number]): Move[] {
-	return [...getOrthogonalMoves(board, position), ...getDiagonalMoves(board, position)];
+	return [...getOrthogonalMoves(board, position, Piece.Queen, board.getActiveColour()), ...getDiagonalMoves(board, position, Piece.Queen, board.getActiveColour())];
 }

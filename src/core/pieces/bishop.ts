@@ -1,6 +1,7 @@
 /** @format */
 
 import type { Move } from '../../types/core';
+import { Piece } from '../../types/enums';
 import type { Board } from '../board';
 import { getDiagonalMoves } from '../moveGenerator';
 
@@ -16,5 +17,5 @@ import { getDiagonalMoves } from '../moveGenerator';
  * @returns An array of pseudo-legal moves
  */
 export function getBishopMoves(board: Board, position: [number, number]): Move[] {
-	return getDiagonalMoves(board, position);
+	return getDiagonalMoves(board, position, Piece.Bishop, board.getActiveColour());
 }

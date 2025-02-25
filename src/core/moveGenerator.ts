@@ -78,7 +78,9 @@ export function makeMove(initBoard: Board, move: Move): Board {
 	const board = initBoard.clone();
 	const Bitboards = board.getBitboards();
 
-	const capturedPiece = move.isCapture ? board.getPieceAt(move.to[0], move.to[1]) : null;
+	const capturedPiece = move.isCapture
+		? board.getPieceAt(move.to[0], move.to[1], [move.piece.colour === Colour.White ? Colour.Black : Colour.White])
+		: null;
 	if (capturedPiece) {
 		board.removePieceAt(move.to[0], move.to[1]);
 
@@ -96,7 +98,7 @@ export function makeMove(initBoard: Board, move: Move): Board {
 		}
 	}
 
-	const pieceData = board.getPieceAt(move.from[0], move.from[1]);
+	const pieceData = board.getPieceAt(move.from[0], move.from[1], [move.piece.colour], [move.piece.type]);
 	if (pieceData === null) throw new Error('No piece found at the given position');
 	const [piece, colour] = pieceData;
 
@@ -253,7 +255,7 @@ export function findKing(board: Board, colour: Colour): [number, number] | null 
  *
  * @internal
  */
-export function getOrthogonalMoves(board: Board, position: [number, number], colour = board.getActiveColour()): Move[] {
+export function getOrthogonalMoves(board: Board, position: [number, number], piece: Piece, colour: Colour): Move[] {
 	const bitboards = board.getBitboards();
 	const moves: Move[] = [];
 	const directions = [
@@ -279,7 +281,7 @@ export function getOrthogonalMoves(board: Board, position: [number, number], col
 			const targetPieceData = board.getPieceAt(x, y);
 			const [targetPiece, targetColour] = targetPieceData ?? [null, null];
 
-			const selectedPieceData = board.getPieceAt(position[0], position[1]);
+			const selectedPieceData = board.getPieceAt(position[0], position[1], [colour], [piece]);
 			if (selectedPieceData === null) {
 				throw new Error('No piece found at the given position / getOrthogonalMoves / b');
 			}
@@ -321,7 +323,7 @@ export function getOrthogonalMoves(board: Board, position: [number, number], col
  *
  * @internal
  */
-export function getDiagonalMoves(board: Board, position: [number, number], colour = board.getActiveColour()): Move[] {
+export function getDiagonalMoves(board: Board, position: [number, number], piece: Piece, colour: Colour): Move[] {
 	const bitboards = board.getBitboards();
 	const moves: Move[] = [];
 	const directions = [
@@ -347,7 +349,7 @@ export function getDiagonalMoves(board: Board, position: [number, number], colou
 			const targetPieceData = board.getPieceAt(x, y);
 			const [targetPiece, targetColour] = targetPieceData ?? [null, null];
 
-			const selectedPieceData = board.getPieceAt(position[0], position[1]);
+			const selectedPieceData = board.getPieceAt(position[0], position[1], [colour], [piece]);
 			if (selectedPieceData === null) {
 				throw new Error('No piece found at the given position / getDiagonalMoves / b');
 			}

@@ -299,12 +299,24 @@ export class Board {
 		return this.bitboards;
 	}
 
-	public getPieceAt(x: number, y: number): [Piece, Colour] | null {
+	public getPieceAt(
+		x: number,
+		y: number,
+		colours: Colour[] = [Colour.White, Colour.Black],
+		pieces: Piece[] = [Piece.Pawn, Piece.Rook, Piece.Knight, Piece.Bishop, Piece.Queen, Piece.King],
+	): [Piece, Colour] | null {
 		const bitboards = this.bitboards;
 		const square = 1n << BigInt(y * 8 + x);
 
-		for (const colour of [Colour.White, Colour.Black]) {
-			for (const piece of [Piece.Pawn, Piece.Rook, Piece.Knight, Piece.Bishop, Piece.Queen, Piece.King]) {
+		if (colours.length === 1 && colours[0] === undefined) {
+			colours = [Colour.White, Colour.Black];
+		}
+		if (pieces.length === 1 && pieces[0] === undefined) {
+			pieces = [Piece.Pawn, Piece.Rook, Piece.Knight, Piece.Bishop, Piece.Queen, Piece.King];
+		}
+
+		for (const colour of colours) {
+			for (const piece of pieces) {
 				if ((bitboards[colour][piece] & square) === square) {
 					return [piece, colour];
 				}
