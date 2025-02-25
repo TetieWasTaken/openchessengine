@@ -21,7 +21,6 @@ const isPromotionRow = (row: number) => row === 7 || row === 0;
 export function getPawnMoves(board: Board, position: [number, number], colour = board.getActiveColour()): Move[] {
 	const moves: Move[] = [];
 	const direction = colour === Colour.White ? -1 : 1;
-	const bitboards = board.getBitboards();
 	const [x, y] = position;
 
 	const addPromotionMoves = (to: [number, number], isCapture = false) => {

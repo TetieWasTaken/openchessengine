@@ -1,7 +1,7 @@
 /** @format */
 
 import type { Move } from '../../types/core';
-import { Colour, Piece } from '../../types/enums';
+import { Piece } from '../../types/enums';
 import type { Board } from '../board';
 
 /**
@@ -17,7 +17,6 @@ import type { Board } from '../board';
  * @returns An array of pseudo-legal moves
  */
 export function getKnightMoves(board: Board, position: [number, number], colour = board.getActiveColour()): Move[] {
-	const bitboards = board.getBitboards();
 	const moves: Move[] = [];
 	const directions = [
 		[-2, -1],

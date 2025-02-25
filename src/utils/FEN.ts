@@ -32,7 +32,6 @@ export function toFEN(board: Board): string {
 }
 
 function _toBoardString(board: Board): string {
-	const bitboards = board.getBitboards();
 	let fen = '';
 
 	for (let row = 7; row >= 0; row--) {

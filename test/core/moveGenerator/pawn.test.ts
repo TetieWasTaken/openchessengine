@@ -59,7 +59,6 @@ describe('Move Generator | Pawn', () => {
 		const board = new Board('8/2p5/8/1P6/8/8/8/8 b - - 0 1');
 
 		expect(board.getEnPassantSquare()).toBeNull();
-		const moves = getMoves(board, [7, 1]);
 
 		const newBoard = makeMove(board, {
 			from: [2, 1],

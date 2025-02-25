@@ -24,7 +24,6 @@ export function getKingMoves(
 	isRecursion = false,
 	colour = board.getActiveColour(),
 ): Move[] {
-	const bitboards = board.getBitboards();
 	const moves: Move[] = [];
 	const directions = [
 		[-1, -1],

@@ -1,6 +1,6 @@
 /** @format */
 
-import type { CastlingRights, Move } from '../types/core';
+import type { Move } from '../types/core';
 import { BoardSide, Colour, Piece } from '../types/enums';
 import type { Board } from './board';
 import { getBishopMoves } from './pieces/bishop';
@@ -76,7 +76,6 @@ export function _perft(board: Board, depth: number): number {
  */
 export function makeMove(initBoard: Board, move: Move): Board {
 	const board = initBoard.clone();
-	const Bitboards = board.getBitboards();
 
 	const capturedPiece = move.isCapture
 		? board.getPieceAt(move.to[0], move.to[1], [move.piece.colour === Colour.White ? Colour.Black : Colour.White])
@@ -100,7 +99,7 @@ export function makeMove(initBoard: Board, move: Move): Board {
 
 	const pieceData = board.getPieceAt(move.from[0], move.from[1], [move.piece.colour], [move.piece.type]);
 	if (pieceData === null) throw new Error('No piece found at the given position');
-	const [piece, colour] = pieceData;
+	const [piece] = pieceData;
 
 	board.removePieceAt(move.from[0], move.from[1], piece, move.piece.colour);
 	if (move.promotion) board.addPieceAt(move.to[0], move.to[1], move.promotion, move.piece.colour);
@@ -171,7 +170,6 @@ export function makeMove(initBoard: Board, move: Move): Board {
  * Returns all possible moves for a piece at a given position.
  */
 export function getMoves(board: Board, position: [number, number], isRecursion = false): Move[] {
-	const bitboards = board.getBitboards();
 	const pieceInfo = board.getPieceAt(position[0], position[1]);
 	if (pieceInfo === null) {
 		return [];
@@ -256,7 +254,6 @@ export function findKing(board: Board, colour: Colour): [number, number] | null 
  * @internal
  */
 export function getOrthogonalMoves(board: Board, position: [number, number], piece: Piece, colour: Colour): Move[] {
-	const bitboards = board.getBitboards();
 	const moves: Move[] = [];
 	const directions = [
 		[-1, 0],
@@ -324,7 +321,6 @@ export function getOrthogonalMoves(board: Board, position: [number, number], pie
  * @internal
  */
 export function getDiagonalMoves(board: Board, position: [number, number], piece: Piece, colour: Colour): Move[] {
-	const bitboards = board.getBitboards();
 	const moves: Move[] = [];
 	const directions = [
 		[-1, -1],
