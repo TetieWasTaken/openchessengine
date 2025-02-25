@@ -308,11 +308,15 @@ export class Board {
 		const bitboards = this.bitboards;
 		const square = 1n << BigInt(y * 8 + x);
 
-		if (colours.length === 1 && colours[0] === undefined) {
-			colours = [Colour.White, Colour.Black];
+		let selectedColours = colours;
+		let selectedPieces = pieces;
+
+		if (selectedColours.length === 1 && selectedColours[0] === undefined) {
+			selectedColours = [Colour.White, Colour.Black];
 		}
-		if (pieces.length === 1 && pieces[0] === undefined) {
-			pieces = [Piece.Pawn, Piece.Rook, Piece.Knight, Piece.Bishop, Piece.Queen, Piece.King];
+
+		if (selectedPieces.length === 1 && selectedPieces[0] === undefined) {
+			selectedPieces = [Piece.Pawn, Piece.Rook, Piece.Knight, Piece.Bishop, Piece.Queen, Piece.King];
 		}
 
 		for (const colour of colours) {
