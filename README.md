@@ -8,6 +8,16 @@ Work in progress! The engine & interface is functional but lacks optimisations a
 
 openchessengine is a chess engine written in TypeScript designed to be easy to use and understand.
 
+## Roadmap
+
+- [x] Engine basics
+- [ ] Performance
+- [ ] Expand tests
+- [ ] Improve interface(s)
+- [ ] Engine improvements
+- [ ] Testing & feedback
+- [ ] Repo, documentation, and code refinement
+
 ## CLI
 
 The CLI is currently the only interface available:
