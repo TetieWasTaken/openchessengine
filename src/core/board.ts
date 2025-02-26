@@ -172,50 +172,6 @@ export class Board {
 		});
 	}
 
-	public createSnapshot(): BoardData {
-		return {
-			board: {
-				[Colour.White]: {
-					[Piece.Pawn]: this.bitboards[Colour.White][Piece.Pawn],
-					[Piece.Rook]: this.bitboards[Colour.White][Piece.Rook],
-					[Piece.Knight]: this.bitboards[Colour.White][Piece.Knight],
-					[Piece.Bishop]: this.bitboards[Colour.White][Piece.Bishop],
-					[Piece.Queen]: this.bitboards[Colour.White][Piece.Queen],
-					[Piece.King]: this.bitboards[Colour.White][Piece.King],
-				},
-				[Colour.Black]: {
-					[Piece.Pawn]: this.bitboards[Colour.Black][Piece.Pawn],
-					[Piece.Rook]: this.bitboards[Colour.Black][Piece.Rook],
-					[Piece.Knight]: this.bitboards[Colour.Black][Piece.Knight],
-					[Piece.Bishop]: this.bitboards[Colour.Black][Piece.Bishop],
-					[Piece.Queen]: this.bitboards[Colour.Black][Piece.Queen],
-					[Piece.King]: this.bitboards[Colour.Black][Piece.King],
-				},
-			},
-			activeColour: this.activeColour,
-			castlingRights: {
-				[Colour.White]: { ...this.castlingRights[Colour.White] },
-				[Colour.Black]: {
-					...this.castlingRights[Colour.Black],
-				},
-			},
-			enPassant: this.enPassantSquare,
-			halfmove: this.halfmove,
-			fullmove: this.fullmove,
-		}
-	};
-
-	public fromSnapshot(snapshot: BoardData): this {
-		this.bitboards = snapshot.board;
-		this.activeColour = snapshot.activeColour;
-		this.castlingRights = snapshot.castlingRights;
-		this.enPassantSquare = snapshot.enPassant;
-		this.halfmove = snapshot.halfmove;
-		this.fullmove = snapshot.fullmove;
-
-		return this;
-	};
-
 	/**
 	 * Set the active colour.
 	 *
