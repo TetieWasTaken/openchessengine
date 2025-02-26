@@ -41,8 +41,10 @@ export function minimax(
 
 	for (const move of moves) {
 		// Make the move and evaluate the resulting position
-		const newBoard = makeMove(board, move);
-		const result = minimax(newBoard, depth - 1, !isMaximising, alpha, beta);
+		const snapshot = board.createSnapshot();
+		makeMove(board, move, true);
+		const result = minimax(board, depth - 1, !isMaximising, alpha, beta);
+		board.fromSnapshot(snapshot);
 
 		if (isMaximising) {
 			if (result.score > best.score) {

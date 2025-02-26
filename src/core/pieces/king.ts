@@ -107,7 +107,7 @@ function getCastlingMoves(board: Board, position: [number, number], colour: Colo
 							type: Piece.King,
 							colour,
 						},
-					});
+					}, true);
 
 					if (!isKingInCheck(finalBoard, colour)) {
 						moves.push({
@@ -148,7 +148,7 @@ function getCastlingMoves(board: Board, position: [number, number], colour: Colo
 							type: Piece.King,
 							colour,
 						},
-					});
+					}, true);
 
 					if (!isKingInCheck(finalBoard, colour)) {
 						moves.push({

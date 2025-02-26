@@ -68,8 +68,10 @@ export function _perft(board: Board, depth: number): number {
 	let nodes = 0;
 
 	for (const move of moves) {
-		const newBoard = makeMove(board, move);
-		nodes += _perft(newBoard, depth - 1);
+		const snapshot = board.createSnapshot();
+		makeMove(board, move, true);
+		nodes += _perft(board, depth - 1);
+		board.fromSnapshot(snapshot);
 	}
 
 	return nodes;
@@ -78,8 +80,9 @@ export function _perft(board: Board, depth: number): number {
 /**
  * Makes a move on the board and returns the new board.
  */
-export function makeMove(initBoard: Board, move: Move): Board {
-	const board = initBoard.clone();
+export function makeMove(initBoard: Board, move: Move, mutate = false): Board {
+	let board = initBoard;
+	if (!mutate) board = initBoard.clone();
 
 	const capturedPiece = move.isCapture
 		? board.getPieceAt(move.to[0], move.to[1], [move.piece.colour === Colour.White ? Colour.Black : Colour.White])
@@ -208,7 +211,7 @@ export function getMoves(board: Board, position: [number, number], isRecursion =
 	return moves.filter((move) => {
 		if (isRecursion) return true;
 		else {
-			const newBoard = makeMove(board, move);
+			const newBoard = makeMove(board, move, false);
 			const inCheck = isKingInCheck(newBoard, colour);
 			return !inCheck;
 		}
