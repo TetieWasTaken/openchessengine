@@ -90,7 +90,7 @@ function getCastlingMoves(board: Board, position: [number, number], colour: Colo
 				board.getPieceAt(position[0] + 2, position[1]) === null;
 
 			if (kingSideEmpty) {
-				const newBoard = makeMove(board, {
+				const undoMove = makeMove(board, {
 					from: position,
 					to: [position[0] + 1, position[1]],
 					piece: {
@@ -99,8 +99,8 @@ function getCastlingMoves(board: Board, position: [number, number], colour: Colo
 					},
 				});
 
-				if (!isKingInCheck(newBoard, colour)) {
-					const finalBoard = makeMove(newBoard, {
+				if (!isKingInCheck(board, colour)) {
+					const undoMoveTwo = makeMove(board, {
 						from: [position[0] + 1, position[1]],
 						to: [position[0] + 2, position[1]],
 						piece: {
@@ -109,7 +109,7 @@ function getCastlingMoves(board: Board, position: [number, number], colour: Colo
 						},
 					});
 
-					if (!isKingInCheck(finalBoard, colour)) {
+					if (!isKingInCheck(board, colour)) {
 						moves.push({
 							from: position,
 							to: [position[0] + 2, position[1]],
@@ -120,7 +120,11 @@ function getCastlingMoves(board: Board, position: [number, number], colour: Colo
 							},
 						});
 					}
+
+					undoMoveTwo();
 				}
+
+				undoMove();
 			}
 		}
 
@@ -131,7 +135,7 @@ function getCastlingMoves(board: Board, position: [number, number], colour: Colo
 				board.getPieceAt(position[0] - 3, position[1]) === null;
 
 			if (queenSideEmpty) {
-				const newBoard = makeMove(board, {
+				const undoMove = makeMove(board, {
 					from: position,
 					to: [position[0] - 1, position[1]],
 					piece: {
@@ -140,8 +144,8 @@ function getCastlingMoves(board: Board, position: [number, number], colour: Colo
 					},
 				});
 
-				if (!isKingInCheck(newBoard, colour)) {
-					const finalBoard = makeMove(newBoard, {
+				if (!isKingInCheck(board, colour)) {
+					const undoMoveTwo = makeMove(board, {
 						from: [position[0] - 1, position[1]],
 						to: [position[0] - 2, position[1]],
 						piece: {
@@ -150,7 +154,7 @@ function getCastlingMoves(board: Board, position: [number, number], colour: Colo
 						},
 					});
 
-					if (!isKingInCheck(finalBoard, colour)) {
+					if (!isKingInCheck(board, colour)) {
 						moves.push({
 							from: position,
 							to: [position[0] - 2, position[1]],
@@ -161,7 +165,11 @@ function getCastlingMoves(board: Board, position: [number, number], colour: Colo
 							},
 						});
 					}
+
+					undoMoveTwo();
 				}
+
+				undoMove();
 			}
 		}
 	}

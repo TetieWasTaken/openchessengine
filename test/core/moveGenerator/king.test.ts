@@ -74,14 +74,14 @@ describe('Move Generator | King', () => {
 
 	test('Castling after rook taken', () => {
 		const board = new Board('r3k2r/8/8/8/8/6n1/8/R3K2R b KQkq - 0 1');
-		const newBoard = makeMove(board, {
+		makeMove(board, {
 			from: [6, 5],
 			to: [7, 7],
 			piece: { type: Piece.Knight, colour: Colour.Black },
 			isCapture: true,
 		});
 
-		const moves = getMoves(newBoard, [4, 7]);
+		const moves = getMoves(board, [4, 7]);
 		expect(moves.map((move) => move.to)).not.toContainEqual([6, 7]);
 	});
 });

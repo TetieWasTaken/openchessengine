@@ -68,8 +68,9 @@ export function _perft(board: Board, depth: number): number {
 	let nodes = 0;
 
 	for (const move of moves) {
-		const newBoard = makeMove(board, move);
-		nodes += _perft(newBoard, depth - 1);
+		const undoMove = makeMove(board, move);
+		nodes += _perft(board, depth - 1);
+		undoMove();
 	}
 
 	return nodes;
@@ -78,26 +79,31 @@ export function _perft(board: Board, depth: number): number {
 /**
  * Makes a move on the board and returns the new board.
  */
-export function makeMove(initBoard: Board, move: Move): Board {
-	const board = initBoard.clone();
+export function makeMove(board: Board, move: Move): () => void {
+	const prevCastlingRights = {
+		[Colour.White]: { ...board.getCastlingRights()[Colour.White] },
+		[Colour.Black]: { ...board.getCastlingRights()[Colour.Black] },
+	};
+	const prevEnPassant = board.getEnPassantSquare();
+	const prevHalfmove = board.getHalfmove();
+	const prevFullmove = board.getFullmove();
+	const prevActiveColour = board.getActiveColour();
 
+	let newCastlingRights = prevCastlingRights;
+
+	// Record pieces affected by the move.
 	const capturedPiece = move.isCapture
-		? board.getPieceAt(move.to[0], move.to[1], [move.piece.colour === Colour.White ? Colour.Black : Colour.White])
+		? board.getPieceAt(
+			move.to[0],
+			move.to[1],
+			[move.piece.colour === Colour.White ? Colour.Black : Colour.White]
+		)
 		: null;
 	if (capturedPiece) {
 		board.removePieceAt(move.to[0], move.to[1]);
-
 		if (capturedPiece[0] === Piece.Rook) {
-			const isOriginalRook =
-				(capturedPiece[1] === Colour.White && (move.to[0] === 0 || move.to[0] === 7) && move.to[1] === 7) ||
-				(capturedPiece[1] === Colour.Black && (move.to[0] === 0 || move.to[0] === 7) && move.to[1] === 0);
-
-			if (isOriginalRook) {
-				const side = move.to[0] === 0 ? BoardSide.Queen : BoardSide.King;
-				const castlingRights = board.getCastlingRights();
-				castlingRights[capturedPiece[1]][side] = false;
-				board.setCastlingRights(castlingRights);
-			}
+			const side = move.to[1] === 0 ? BoardSide.Queen : BoardSide.King;
+			newCastlingRights[capturedPiece[1]][side] = false;
 		}
 	}
 
@@ -106,8 +112,11 @@ export function makeMove(initBoard: Board, move: Move): Board {
 	const [piece] = pieceData;
 
 	board.removePieceAt(move.from[0], move.from[1], piece, move.piece.colour);
-	if (move.promotion) board.addPieceAt(move.to[0], move.to[1], move.promotion, move.piece.colour);
-	else board.addPieceAt(move.to[0], move.to[1], piece, move.piece.colour);
+	if (move.promotion) {
+		board.addPieceAt(move.to[0], move.to[1], move.promotion, move.piece.colour);
+	} else {
+		board.addPieceAt(move.to[0], move.to[1], piece, move.piece.colour);
+	}
 
 	if (move.isEnPassantCapture) {
 		const enPassantSquare = board.getEnPassantSquare();
@@ -116,7 +125,9 @@ export function makeMove(initBoard: Board, move: Move): Board {
 
 	if (move.isDoublePawnMove) {
 		const enPassantSquare: [number, number] | null =
-			move.piece.colour === Colour.White ? [move.to[0], move.to[1] + 1] : [move.to[0], move.to[1] - 1];
+			move.piece.colour === Colour.White
+				? [move.to[0], move.to[1] + 1]
+				: [move.to[0], move.to[1] - 1];
 		board.setEnPassantSquare(enPassantSquare);
 	} else {
 		board.setEnPassantSquare(null);
@@ -137,37 +148,52 @@ export function makeMove(initBoard: Board, move: Move): Board {
 		board.addPieceAt(newRookFile, rank, Piece.Rook, move.piece.colour);
 	}
 
-	const castlingRights = board.getCastlingRights();
-
 	if (move.piece.type === Piece.King) {
-		castlingRights[move.piece.colour] = {
+		newCastlingRights[move.piece.colour] = {
 			[BoardSide.King]: false,
 			[BoardSide.Queen]: false,
 		};
 	}
-
 	if (move.piece.type === Piece.Rook) {
 		const side = move.from[1] === 0 ? BoardSide.Queen : BoardSide.King;
-		castlingRights[move.piece.colour][side] = false;
+		newCastlingRights[move.piece.colour][side] = false;
 	}
-
 	if (move.castle !== undefined) {
-		castlingRights[move.piece.colour][move.castle] = false;
+		newCastlingRights[move.piece.colour][move.castle] = false;
 	}
-
-	board.setCastlingRights(castlingRights);
+	board.setCastlingRights(newCastlingRights);
 
 	if (move.isCapture || piece === Piece.Pawn) {
 		board.setHalfmove(0);
 	} else {
 		board.setHalfmove(board.getHalfmove() + 1);
 	}
-
 	if (move.piece.colour === Colour.Black) {
 		board.setFullmove(board.getFullmove() + 1);
 	}
 
-	return board.setActiveColour(move.piece.colour === Colour.White ? Colour.Black : Colour.White);
+	board.setActiveColour(move.piece.colour === Colour.White ? Colour.Black : Colour.White);
+
+	return () => {
+		board.setActiveColour(prevActiveColour);
+		board.setFullmove(prevFullmove);
+		board.setHalfmove(prevHalfmove);
+		board.setEnPassantSquare(prevEnPassant);
+		board.setCastlingRights(prevCastlingRights);
+
+		board.removePieceAt(
+			move.to[0],
+			move.to[1],
+			move.promotion ? move.promotion : piece,
+			move.piece.colour
+		);
+
+		board.addPieceAt(move.from[0], move.from[1], piece, move.piece.colour);
+
+		if (capturedPiece) {
+			board.addPieceAt(move.to[0], move.to[1], capturedPiece[0], capturedPiece[1]);
+		}
+	};
 }
 
 /**
@@ -208,8 +234,9 @@ export function getMoves(board: Board, position: [number, number], isRecursion =
 	return moves.filter((move) => {
 		if (isRecursion) return true;
 		else {
-			const newBoard = makeMove(board, move);
-			const inCheck = isKingInCheck(newBoard, colour);
+			const undoMove = makeMove(board, move);
+			const inCheck = isKingInCheck(board, colour);
+			undoMove();
 			return !inCheck;
 		}
 	});

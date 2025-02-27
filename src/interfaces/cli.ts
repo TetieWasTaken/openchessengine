@@ -42,8 +42,8 @@ class FENCLI {
 			return;
 		}
 
-		const newBoard = makeMove(board, bestMove);
-		const newFEN = toFEN(newBoard);
+		makeMove(board, bestMove);
+		const newFEN = toFEN(board);
 
 		console.log(`Best move: ${this.moveToAlgebraic(bestMove)}`);
 		console.log(`New FEN: ${newFEN} (depth ${depth.toString()})`);
@@ -62,7 +62,7 @@ class FENCLI {
 				break;
 			}
 
-			board = makeMove(board, bestMove);
+			makeMove(board, bestMove);
 			const newFEN = toFEN(board);
 
 			console.log(`Best move: ${this.moveToAlgebraic(bestMove)}`);

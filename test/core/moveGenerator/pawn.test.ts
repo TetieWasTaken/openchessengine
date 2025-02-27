@@ -35,7 +35,7 @@ describe('Move Generator | Pawn', () => {
 
 		expect(moves.map((move) => move.promotion)).toEqual([Piece.Queen, Piece.Rook, Piece.Bishop, Piece.Knight]);
 
-		const newBoard = makeMove(board, {
+		makeMove(board, {
 			from: [1, 1],
 			to: [1, 0],
 			promotion: Piece.Knight,
@@ -45,7 +45,7 @@ describe('Move Generator | Pawn', () => {
 			},
 		});
 
-		expect(newBoard.getPieceAt(1, 0)?.[0]).toBe(Piece.Knight);
+		expect(board.getPieceAt(1, 0)?.[0]).toBe(Piece.Knight);
 	});
 
 	test('En passant', () => {
@@ -60,7 +60,7 @@ describe('Move Generator | Pawn', () => {
 
 		expect(board.getEnPassantSquare()).toBeNull();
 
-		const newBoard = makeMove(board, {
+		makeMove(board, {
 			from: [2, 1],
 			to: [2, 3],
 			isDoublePawnMove: true,
@@ -70,6 +70,6 @@ describe('Move Generator | Pawn', () => {
 			},
 		});
 
-		expect(newBoard.getEnPassantSquare()).toEqual([2, 2]);
+		expect(board.getEnPassantSquare()).toEqual([2, 2]);
 	});
 });
