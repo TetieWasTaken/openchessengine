@@ -5,7 +5,7 @@ import type { Move } from '../types/Core';
 import { minimax } from './MinimaxOptimized';
 
 /**
- * Search for the best move for the current player
+ * Search for the best move for the current player using optimized algorithms
  *
  * @param board - Current board position
  * @param depth - How many moves ahead to search
