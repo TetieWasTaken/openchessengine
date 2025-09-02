@@ -1,7 +1,7 @@
 /** @format */
 
 import type { Board } from '../core/board';
-import type { CastlingRights } from '../types/core';
+import type { CastlingRights } from '../types/Core';
 import type { Piece } from '../types/enums';
 import { BoardSide, Colour } from '../types/enums';
 

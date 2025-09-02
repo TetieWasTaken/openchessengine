@@ -1,7 +1,21 @@
 /** @format */
 
 import type { Board } from '../core/board';
-import { Colour, Piece, pieceMap } from '../types/enums';
+import { Colour, Piece } from '../types/enums';
+
+/**
+ * Fast bit counting using Brian Kernighan's algorithm
+ * @param n - The bigint to count bits in
+ * @returns The number of set bits
+ */
+function popcount(n: bigint): number {
+	let count = 0;
+	while (n !== 0n) {
+		n &= n - 1n; // Clear the lowest set bit
+		count++;
+	}
+	return count;
+}
 
 /**
  * Evaluates the board and returns a score.
@@ -13,29 +27,32 @@ export function evaluate(board: Board): number {
 	const bitboards = board.getBitboards();
 	let score = 0;
 	let whiteKing = false;
+	let blackKing = false;
 
-	for (const char in bitboards[Colour.White]) {
-		if (Object.hasOwn(bitboards[Colour.White], char)) {
-			const piece = pieceMap[char.toLowerCase()];
-			const bitboard = BigInt(bitboards[Colour.White][piece]);
-			if (bitboard === 0n) continue;
+	// Evaluate white pieces
+	for (const piece of Object.values(Piece)) {
+		const bitboard = bitboards[Colour.White][piece];
+		if (bitboard === 0n) continue;
+		
+		const pieceCount = popcount(bitboard);
+		if (pieceCount > 0) {
 			const pieceValue = getPieceValue(piece);
-			score += pieceValue * (bitboard.toString(2).split('1').length - 1);
+			score += pieceValue * pieceCount;
 			if (piece === Piece.King) whiteKing = true;
 		}
 	}
 
 	if (!whiteKing) return -Infinity;
 
-	let blackKing = false;
-
-	for (const char in bitboards[Colour.Black]) {
-		if (Object.hasOwn(bitboards[Colour.Black], char)) {
-			const piece = pieceMap[char.toLowerCase()];
-			const bitboard = BigInt(bitboards[Colour.Black][piece]);
-			if (bitboard === 0n) continue;
+	// Evaluate black pieces
+	for (const piece of Object.values(Piece)) {
+		const bitboard = bitboards[Colour.Black][piece];
+		if (bitboard === 0n) continue;
+		
+		const pieceCount = popcount(bitboard);
+		if (pieceCount > 0) {
 			const pieceValue = getPieceValue(piece);
-			score -= pieceValue * (bitboard.toString(2).split('1').length - 1);
+			score -= pieceValue * pieceCount;
 			if (piece === Piece.King) blackKing = true;
 		}
 	}

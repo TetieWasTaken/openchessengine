@@ -1,6 +1,6 @@
 /** @format */
 
-import type { Move } from '../../types/core';
+import type { Move } from '../../types/Core';
 import { type Colour, BoardSide, Piece } from '../../types/enums';
 import type { Board } from '../board';
 import { isKingInCheck, makeMove } from '../moveGenerator';

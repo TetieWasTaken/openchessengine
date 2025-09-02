@@ -1,6 +1,6 @@
 /** @format */
 
-import type { Bitboards, BoardData, CastlingRights } from '../types/core';
+import type { Bitboards, BoardData, CastlingRights } from '../types/Core';
 import { Piece, Colour, pieceMap, BoardSide } from '../types/enums';
 import { DEFAULT_FEN } from '../utils/constants';
 

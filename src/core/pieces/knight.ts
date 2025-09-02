@@ -1,6 +1,6 @@
 /** @format */
 
-import type { Move } from '../../types/core';
+import type { Move } from '../../types/Core';
 import { Piece } from '../../types/enums';
 import type { Board } from '../board';
 

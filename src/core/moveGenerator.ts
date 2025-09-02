@@ -1,6 +1,6 @@
 /** @format */
 
-import type { Move } from '../types/core';
+import type { Move } from '../types/Core';
 import { BoardSide, Colour, Piece } from '../types/enums';
 import type { Board } from './board';
 import { getBishopMoves } from './pieces/bishop';

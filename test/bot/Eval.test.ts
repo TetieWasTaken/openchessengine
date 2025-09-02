@@ -1,6 +1,6 @@
 /** @format */
 
-import { evaluate } from '../../src/bot/eval';
+import { evaluate } from '../../src/bot/Eval';
 import { Board } from '../../src/core/board';
 
 describe('Eval', () => {

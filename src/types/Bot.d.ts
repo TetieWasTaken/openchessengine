@@ -1,6 +1,6 @@
 /** @format */
 
-import type { Move } from './core';
+import type { Move } from './Core';
 
 export type MinimaxResult = {
 	move: Move;

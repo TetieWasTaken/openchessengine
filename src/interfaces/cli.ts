@@ -1,10 +1,10 @@
 /** @format */
 
-import { search } from '../bot/search';
+import { search } from '../bot/Search';
 import { Board } from '../core/board';
 import { makeMove } from '../core/moveGenerator';
-import type { Move } from '../types/core';
-import { toFEN } from '../utils/fen';
+import type { Move } from '../types/Core';
+import { toFEN } from '../utils/FEN';
 
 /**
  * CLI for interacting with the bot.

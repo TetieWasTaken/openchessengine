@@ -1,6 +1,6 @@
 /** @format */
 
-import { minimax } from '../../src/bot/minimax';
+import { minimax } from '../../src/bot/Minimax';
 import { Board } from '../../src/core/board';
 
 // See https://lichess.org/editor/ for position setup
